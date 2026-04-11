@@ -5,11 +5,14 @@ class AppColors {
   static final AppColors _instance = AppColors._privateConstructor();
   static AppColors get instance => _instance;
   ////////////////  app primary use color
-  Color primary = Color(0xff111518);
+  Color primary = Color(0xff004AC6);
   Color success = Color(0xff29B000);
   final Color error = Color(0xFFFF3B28);
   final Color yellow = Color(0xFFFFBE00);
   final Color blue = Color(0xFF0051FF);
+  final Color buttonColor = Color(0xff158DE0);
+  final Color hintText = Color(0xFFC5C6CD);
+  final Color containerColor = Color(0xFFE7E8EA);
   final Color transparent = Colors.transparent;
 
   ////////////////  app gray color

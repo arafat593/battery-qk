@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/main_app_entry.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
-import 'package:flutter_riverpod_template/utils/gap.dart';
-import 'package:flutter_riverpod_template/widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/main_app_entry.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:permission_handler/permission_handler.dart';

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter_riverpod_template",
+            "name": "olabisiolai_flutter_app",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
@@ -15,7 +15,7 @@
             // ]
         },
         {
-            "name": "flutter_riverpod_template (profile mode)",
+            "name": "olabisiolai_flutter_app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
@@ -26,7 +26,7 @@
             // ]
         },
         {
-            "name": "flutter_riverpod_template (release mode)",
+            "name": "olabisiolai_flutter_app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",

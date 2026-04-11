@@ -1,4 +1,4 @@
-name: flutter_riverpod_template
+name: olabisiolai_flutter_app
 description: "A new Flutter project."
 
 publish_to: 'none' 
@@ -20,6 +20,9 @@ dependencies:
   app_links: ^7.0.0
   # storage
   shared_preferences: ^2.5.4
+
+  # country related
+  country_picker: ^2.0.24
 
   # api services
   dio: ^5.9.0

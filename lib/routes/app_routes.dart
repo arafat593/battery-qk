@@ -1,20 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen.dart';
-import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
-import 'package:flutter_riverpod_template/routes/internet_check_provider.dart';
-import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:olabisiolai_flutter_app/error_handling_screen/not_found_screen.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
+import 'package:olabisiolai_flutter_app/routes/internet_check_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/splash_screen/splash_screen.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
+
+import '../screens/auth_screen/login_screen/login_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   ////////////// constructor
   AppRoutes._privateConstructor();
+
   static final AppRoutes _instance = AppRoutes._privateConstructor();
+
   static AppRoutes get instance => _instance;
+
   //////////////// routes
 
   GoRouter router = GoRouter(
@@ -22,11 +27,20 @@ class AppRoutes {
     debugLogDiagnostics: kDebugMode,
     initialLocation: AppRoutesKey.instance.initial,
     routes: [
-      GoRoute(path: AppRoutesKey.instance.initial, name: AppRoutesKey.instance.splash, builder: (context, state) => SplashScreen()),
+      GoRoute(
+        path: AppRoutesKey.instance.initial,
+        name: AppRoutesKey.instance.splash,
+        builder: (context, state) => SplashScreen(),
+      ),
       GoRoute(
         path: "/${AppRoutesKey.instance.notFoundScreen}",
         name: AppRoutesKey.instance.noInternetScreen,
         builder: (context, state) => SplashScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.loginScreen}",
+        name: AppRoutesKey.instance.loginScreen,
+        builder: (context, state) => LoginScreen(),
       ),
     ],
     errorBuilder: (context, state) {
@@ -40,7 +54,8 @@ class AppRoutes {
       if (asyncStatus.hasError) return "/${AppRoutesKey.instance.errorScreen}";
 
       final isOnline = asyncStatus.value ?? true;
-      final goingToNoInternet = state.name == AppRoutesKey.instance.noInternetScreen;
+      final goingToNoInternet =
+          state.name == AppRoutesKey.instance.noInternetScreen;
 
       if (!isOnline && !goingToNoInternet) {
         return "/${AppRoutesKey.instance.noInternetScreen}";
@@ -73,7 +88,13 @@ class AppRoutes {
     String? fragment,
   }) {
     try {
-      router.goNamed(value, pathParameters: pathParameters, extra: extra, fragment: fragment, queryParameters: queryParameters);
+      router.goNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        fragment: fragment,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("goNamed", e);
     }
@@ -94,7 +115,12 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      router.replaceNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.replaceNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("replaceNamed", e);
     }
@@ -120,7 +146,12 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      router.pushNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.pushNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("pushNamed", e);
     }
@@ -141,7 +172,12 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      router.pushReplacementNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.pushReplacementNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("pushReplacementNamed", e);
     }

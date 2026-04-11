@@ -1,4 +1,4 @@
-package com.example.flutter_riverpod_templete
+package com.olabisiolai.gidira
 
 import io.flutter.embedding.android.FlutterActivity
 

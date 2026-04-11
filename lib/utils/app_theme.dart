@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
 class ThemeNotifier extends StateNotifier<ThemeMode> {
-  bool isDarkMode = false;
+  bool isDarkMode = true;
   StorageServices storageServices = StorageServices.instance;
 
   ThemeNotifier() : super(ThemeMode.light) {

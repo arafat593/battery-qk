@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod_template/services/storage/storage_key.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:olabisiolai_flutter_app/services/storage/storage_key.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageServices {
@@ -120,7 +120,7 @@ class StorageServices {
   //////////// dark mode
   Future<bool> isDarkMode() async {
     final pref = await _pref;
-    return pref.getBool(StorageKey.instance.isDarkMode) ?? true;
+    return pref.getBool(StorageKey.instance.isDarkMode) ?? false;
   }
 
   Future<void> setDarkMode(bool value) async {

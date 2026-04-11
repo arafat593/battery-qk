@@ -1,4 +1,4 @@
-# flutter_riverpod_templete
+# olabisiolai_flutter_app
 
 A new Flutter project.
 

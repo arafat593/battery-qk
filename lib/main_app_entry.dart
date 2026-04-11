@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/error_screen.dart';
-import 'package:flutter_riverpod_template/routes/app_routes.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/utils/app_theme.dart';
-import 'package:flutter_riverpod_template/utils/app_theme_configuration.dart';
-import 'package:flutter_riverpod_template/utils/observer/logger_ob_server.dart';
+import 'package:olabisiolai_flutter_app/error_handling_screen/error_screen.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/utils/app_theme.dart';
+import 'package:olabisiolai_flutter_app/utils/app_theme_configuration.dart';
+import 'package:olabisiolai_flutter_app/utils/observer/logger_ob_server.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -21,6 +21,7 @@ class MainAppEntry extends StatefulWidget {
 
 class _MainAppEntryState extends State<MainAppEntry> {
   Key providerKey = UniqueKey();
+
   void resetRiverpod() {
     setState(() {
       providerKey = UniqueKey();
@@ -51,7 +52,7 @@ class MainApp extends ConsumerStatefulWidget {
 class _MainAppState extends ConsumerState<MainApp> {
   @override
   Widget build(BuildContext context) {
-    final ThemeMode themeMode = ref.watch(themeProvider);
+    // final ThemeMode themeMode = ref.watch(themeProvider);
     return MaterialApp.router(
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
@@ -61,8 +62,8 @@ class _MainAppState extends ConsumerState<MainApp> {
       themeAnimationCurve: Curves.easeInOut,
       themeAnimationDuration: Duration.zero,
       theme: AppThemeConfiguration.instance.lightThemeData,
-      darkTheme: AppThemeConfiguration.instance.darkThemeData,
-      themeMode: themeMode,
+      // darkTheme: AppThemeConfiguration.instance.darkThemeData,
+      themeMode: ThemeMode.light,
 
       builder: (context, child) {
         ErrorWidget.builder = (FlutterErrorDetails errorDetails) {

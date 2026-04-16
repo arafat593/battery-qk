@@ -5,6 +5,7 @@ import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 import 'package:olabisiolai_flutter_app/utils/app_theme.dart';
 import 'package:olabisiolai_flutter_app/utils/app_theme_configuration.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/utils/observer/logger_ob_server.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -75,9 +76,7 @@ class _MainAppState extends ConsumerState<MainApp> {
 
         return Overlay(
           key: appOverlayKey,
-          initialEntries: [
-            OverlayEntry(builder: (context) => child ?? SizedBox()),
-          ],
+          initialEntries: [OverlayEntry(builder: (context) => child ?? Gap())],
         );
       },
     );

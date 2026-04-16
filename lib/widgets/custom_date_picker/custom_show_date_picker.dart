@@ -289,7 +289,7 @@ class _CalendarViewState extends State<CalendarView> {
                       )
                       .toList(),
                 ),
-                SizedBox(height: 8),
+                Gap(height: 8),
 
                 GridView.count(
                   shrinkWrap: true,

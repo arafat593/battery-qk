@@ -4,6 +4,7 @@ import 'package:olabisiolai_flutter_app/screens/base_screen/faq_screen/providers
 import 'package:olabisiolai_flutter_app/screens/base_screen/faq_screen/widgets/faq_card.dart';
 import 'package:olabisiolai_flutter_app/screens/base_screen/faq_screen/widgets/faq_card_loader.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -24,7 +25,7 @@ class FaqScreen extends StatelessWidget {
             var provider = ref.watch(fAQScreenProvider);
             return provider.when(
               data: (data) {
-                if (data.isEmpty) return SizedBox();
+                if (data.isEmpty) return Gap();
                 return ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {

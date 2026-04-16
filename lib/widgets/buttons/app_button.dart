@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
-import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
-import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart'
-    show AppText;
+
+import '../../constant/app_colors.dart';
+import '../../utils/app_size.dart';
+import '../app_image/app_image.dart';
+import '../texts/app_text.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -31,6 +32,7 @@ class AppButton extends StatelessWidget {
     this.trailing,
     this.leadingIconImage,
     this.trailingIconImage,
+    this.iconColor,
   });
 
   final double? loadingSize;
@@ -49,6 +51,7 @@ class AppButton extends StatelessWidget {
   final Color? backgroundColor;
   final BoxBorder? border;
   final Color? borderColor;
+  final Color? iconColor;
   final double? fontSize;
   final BorderRadiusGeometry? borderRadius;
   final FontWeight? fontWeight;
@@ -69,66 +72,84 @@ class AppButton extends StatelessWidget {
         alignment: alignment ?? Alignment.center,
         margin: margin,
         padding:
-            padding ??
+        padding ??
             EdgeInsets.symmetric(vertical: AppSize.size.height * 0.013),
         decoration:
-            decoration ??
+        decoration ??
             BoxDecoration(
               color: backgroundColor ?? AppColors.instance.buttonColor,
               border:
-                  border ??
+              border ??
                   Border.all(
                     color: borderColor ?? AppColors.instance.buttonColor,
                   ),
               borderRadius:
-                  borderRadius ??
+              borderRadius ??
                   BorderRadius.circular(
                     AppSize.width(value: AppSize.width(value: 8.0)),
                   ),
             ),
         child: isLoading
             ? SizedBox(
-                width: loadingSize ?? AppSize.size.height * 0.04,
-                height: loadingSize ?? AppSize.size.height * 0.04,
-                child: CircularProgressIndicator(
-                  color: loaderColor ?? AppColors.instance.white50,
-                ),
-              )
+          width: loadingSize ?? AppSize.size.height * 0.04,
+          height: loadingSize ?? AppSize.size.height * 0.04,
+          child: CircularProgressIndicator(
+            color: loaderColor ?? AppColors.instance.white50,
+          ),
+        )
             : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  child ??
-                      Icon(
-                        leading,
-                        weight: 13,
-                        color: AppColors.instance.white50,
-                      ),
-                  if (leadingIconImage != null)
-                    AppImage(
-                      path: leadingIconImage,
-                      width: 13,
-                      color: Colors.white,
-                    ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSize.size.width * 0.02,
-                    ),
-                    child: AppText(
-                      text: title ?? "",
-                      color: titleColor ?? AppColors.instance.white50,
-                      fontWeight: fontWeight ?? FontWeight.w500,
-                      fontSize: fontSize ?? 18,
-                    ),
-                  ),
-                  Icon(trailing, weight: 13, color: AppColors.instance.white50),
-                  if (trailingIconImage != null)
-                    AppImage(
-                      path: trailingIconImage,
-                      width: 13,
-                      color: Colors.white,
-                    ),
-                ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // ✅ child priority
+            if (child != null) child!,
+
+            // ✅ leading icon safe
+            if (leading != null)
+              Icon(
+                leading,
+                weight: 13,
+                color: iconColor ?? AppColors.instance.white50,
               ),
+
+            // ✅ leading image safe
+            if (leadingIconImage != null)
+              AppImage(
+                path: leadingIconImage,
+                width: 13,
+                color: iconColor ?? AppColors.instance.white50,
+              ),
+
+            if (title != null)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.size.width * 0.02,
+                ),
+                child: AppText(
+                  text: title ?? "",
+                  color:
+                  titleColor ?? AppColors.instance.white50,
+                  fontWeight: fontWeight ?? FontWeight.w500,
+                  fontSize: fontSize ?? 18,
+                ),
+              ),
+
+            // ✅ trailing icon safe
+            if (trailing != null)
+              Icon(
+                trailing,
+                weight: 13,
+                color: iconColor ?? AppColors.instance.white50,
+              ),
+
+            // ✅ trailing image safe
+            if (trailingIconImage != null)
+              AppImage(
+                path: trailingIconImage,
+                width: 13,
+                color: iconColor ?? AppColors.instance.white50,
+              ),
+          ],
+        ),
       ),
     );
   }

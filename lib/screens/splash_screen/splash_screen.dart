@@ -45,7 +45,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 5), () {
       onAppInitial();
     });
   }
@@ -55,7 +55,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
+           image: DecorationImage(
             image: AssetImage(AppAssertsImagePath.instance.splashBackground),
           ),
         ),

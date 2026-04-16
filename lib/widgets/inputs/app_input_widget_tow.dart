@@ -53,6 +53,7 @@ class AppInputWidgetTwo extends StatefulWidget {
     this.titleFontSize,
     this.fontWeight,
   });
+
   final String? title;
   final String? subTitle;
   final String hintText;
@@ -95,16 +96,20 @@ class AppInputWidgetTwo extends StatefulWidget {
   final bool? alignLabelWithHint;
   final double? titleFontSize;
   final FontWeight? fontWeight;
+
   @override
   State<AppInputWidgetTwo> createState() => _AppInputWidgetTwoState();
 }
 
 class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
   bool isShowPassWord = true;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.padding ?? EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0)),
+      padding:
+          widget.padding ??
+          EdgeInsets.symmetric(horizontal: AppSize.width(value: 0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -121,15 +126,17 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                     AppText(
                       text: widget.title ?? "",
                       fontWeight: FontWeight.w500,
-                      color: widget.titleColor ?? AppColors.instance.black900,
+                      color: widget.titleColor ?? AppColors.instance.black500,
                       fontSize: widget.titleFontSize ?? 18,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: AppSize.width(value: 10.0)),
+                      padding: EdgeInsets.only(
+                        right: AppSize.width(value: 10.0),
+                      ),
                       child: AppText(
                         text: widget.subTitle ?? "",
                         fontWeight: widget.fontWeight ?? FontWeight.w400,
-                        color: widget.titleColor ?? AppColors.instance.black900,
+                        color: widget.titleColor ?? AppColors.instance.hintText,
                         fontSize: 14,
                       ),
                     ),
@@ -175,9 +182,12 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                       if (isValidEmail(value.toString())) return null;
                       return "Please provide a valid email address";
                     }
-                    if (widget.isPassWord && widget.isPassWordSecondValidation) {
+                    if (widget.isPassWord &&
+                        widget.isPassWordSecondValidation) {
                       if (widget.isPassWordSecondValidationController != null) {
-                        if (value.toLowerCase() != widget.isPassWordSecondValidationController!.text.toLowerCase()) {
+                        if (value.toLowerCase() !=
+                            widget.isPassWordSecondValidationController!.text
+                                .toLowerCase()) {
                           return "Both passwords most match";
                         } else {
                           return null;
@@ -195,17 +205,22 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
               textAlignVertical: TextAlignVertical.top,
               style:
                   widget.style ??
-                  Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(color: widget.textColor ?? AppColors.instance.black300, fontWeight: FontWeight.w400, fontSize: 16),
+                  Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: widget.textColor ?? AppColors.instance.black300,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
               textAlign: widget.textAlign,
               decoration: InputDecoration(
                 alignLabelWithHint: widget.alignLabelWithHint,
 
                 hoverColor: AppColors.instance.transparent,
                 filled: true,
-                contentPadding: widget.contentPadding ?? EdgeInsets.all(AppSize.width(value: 15.0)),
-                fillColor: widget.fillColor ?? AppColors.instance.primary,
+                contentPadding:
+                    widget.contentPadding ??
+                    EdgeInsets.all(AppSize.width(value: 15.0)),
+                fillColor:
+                    widget.fillColor ?? AppColors.instance.containerColor,
                 prefixIcon: widget.prefix,
                 suffixIcon: widget.isPassWord
                     ? Container(
@@ -221,7 +236,9 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                               isShowPassWord = !isShowPassWord;
                             });
                           },
-                          icon: isShowPassWord ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                          icon: isShowPassWord
+                              ? const Icon(Icons.visibility_off)
+                              : const Icon(Icons.visibility),
                         ),
                       )
                     : widget.suffixIcon,
@@ -229,8 +246,16 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                 hintText: widget.hintText,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 labelText: widget.labelText,
-                hintStyle: widget.hintStyle ?? Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.instance.black300),
-                labelStyle: widget.hintStyle ?? Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.instance.black300),
+                hintStyle:
+                    widget.hintStyle ??
+                    Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: AppColors.instance.black300,
+                    ),
+                labelStyle:
+                    widget.hintStyle ??
+                    Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: AppColors.instance.black300,
+                    ),
                 errorStyle: TextStyle(
                   color: widget.errorColor ?? AppColors.instance.error,
                   fontWeight: FontWeight.w500,
@@ -240,31 +265,53 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                 border:
                     widget.border ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
-                      borderSide: BorderSide(color: widget.borderColor ?? AppColors.instance.primary),
+                      borderRadius: BorderRadius.circular(
+                        AppSize.width(value: 8.0),
+                      ),
+                      borderSide: BorderSide(
+                        color:
+                            widget.borderColor ??
+                            AppColors.instance.transparent,
+                      ),
                     ),
                 enabledBorder:
                     widget.border ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
-                      borderSide: BorderSide(color: widget.borderColor ?? AppColors.instance.primary),
+                      borderRadius: BorderRadius.circular(
+                        AppSize.width(value: 8.0),
+                      ),
+                      borderSide: BorderSide(
+                        color:
+                            widget.borderColor ??
+                            AppColors.instance.transparent,
+                      ),
                     ),
                 focusedBorder:
                     widget.border ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
-                      borderSide: BorderSide(color: widget.borderColor ?? AppColors.instance.primary),
+                      borderRadius: BorderRadius.circular(
+                        AppSize.width(value: 8.0),
+                      ),
+                      borderSide: BorderSide(
+                        color:
+                            widget.borderColor ??
+                            AppColors.instance.transparent,
+                      ),
                     ),
                 errorBorder:
                     widget.errBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
+                      borderRadius: BorderRadius.circular(
+                        AppSize.width(value: 8.0),
+                      ),
                       borderSide: BorderSide(color: AppColors.instance.error),
                     ),
                 focusedErrorBorder:
                     widget.errBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
+                      borderRadius: BorderRadius.circular(
+                        AppSize.width(value: 8.0),
+                      ),
                       borderSide: BorderSide(color: AppColors.instance.error),
                     ),
               ),

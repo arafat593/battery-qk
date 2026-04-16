@@ -15,7 +15,10 @@ class AppOverlayHelper {
     }
 
     final overlay = Overlay.of(context);
-    _controller = AnimationController(vsync: Navigator.of(context), duration: const Duration(milliseconds: 400));
+    _controller = AnimationController(
+      vsync: Navigator.of(context),
+      duration: const Duration(milliseconds: 400),
+    );
 
     _animation = Tween<Offset>(
       begin: const Offset(0, -1),
@@ -38,7 +41,11 @@ class AppOverlayHelper {
                 child: Material(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  child: SizedBox(height: AppSize.size.height, width: AppSize.size.width, child: child),
+                  child: SizedBox(
+                    height: AppSize.size.height,
+                    width: AppSize.size.width,
+                    child: child,
+                  ),
                 ),
               ),
             ),

@@ -7,8 +7,25 @@ import 'package:olabisiolai_flutter_app/routes/internet_check_provider.dart';
 import 'package:olabisiolai_flutter_app/screens/splash_screen/splash_screen.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
-
+import '../screens/account_settings_screen/account_settings_screen.dart';
+import '../screens/app_navigation_screen/app_navigation_screen.dart';
 import '../screens/auth_screen/login_screen/login_screen.dart';
+import '../screens/base_screen/about_us_screen/about_us_screen.dart';
+import '../screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
+import '../screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
+import '../screens/business_profile/business_profile.dart';
+import '../screens/business_profile_photos_screen/business_profile_photos_screen.dart';
+import '../screens/business_profile_review_screen/business_profile_review_screen.dart';
+import '../screens/categories_screen/categories_screen.dart';
+import '../screens/edit_profile_screen/edit_profile_screen.dart';
+import '../screens/home_screen/home_screen.dart';
+import '../screens/map_screen/map_screen.dart';
+import '../screens/message_details_screen/messages_details_screen.dart';
+import '../screens/message_screen/message_screen.dart';
+import '../screens/my_reviews_screen/my_reviews_screen.dart';
+import '../screens/profile_screen/profile_screen.dart';
+import '../screens/review_submitted_screen/review_submitted_screen.dart';
+import '../screens/saved_business_screen/saved_business_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -41,6 +58,96 @@ class AppRoutes {
         path: "/${AppRoutesKey.instance.loginScreen}",
         name: AppRoutesKey.instance.loginScreen,
         builder: (context, state) => LoginScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.appNavigationScreen}",
+        name: AppRoutesKey.instance.appNavigationScreen,
+        builder: (context, state) => AppNavigationScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.homeScreen}",
+        name: AppRoutesKey.instance.homeScreen,
+        builder: (context, state) => HomeScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.categoriesScreen}",
+        name: AppRoutesKey.instance.categoriesScreen,
+        builder: (context, state) => CategoriesScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.messageScreen}",
+        name: AppRoutesKey.instance.messageScreen,
+        builder: (context, state) => MessageScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.profileScreen}",
+        name: AppRoutesKey.instance.profileScreen,
+        builder: (context, state) => ProfileScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.mapScreen}",
+        name: AppRoutesKey.instance.mapScreen,
+        builder: (context, state) => MapScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.businessProfile}",
+        name: AppRoutesKey.instance.businessProfile,
+        builder: (context, state) => BusinessProfile(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.businessProfilePhotosScreen}",
+        name: AppRoutesKey.instance.businessProfilePhotosScreen,
+        builder: (context, state) => BusinessProfilePhotosScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.businessProfileReviewScreen}",
+        name: AppRoutesKey.instance.businessProfileReviewScreen,
+        builder: (context, state) => BusinessProfileReviewScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.reviewSubmittedScreen}",
+        name: AppRoutesKey.instance.reviewSubmittedScreen,
+        builder: (context, state) => ReviewSubmittedScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.messagesDetailsScreen}",
+        name: AppRoutesKey.instance.messagesDetailsScreen,
+        builder: (context, state) => MessagesDetailsScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.editProfileScreen}",
+        name: AppRoutesKey.instance.editProfileScreen,
+        builder: (context, state) => EditProfileScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.savedBusinessesScreen}",
+        name: AppRoutesKey.instance.savedBusinessesScreen,
+        builder: (context, state) => SavedBusinessesScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.myReviewsScreen}",
+        name: AppRoutesKey.instance.myReviewsScreen,
+        builder: (context, state) => MyReviewsScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.accountSettingsScreen}",
+        name: AppRoutesKey.instance.accountSettingsScreen,
+        builder: (context, state) => AccountSettingsScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.aboutUsScreen}",
+        name: AppRoutesKey.instance.aboutUsScreen,
+        builder: (context, state) => AboutUsScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.privacyPolicyScreen}",
+        name: AppRoutesKey.instance.privacyPolicyScreen,
+        builder: (context, state) => PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.termsAndConditionsScreen}",
+        name: AppRoutesKey.instance.termsAndConditionsScreen,
+        builder: (context, state) => TermsAndConditionsScreen(),
       ),
     ],
     errorBuilder: (context, state) {

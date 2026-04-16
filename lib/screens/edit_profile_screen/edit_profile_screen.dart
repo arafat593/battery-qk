@@ -1,0 +1,172 @@
+import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
+import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
+import '../../../widgets/texts/app_text.dart';
+import '../../utils/gap.dart';
+import '../../widgets/custom_app_bar/custom_app_bar.dart';
+
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  bool _obscureCurrent = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFF8F9FA),
+      appBar: CustomAppBar(
+        title: "Edit Profile",
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: AppText(
+              text: "Save",
+              color: AppColors.instance.blue,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // --- Profile Picture Update ---
+            Center(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      AppImageCircular(
+                        borderRadius: 100,
+                        height: 120,
+                        width: 120,
+                        url:
+                            "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop",
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 4),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.camera_alt_outlined,
+                            size: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(height: 10),
+                  AppText(
+                    text: "UPDATE LOGO",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ],
+              ),
+            ),
+            const Gap(height: 30),
+
+            // --- Personal Information Section ---
+            SectionCard(
+              icon: Icons.person_outline,
+              title: "Personal Information",
+              children: [
+                AppInputWidgetTwo(title: "FULL NAME", hintText: "Amara Okafor"),
+                AppInputWidgetTwo(
+                  title: "EMAIL ADDRESS",
+                  hintText: "chidi.okoro@gidira.com",
+                ),
+                AppInputWidgetTwo(
+                  title: "PHONE NUMBER",
+                  hintText: "+234 803 123 4567",
+                ),
+                AppInputWidgetTwo(
+                  title: "LOCATION / ADDRESS",
+                  hintText: "Victoria Island, Lagos",
+                  prefix: Icon(Icons.location_on_outlined),
+                ),
+              ],
+            ),
+
+            const Gap(height: 20),
+
+            SectionCard(
+              icon: Icons.lock_outline,
+              title: "Security",
+              children: [
+                AppInputWidgetTwo(
+                  title: "CURRENT PASSWORD",
+                  hintText: "****************",
+                ),
+                AppInputWidgetTwo(
+                  title: "NEW PASSWORD",
+                  hintText: "****************",
+                ),
+                AppInputWidgetTwo(
+                  title: "CONFIRM NEW PASSWORD",
+                  hintText: "****************",
+                ),
+              ],
+            ),
+            const Gap(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SectionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final List<Widget> children;
+
+  const SectionCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.redAccent, size: 20),
+              const Gap(width: 8),
+              AppText(text: title, fontSize: 16, fontWeight: FontWeight.bold),
+            ],
+          ),
+          const Gap(height: 20),
+          ...children,
+        ],
+      ),
+    );
+  }
+}

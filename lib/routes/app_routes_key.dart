@@ -29,4 +29,8 @@ class AppRoutesKey {
   final String aboutUsScreen = "aboutUsScreen";
   final String privacyPolicyScreen = "privacyPolicyScreen";
   final String termsAndConditionsScreen = "termsAndConditionsScreen";
+  final String signUpScreen = "signUpScreen";
+  final String forgetPassword = "forgetPassword";
+  final String recoverPassword = "recoverPassword";
+  final String successfullScreen = "successfullScreen";
 }

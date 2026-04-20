@@ -8,6 +8,7 @@ import '../../constant/app_asserts_icons_path.dart';
 import '../../error_handling_screen/error_screen.dart';
 import '../../services/storage/storage_services.dart';
 import '../../utils/app_log.dart';
+final GlobalKey<_AppNavigationScreenState> appNavigationKey = GlobalKey<_AppNavigationScreenState>();
 
 class AppNavigationScreen extends StatefulWidget {
   const AppNavigationScreen({super.key});

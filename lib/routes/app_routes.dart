@@ -9,7 +9,11 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/account_settings_screen/account_settings_screen.dart';
 import '../screens/app_navigation_screen/app_navigation_screen.dart';
+import '../screens/auth_screen/forget_password/forget_password.dart';
 import '../screens/auth_screen/login_screen/login_screen.dart';
+import '../screens/auth_screen/recover_password/recover_password.dart';
+import '../screens/auth_screen/sign_up_screen/sign_up_screen.dart';
+import '../screens/auth_screen/successful_screen/successfull_screen.dart';
 import '../screens/base_screen/about_us_screen/about_us_screen.dart';
 import '../screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
 import '../screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
@@ -62,7 +66,7 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.appNavigationScreen}",
         name: AppRoutesKey.instance.appNavigationScreen,
-        builder: (context, state) => AppNavigationScreen(),
+        builder: (context, state) => AppNavigationScreen(key: appNavigationKey),
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.homeScreen}",
@@ -148,6 +152,26 @@ class AppRoutes {
         path: "/${AppRoutesKey.instance.termsAndConditionsScreen}",
         name: AppRoutesKey.instance.termsAndConditionsScreen,
         builder: (context, state) => TermsAndConditionsScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.signUpScreen}",
+        name: AppRoutesKey.instance.signUpScreen,
+        builder: (context, state) => SignUpScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.forgetPassword}",
+        name: AppRoutesKey.instance.forgetPassword,
+        builder: (context, state) => ForgetPassword(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.recoverPassword}",
+        name: AppRoutesKey.instance.recoverPassword,
+        builder: (context, state) => RecoverPassword(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.successfullScreen}",
+        name: AppRoutesKey.instance.successfullScreen,
+        builder: (context, state) => SuccessfullScreen(),
       ),
     ],
     errorBuilder: (context, state) {

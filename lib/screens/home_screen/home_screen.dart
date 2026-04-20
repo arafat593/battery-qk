@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
+import 'package:olabisiolai_flutter_app/screens/app_navigation_screen/app_navigation_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_app_bar.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_category_grid.dart';
 import 'package:olabisiolai_flutter_app/screens/common_widget/professional_card.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_section_header.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_service_tile.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import 'package:olabisiolai_flutter_app/utils/gap.dart';
-import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
-import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-
-import '../../constant/app_asserts_icons_path.dart';
-import '../../routes/app_routes.dart';
-import '../../routes/app_routes_key.dart';
-import '../../widgets/inputs/custom_floationg_search_widget.dart';
+import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -50,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                   hintText: "Find verified services...",
                   prefixIcon: Icon(Icons.search),
                   onTap: () {
-                    print("Search tapped");
                   },
                 ),
               ),
@@ -59,7 +55,13 @@ class HomeScreen extends StatelessWidget {
               child: HomeSectionHeader(
                 title: "Curated Categories",
                 actionText: "View All",
-                onActionTap: () {},
+                onActionTap: () {
+                  try {
+                    appNavigationKey.currentState?.changeNavigation(1);
+                  } catch (e) {
+                    errorLog("HomeScreen", e);
+                  }
+                },
               ),
             ),
             SliverToBoxAdapter(

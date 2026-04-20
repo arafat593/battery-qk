@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
-class LoginBottomSection extends StatelessWidget {
+class CustomTextSpan extends StatelessWidget {
   final String prefixText;
-  final String termsText;
-  final String privacyText;
+  final String firstHighLightText;
+  final String? secondHighLightText;
   final Color normalColor;
   final Color highlightColor;
-  final VoidCallback? onTermsTap;
-  final VoidCallback? onPrivacyTap;
+  final VoidCallback? firstOnTap;
+  final VoidCallback? secondOnTap;
+  final bool? isAnd;
 
-  const LoginBottomSection({
+  const CustomTextSpan({
     super.key,
     this.prefixText = "By continuing, you agree to ",
-    this.termsText = "Terms of Service",
-    this.privacyText = "Privacy Policy",
+    this.firstHighLightText = "Terms of Service",
+    this.secondHighLightText = "",
     this.normalColor = Colors.grey,
     this.highlightColor = Colors.red,
-    this.onTermsTap,
-    this.onPrivacyTap,
+    this.firstOnTap,
+    this.secondOnTap,
+    this.isAnd = true,
   });
 
   @override
@@ -31,29 +33,29 @@ class LoginBottomSection extends StatelessWidget {
 
           WidgetSpan(
             child: GestureDetector(
-              onTap: onTermsTap,
+              onTap: firstOnTap,
               child: Text(
-                termsText,
+                firstHighLightText,
                 style: TextStyle(
                   color: highlightColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12
+                  fontSize: 12,
                 ),
               ),
             ),
           ),
 
-          const TextSpan(text: " and "),
+          isAnd! ? TextSpan(text: " and ") : TextSpan(),
 
           WidgetSpan(
             child: GestureDetector(
-              onTap: onPrivacyTap,
+              onTap: secondOnTap,
               child: Text(
-                privacyText,
+                secondHighLightText!,
                 style: TextStyle(
                   color: highlightColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12
+                  fontSize: 12,
                 ),
               ),
             ),

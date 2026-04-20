@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../widgets/app_image/app_image.dart';
-import '../../../../widgets/texts/app_text.dart';
+import '../../widgets/app_image/app_image.dart';
+import '../../widgets/texts/app_text.dart';
 
-class SocialButton extends StatelessWidget {
+class CustomSocialButton extends StatelessWidget {
   final String label;
   final String icon;
   final Color color;
 
-  const SocialButton({
+  const CustomSocialButton({
+    super.key,
     required this.label,
     required this.icon,
     required this.color,

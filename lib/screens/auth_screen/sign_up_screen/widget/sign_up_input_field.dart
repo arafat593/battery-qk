@@ -1,40 +1,26 @@
-import 'package:country_picker/country_picker.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
 
-import '../../../../constant/app_colors.dart';
-import '../../../../utils/gap.dart';
-import '../../../../widgets/inputs/app_input_widget.dart';
-import '../../../../widgets/inputs/app_input_widget_tow.dart';
-import '../../../../widgets/texts/app_text.dart';
-
-class SignUpInputField extends StatefulWidget {
-  final String label;
-  final String defaultCountryCode;
-  final String defaultFlag;
-  final Color? containerColor;
-  final Color? textColor;
+class SignUpInputField extends StatelessWidget {
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController emailController;
+  final TextEditingController phoneController;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
 
   const SignUpInputField({
     super.key,
-    this.label = "PHONE NUMBER",
-    this.defaultCountryCode = "234",
-    this.defaultFlag = "🇳🇬",
-    this.containerColor,
-    this.textColor,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.emailController,
+    required this.phoneController,
+    required this.passwordController,
+    required this.confirmPasswordController,
   });
-
-  @override
-  State<SignUpInputField> createState() => _SignUpInputFieldState();
-}
-
-class _SignUpInputFieldState extends State<SignUpInputField> {
-  late String _countryCode;
-  late String _flagEmoji;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,28 +29,82 @@ class _SignUpInputFieldState extends State<SignUpInputField> {
         AppInputWidgetTwo(
           title: "First Name",
           hintText: "Enter your name",
+          controller: firstNameController,
+          textInputAction: TextInputAction.next,
+          validator: (value) =>
+          value!.trim().isEmpty ? "Enter your first name" : null,
         ),
+
         AppInputWidgetTwo(
           title: "Last Name",
           hintText: "Enter your last name",
+          controller: lastNameController,
+          textInputAction: TextInputAction.next,
+          validator: (value) =>
+          value!.trim().isEmpty ? "Enter your last name" : null,
         ),
+
         AppInputWidgetTwo(
           title: "Email",
           hintText: "Enter your email",
+          controller: emailController,
+          // isEmail: true,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          validator: (value) =>
+          value!.trim().isEmpty ? "Enter your email" : null,
         ),
+
         AppInputWidgetTwo(
-          title: "Phone Number*",
+          title: "Phone Number",
           hintText: "Enter your phone number",
+          controller: phoneController,
+          keyboardType: TextInputType.phone,
+          textInputAction: TextInputAction.next,
+          validator: (value) =>
+          value!.trim().isEmpty ? "Enter your phone number" : null,
         ),
+
         AppInputWidgetTwo(
-          title: "Password*",
+          title: "Password",
           hintText: "**************",
+          controller: passwordController,
+          textInputAction: TextInputAction.next,
+          isPassWord: true,
+          maxLines: 1,
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Enter your password";
+            }
+            if ((value ?? '').length < 6) {
+              return "At least 6 characters";
+            }
+            return null;
+          },
         ),
+
         AppInputWidgetTwo(
-          title: "Confirm Password*",
+          title: "Confirm Password",
           hintText: "**************",
+          controller: confirmPasswordController,
+          textInputAction: TextInputAction.done,
+          isPassWord: true,
+          maxLines: 1,
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Enter your password";
+            }
+            if ((value ?? '').length < 6) {
+              return "At least 6 characters";
+            }
+            if (value != passwordController.text) {
+              return "Password does not match";
+            }
+            return null;
+          },
         ),
-        Gap(height: 8),
+
+        const Gap(height: 8),
       ],
     );
   }

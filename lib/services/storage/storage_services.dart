@@ -36,6 +36,8 @@ class StorageServices {
     }
   }
 
+
+
   ////////////// token storage
   Future<void> setToken(String value) async {
     final pref = await _pref;
@@ -48,6 +50,21 @@ class StorageServices {
       return pref.getString(StorageKey.instance.token) ?? "";
     } catch (e) {
       errorLog("get token", e);
+      return "";
+    }
+  }
+
+  Future<void> setEmail(String value) async {
+    final pref = await _pref;
+    await pref.setString(StorageKey.instance.email, value);
+  }
+
+  Future<String> getEmail() async {
+    try {
+      final pref = await _pref;
+      return pref.getString(StorageKey.instance.email) ?? "";
+    } catch (e) {
+      errorLog("get email", e);
       return "";
     }
   }

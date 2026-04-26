@@ -25,7 +25,7 @@ class AppInputWidgetTwo extends StatefulWidget {
     this.elevation = 0.0,
     this.elevationColor,
     this.minLines = 1,
-    this.maxLines,
+    this.maxLines = 1,
     this.readOnly = false,
     this.isOptional = false,
     this.border,

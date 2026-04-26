@@ -9,12 +9,13 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/account_settings_screen/account_settings_screen.dart';
 import '../screens/app_navigation_screen/app_navigation_screen.dart';
-import '../screens/auth_screen/forget_password/forget_password.dart';
+import '../screens/auth_screen/forget_password/forget_password_gmail/forget_password_gmail.dart';
+import '../screens/auth_screen/forget_password/recover_password/recover_password.dart';
+import '../screens/auth_screen/forget_password/successful_screen/successfull_screen.dart';
 import '../screens/auth_screen/login_screen/login_screen.dart';
-import '../screens/auth_screen/recover_password/recover_password.dart';
+import '../screens/auth_screen/otp_verification_screen/otp_verification_screen.dart';
 import '../screens/auth_screen/sign_up_screen/sign_up_screen.dart';
-import '../screens/auth_screen/successful_screen/successfull_screen.dart';
-import '../screens/base_screen/about_us_screen/about_us_screen.dart';
+ import '../screens/base_screen/about_us_screen/about_us_screen.dart';
 import '../screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
 import '../screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
 import '../screens/business_profile/business_profile.dart';
@@ -161,7 +162,7 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.forgetPassword}",
         name: AppRoutesKey.instance.forgetPassword,
-        builder: (context, state) => ForgetPassword(),
+        builder: (context, state) => ForgetPasswordGmail(),
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.recoverPassword}",
@@ -171,7 +172,12 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.successfullScreen}",
         name: AppRoutesKey.instance.successfullScreen,
-        builder: (context, state) => SuccessfullScreen(),
+        builder: (context, state) => SuccessFullScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.otpVerificationScreen}",
+        name: AppRoutesKey.instance.otpVerificationScreen,
+        builder: (context, state) => OtpVerificationScreen(),
       ),
     ],
     errorBuilder: (context, state) {

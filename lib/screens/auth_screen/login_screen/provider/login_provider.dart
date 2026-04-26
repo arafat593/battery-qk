@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import '../../../../services/repository/auth_repository.dart';
 import '../../../../utils/app_log.dart';
 
-final loginProvider =
-StateNotifierProvider<LoginProvider, bool>((ref) {
+final loginProvider = StateNotifierProvider<LoginProvider, bool>((ref) {
   return LoginProvider();
 });
 
@@ -19,8 +18,6 @@ class LoginProvider extends StateNotifier<bool> {
       final response = await AuthRepository.instance.login(
         email: email,
         password: password,
-        fcmToken: '',
-        deviceId: '',
       );
 
       state = false;

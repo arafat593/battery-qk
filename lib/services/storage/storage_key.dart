@@ -12,4 +12,6 @@ class StorageKey {
   final String isDarkMode = "isDarkMode";
   final String appFirstTime = "appFirstTime";
   final String appUserRollData = "appUserRollData";
+  final String email = "email";
+  final String resetToken = "resetToken";
 }

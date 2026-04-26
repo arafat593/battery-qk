@@ -33,4 +33,5 @@ class AppRoutesKey {
   final String forgetPassword = "forgetPassword";
   final String recoverPassword = "recoverPassword";
   final String successfullScreen = "successfullScreen";
+  final String otpVerificationScreen = "otpVerificationScreen";
 }

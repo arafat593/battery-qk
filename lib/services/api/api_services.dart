@@ -12,8 +12,11 @@ import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
 class ApiServices {
   ///////////////
   ApiServices._privateConstructor();
+
   static final ApiServices _instance = ApiServices._privateConstructor();
+
   static ApiServices get instance => _instance;
+
   //////////  object
   final api = AppApi();
   var storageServices = StorageServices.instance;
@@ -21,9 +24,18 @@ class ApiServices {
 
   // services
 
-  Future<dynamic> putServices({required String url, dynamic body, int statusCode = 200, Map<String, dynamic>? query}) async {
+  Future<dynamic> putServices({
+    required String url,
+    dynamic body,
+    int statusCode = 200,
+    Map<String, dynamic>? query,
+  }) async {
     try {
-      final response = await api.sendRequest.put(url, data: body, queryParameters: query);
+      final response = await api.sendRequest.put(
+        url,
+        data: body,
+        queryParameters: query,
+      );
       if (response.statusCode == statusCode) {
         return response.data;
       } else {
@@ -66,7 +78,8 @@ class ApiServices {
   }) async {
     try {
       final dynamic response = await AppApi().sendRequest.post(url, data: body);
-      if (response.statusCode >= statusCodeStart && response.statusCode <= statusCodeEnd) {
+      if (response.statusCode >= statusCodeStart &&
+          response.statusCode <= statusCodeEnd) {
         return response.data;
       } else {
         return null;
@@ -99,9 +112,18 @@ class ApiServices {
     }
   }
 
-  Future<dynamic> getServices(String url, {int statusCode = 200, Map<String, dynamic>? queryParameters, dynamic body}) async {
+  Future<dynamic> getServices(
+    String url, {
+    int statusCode = 200,
+    Map<String, dynamic>? queryParameters,
+    dynamic body,
+  }) async {
     try {
-      final response = await api.sendRequest.get(url, queryParameters: queryParameters, data: body);
+      final response = await api.sendRequest.get(
+        url,
+        queryParameters: queryParameters,
+        data: body,
+      );
       if (response.statusCode == statusCode) {
         return response.data;
       } else {
@@ -135,14 +157,27 @@ class ApiServices {
     }
   }
 
-  Future<dynamic> patchServices({required String url, Object? body, int statusCode = 200, Map<String, dynamic>? query, Options? options}) async {
+  Future<dynamic> patchServices({
+    required String url,
+    Object? body,
+    int statusCode = 200,
+    Map<String, dynamic>? query,
+    Options? options,
+  }) async {
     try {
-      final response = await api.sendRequest.patch(url, data: body, queryParameters: query, options: options);
+      final response = await api.sendRequest.patch(
+        url,
+        data: body,
+        queryParameters: query,
+        options: options,
+      );
 
       if (response.statusCode == statusCode) {
         return response.data;
       } else {
-        AppSnackBar.instance.error("Unexpected response: ${response.statusCode} ${response.statusMessage}");
+        AppSnackBar.instance.error(
+          "Unexpected response: ${response.statusCode} ${response.statusMessage}",
+        );
         return null;
       }
     } on SocketException catch (e) {
@@ -173,14 +208,27 @@ class ApiServices {
     }
   }
 
-  Future<dynamic> deleteServices({required String url, Object? body, int statusCode = 200, Map<String, dynamic>? query, Options? options}) async {
+  Future<dynamic> deleteServices({
+    required String url,
+    Object? body,
+    int statusCode = 200,
+    Map<String, dynamic>? query,
+    Options? options,
+  }) async {
     try {
-      final response = await api.sendRequest.delete(url, data: body, queryParameters: query, options: options);
+      final response = await api.sendRequest.delete(
+        url,
+        data: body,
+        queryParameters: query,
+        options: options,
+      );
 
       if (response.statusCode == statusCode) {
         return response.data;
       } else {
-        AppSnackBar.instance.error("Unexpected response: ${response.statusCode} ${response.statusMessage}");
+        AppSnackBar.instance.error(
+          "Unexpected response: ${response.statusCode} ${response.statusMessage}",
+        );
         return null;
       }
     } on SocketException catch (e) {

@@ -5,7 +5,6 @@ import '../../../../widgets/inputs/app_input_widget_tow.dart';
 class PhoneInputField extends StatefulWidget {
   final Color? containerColor;
   final Color? textColor;
-
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
@@ -41,8 +40,6 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           },
           title: "phone number/email",
           controller: widget.emailController,
-          isEmail: false,
-          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
         ),
         AppInputWidgetTwo(

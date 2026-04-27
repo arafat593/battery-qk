@@ -55,81 +55,78 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final state = ref.watch(signUpProvider);
 
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  AppImage(
-                    path: AppAssertsIconsPath.instance.gidiraNameLogo,
-                    width: 116,
-                  ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                AppImage(
+                  path: AppAssertsIconsPath.instance.gidiraNameLogo,
+                  width: 116,
+                ),
 
-                  Gap(height: 40),
+                Gap(height: 40),
 
-                  AppText(
-                    text: 'Welcome to Gidira',
-                    fontSize: 36,
-                    fontWeight: FontWeight.w800,
-                  ),
+                AppText(
+                  text: 'Welcome to Gidira',
+                  fontSize: 36,
+                  fontWeight: FontWeight.w800,
+                ),
 
-                  Gap(height: 40),
+                Gap(height: 40),
 
-                  SignUpInputField(
-                    firstNameController: firstNameController,
-                    lastNameController: lastNameController,
-                    emailController: emailController,
-                    phoneController: phoneController,
-                    passwordController: passwordController,
-                    confirmPasswordController: confirmPasswordController,
-                  ),
+                SignUpInputField(
+                  formKey: _formKey,
+                  firstNameController: firstNameController,
+                  lastNameController: lastNameController,
+                  emailController: emailController,
+                  phoneController: phoneController,
+                  passwordController: passwordController,
+                  confirmPasswordController: confirmPasswordController,
+                ),
 
-                  Gap(height: 24),
+                Gap(height: 24),
 
-                  Consumer(
-                    builder: (context, ref, child) {
-                      var provider = ref.watch(signUpProvider);
-                      return AppButton(
-                        title: state.isLoading ? "Loading..." : "Continue",
-                        onTap: state.isLoading
-                            ? null
-                            : () async {
-                                final notifier = ref.read(
-                                  signUpProvider.notifier,
+                Consumer(
+                  builder: (context, ref, child) {
+                    var provider = ref.watch(signUpProvider);
+                    return AppButton(
+                      title: state.isLoading ? "Loading..." : "Continue",
+                      onTap: state.isLoading
+                          ? null
+                          : () async {
+                              final notifier = ref.read(
+                                signUpProvider.notifier,
+                              );
+
+                              FocusScope.of(context).unfocus();
+
+                              notifier.update(
+                                firstName: firstNameController.text.trim(),
+                                lastName: lastNameController.text.trim(),
+                                email: emailController.text.trim(),
+                                phone: phoneController.text.trim(),
+                                password: passwordController.text.trim(),
+                                confirmPassword: confirmPasswordController.text
+                                    .trim(),
+                              );
+
+                              final success = await notifier.signUp(_formKey);
+
+                              if (!mounted) return;
+
+                              if (success) {
+                                AppRoutes.instance.pushNamed(
+                                  AppRoutesKey.instance.otpVerificationScreen,
+                                  extra: emailController.text.trim(),
                                 );
-
-                                FocusScope.of(context).unfocus();
-
-                                notifier.update(
-                                  firstName: firstNameController.text.trim(),
-                                  lastName: lastNameController.text.trim(),
-                                  email: emailController.text.trim(),
-                                  phone: phoneController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                  confirmPassword: confirmPasswordController
-                                      .text
-                                      .trim(),
-                                );
-
-                                final success = await notifier.signUp(_formKey);
-
-                                if (!mounted) return;
-
-                                if (success) {
-                                  AppRoutes.instance.pushNamed(
-                                    AppRoutesKey.instance.otpVerificationScreen,
-                                    extra: emailController.text.trim(),
-                                  );
-                                }
-                              },
-                      );
-                    },
-                  ),
-                ],
-              ),
+                              }
+                            },
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

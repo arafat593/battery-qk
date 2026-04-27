@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../constant/app_asserts_icons_path.dart';
 import '../../../../routes/app_routes.dart';
@@ -26,32 +27,34 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
   late GlobalKey<FormState> formKey;
 
   String token = "";
+  String email = "";
 
   @override
   void initState() {
     super.initState();
+
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
     formKey = GlobalKey<FormState>();
-
-    /// GET TOKEN FROM PREVIOUS SCREEN
-    Future.microtask(() {
-      token = ModalRoute.of(context)?.settings.arguments as String? ?? "";
-    });
   }
 
   @override
-  void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final args = GoRouterState.of(context).extra;
+
+    if (args != null && args is Map) {
+      token = args["token"] ?? "";
+      email = args["email"] ?? "";
+    }
   }
 
   Future<void> resetPassword() async {
     if (!formKey.currentState!.validate()) return;
 
-    if (token.isEmpty) {
-      AppSnackBar.instance.error("Invalid session. Try again.");
+    if (token.isEmpty || email.isEmpty) {
+      AppSnackBar.instance.error("Invalid session");
       return;
     }
 
@@ -59,9 +62,12 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
         .read(recoverPasswordProvider.notifier)
         .resetPassword(
           token: token,
-          newPassword: passwordController.text.trim(),
+          email: email,
+          password: passwordController.text.trim(),
           confirmPassword: confirmPasswordController.text.trim(),
         );
+
+    if (!mounted) return;
 
     if (success) {
       AppRoutes.instance.go(AppRoutesKey.instance.successfullScreen);
@@ -115,41 +121,26 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
 
                   Gap(height: 30),
 
-                  /// PASSWORD
                   AppInputWidgetTwo(
                     title: "Password",
                     controller: passwordController,
                     isPassWord: true,
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter password";
-                      }
-                      if ((value ?? '').length < 6) {
-                        return "Minimum 6 characters";
-                      }
-                      return null;
-                    },
+                    maxLines: 1,
+                    textInputAction: TextInputAction.next,
                   ),
 
-                  /// CONFIRM PASSWORD
                   AppInputWidgetTwo(
                     title: "Confirm Password",
                     controller: confirmPasswordController,
                     isPassWord: true,
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Confirm password";
-                      }
-                      if (value != passwordController.text) {
-                        return "Passwords do not match";
-                      }
-                      return null;
-                    },
+                    textInputAction: TextInputAction.done,
+                    isPassWordSecondValidation: true,
+                    isPassWordSecondValidationController: passwordController,
+                    maxLines: 1,
                   ),
 
                   Gap(height: 30),
 
-                  /// BUTTON
                   AppButton(
                     title: "Continue",
                     trailing: Icons.arrow_forward,

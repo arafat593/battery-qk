@@ -259,7 +259,7 @@ class AuthRepository {
     return "";
   }
 
-  Future<String> forgotVerifyEmail({
+  Future<bool> forgotVerifyEmail({
     required String email,
     required String token,
     required String otp,
@@ -276,36 +276,35 @@ class AuthRepository {
         body: bodyData,
       );
 
-      if (response != null) {
-        if (response["data"] != null && response["data"] is String) {
-          return response["data"].toString();
-        }
+      if (response != null && response["success"] == true) {
+        return true; // ✅ success
       }
     } catch (e) {
       errorLog("forgotVerifyEmail repo", e);
     }
 
-    return "";
+    return false; // ❌ fail
   }
 
   Future<bool> forgotResetPassword({
     required String token,
-    required String newPassword,
+    required String email,
+    required String password,
     required String confirmPassword,
   }) async {
     try {
-      Map<String, dynamic> bodyData = {
-        "newPassword": newPassword,
-        "confirmPassword": confirmPassword,
-      };
-      var response = await nonAuthApi.sendRequest.post(
+      final response = await nonAuthApi.sendRequest.post(
         api.authResetPassword,
-        data: bodyData,
+        data: {
+          "token": token,
+          "email": email,
+          "password": password,
+          "password_confirmation": confirmPassword,
+        },
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
             "Content-Type": "application/json",
-            "Accept": "*/*",
+            "Accept": "application/json",
           },
         ),
       );
@@ -314,8 +313,9 @@ class AuthRepository {
         return true;
       }
     } catch (e) {
-      errorLog("forgotPassword repo", e);
+      errorLog("resetPassword repo", e);
     }
+
     return false;
   }
 }

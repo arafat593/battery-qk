@@ -28,7 +28,7 @@ class ForgetPasswordGmailProvider extends StateNotifier<bool> {
   }
 
   /// VERIFY OTP
-  Future<String> verifyOtp({
+  Future<bool> verifyOtp({
     required String email,
     required String token,
     required int otp,
@@ -43,11 +43,12 @@ class ForgetPasswordGmailProvider extends StateNotifier<bool> {
       );
 
       state = false;
-      return result;
+
+      return result; // 👈 must be bool এখন
     } catch (e) {
       errorLog("verifyOtp", e);
       state = false;
-      return "";
+      return false;
     }
   }
 }

@@ -88,18 +88,21 @@ class _ForgetPasswordGmailState extends ConsumerState<ForgetPasswordGmail> {
       return;
     }
 
-    final responseToken = await ref
+    final isSuccess = await ref
         .read(forgetPasswordGmailProvider.notifier)
         .verifyOtp(
           email: emailController.text.trim(),
           token: token,
-          otp: int.parse(otpController.text.trim()),
+          otp: int.parse(otpText),
         );
 
-    if (responseToken.isNotEmpty) {
-      token = responseToken;
+    if (isSuccess) {
+      if (!context.mounted) return;
 
-      AppRoutes.instance.pushNamed(AppRoutesKey.instance.recoverPassword);
+      AppRoutes.instance.pushNamed(
+        AppRoutesKey.instance.recoverPassword,
+        extra: {"token": token, "email": emailController.text.trim()},
+      );
     } else {
       AppSnackBar.instance.error("Invalid OTP");
     }
@@ -222,9 +225,9 @@ class _ForgetPasswordGmailState extends ConsumerState<ForgetPasswordGmail> {
                           onPressed: (!isLoading)
                               ? () {
                                   if (token.isEmpty) {
-                                    sendCode(); // প্রথমবার send
+                                    sendCode();
                                   } else {
-                                    resendCode(); // resend OTP
+                                    resendCode();
                                   }
                                 }
                               : null,

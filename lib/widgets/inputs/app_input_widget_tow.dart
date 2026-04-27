@@ -175,8 +175,25 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                       return "This field is required";
                     }
 
-                    if (widget.isPassWord && value.length < 8) {
-                      return "Must be at last 8 characters.";
+                    if (widget.isPassWord) {
+                      if (value.length < 8) {
+                        return "Minimum of 8 characters required.";
+                      }
+
+                      if (!value.contains(RegExp(r'[a-z]'))) {
+                        return "Add lowercase";
+                      }
+
+                      if (!value.contains(RegExp(r'[A-Z]'))) {  
+                        return "Add uppercase";
+                      } 
+
+                      if (!value.contains(RegExp(r'[0-9]'))) {
+                        return "Add number";
+                      } 
+
+                      if (!value.contains(RegExp(r'[!@#$%^&*]'))) {
+                        return "Add special char"; 
                     }
                     if (widget.isEmail) {
                       if (isValidEmail(value.toString())) return null;

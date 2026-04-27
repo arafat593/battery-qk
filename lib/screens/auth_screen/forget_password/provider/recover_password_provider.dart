@@ -4,25 +4,26 @@ import '../../../../services/repository/auth_repository.dart';
 import '../../../../utils/app_log.dart';
 
 final recoverPasswordProvider =
-StateNotifierProvider<RecoverPasswordProvider, bool>((ref) {
-  return RecoverPasswordProvider();
-});
+    StateNotifierProvider<RecoverPasswordProvider, bool>((ref) {
+      return RecoverPasswordProvider();
+    });
 
 class RecoverPasswordProvider extends StateNotifier<bool> {
   RecoverPasswordProvider() : super(false);
 
   Future<bool> resetPassword({
     required String token,
-    required String newPassword,
+    required String email,
+    required String password,
     required String confirmPassword,
   }) async {
     try {
       state = true;
 
-      final response =
-      await AuthRepository.instance.forgotResetPassword(
+      final response = await AuthRepository.instance.forgotResetPassword(
         token: token,
-        newPassword: newPassword,
+        email: email,
+        password: password,
         confirmPassword: confirmPassword,
       );
 

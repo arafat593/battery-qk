@@ -77,14 +77,9 @@ class SignUpProvider extends StateNotifier<SignUpState> {
   }
 
   Future<bool> signUp(GlobalKey<FormState> formKey) async {
-    if (!formKey.currentState!.validate()) return false;
-
-    if (state.password != state.confirmPassword) {
-      errorLog("signup error", "Password mismatch");
-      return false;
-    }
-
     try {
+      if (!formKey.currentState!.validate()) return false;
+
       state = state.copyWith(isLoading: true);
 
       final success = await AuthRepository.instance.signUp(

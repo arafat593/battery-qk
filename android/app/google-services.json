@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "233797822107",
+    "project_id": "olabisiolai-flutter-app",
+    "storage_bucket": "olabisiolai-flutter-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233797822107:android:8c6ba77cc78275a9cd083e",
+        "android_client_info": {
+          "package_name": "com.olabisiolai.gidira"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW99Z6_oeNMnMF6x322sNMWrdJs9MaFT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

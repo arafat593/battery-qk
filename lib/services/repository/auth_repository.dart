@@ -23,7 +23,7 @@ class AuthRepository {
   StorageServices storageServices = StorageServices.instance;
 
   /////////////// function
-  Future<bool> login({
+  Future<Map<String, dynamic>?> login({
     required String email,
     required String password,
     // required String fcmToken,
@@ -43,6 +43,7 @@ class AuthRepository {
         body: bodyData,
       );
       if (response != null) {
+        // Store tokens if present
         if (response["data"] != null && response["data"] is Map) {
           var data = response["data"];
           if (data["role"] != null && data["role"] is String) {
@@ -52,17 +53,15 @@ class AuthRepository {
             await storageServices.setToken(data["accessToken"].toString());
           }
           if (data["refreshToken"] != null && data["refreshToken"] is String) {
-            await storageServices.setRefreshToken(
-              data["refreshToken"].toString(),
-            );
+            await storageServices.setRefreshToken(data["refreshToken"].toString());
           }
         }
-        return true;
+        return response;
       }
     } catch (e) {
       errorLog("login function repo", e);
     }
-    return false;
+    return null;
   }
 
   Future<bool> accountDelete({required String password}) async {

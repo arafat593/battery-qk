@@ -213,6 +213,7 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                     }
 
                     return null;
+                  };
                   },
               inputFormatters: widget.inputFormatters,
               keyboardType: widget.keyboardType,

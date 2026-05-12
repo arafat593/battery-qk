@@ -48,7 +48,7 @@ Error message: ${error.message}
 """);
 
           try {
-            if (error.response?.statusCode == 401) {
+            if (error.response?.statusCode == 401 && !error.requestOptions.path.contains("/auth/login")) {
               String token = await storageServices.getRefreshToken();
               if (token.isEmpty) {
                 await storageServices.logout();

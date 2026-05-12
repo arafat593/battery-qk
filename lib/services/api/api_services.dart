@@ -50,7 +50,7 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
           await storageServices.logout();
           appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
@@ -93,7 +93,7 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
           await storageServices.logout();
           appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
@@ -138,7 +138,7 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
           await storageServices.logout();
           appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
@@ -189,7 +189,7 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
           await storageServices.logout();
           appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
@@ -240,7 +240,7 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401) {
+        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
           await storageServices.logout();
           appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }

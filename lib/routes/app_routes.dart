@@ -294,9 +294,14 @@ class AppRoutes {
     }
   }
 
-  void pushReplacement(String value, {Object? extra}) {
+  void pushReplacement(String value, {Map<String, String> pathParameters = const {}, Map<String, dynamic> queryParameters = const {}, Object? extra}) {
     try {
-      router.pushReplacement(_normalize(value), extra: extra);
+      router.pushReplacementNamed(
+        value,
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
     } catch (e) {
       errorLog("pushReplacement", e);
     }

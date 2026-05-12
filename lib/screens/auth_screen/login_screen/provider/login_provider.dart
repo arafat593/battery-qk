@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-
 import '../../../../services/repository/auth_repository.dart';
 import '../../../../utils/app_log.dart';
 
@@ -21,7 +19,7 @@ class LoginProvider extends StateNotifier<bool> {
       );
 
       state = false;
-      return response;
+      return response != null;
     } catch (e) {
       errorLog("Login", e);
       state = false;

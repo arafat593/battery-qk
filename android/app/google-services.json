@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "233797822107",
+    "firebase_url": "https://olabisiolai-flutter-app-default-rtdb.firebaseio.com",
     "project_id": "olabisiolai-flutter-app",
     "storage_bucket": "olabisiolai-flutter-app.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.olabisiolai.gidira"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "233797822107-vt95jdqrhr520gppek8mmham2qngq1v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.olabisiolai.gidira",
+            "certificate_hash": "39d4594fdeda2b672717e104e55fe207ab4e038a"
+          }
+        },
+        {
+          "client_id": "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCW99Z6_oeNMnMF6x322sNMWrdJs9MaFT8"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "233797822107-v426oj9rnpfoj9jsiiqi39hlsv315jhr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.olabisiolai.gidira"
+              }
+            }
+          ]
         }
       }
     }

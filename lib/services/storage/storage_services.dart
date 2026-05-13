@@ -92,6 +92,8 @@ class StorageServices {
       await pref.setString(StorageKey.instance.refreshToken, "");
       await pref.setString(StorageKey.instance.token, "");
       await pref.setString(StorageKey.instance.appUserRollData, "");
+      await pref.setString(StorageKey.instance.loginDataStore, "");
+      await pref.setString(StorageKey.instance.email, "");
     } catch (e) {
       errorLog("logout", e);
     }

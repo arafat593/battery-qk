@@ -33,6 +33,7 @@ class AppApiUrl {
   String authDeleteAccount = "/authDeleteAccount";
   String user = "/user";
   String changePassword = "/changePassword";
+  
 }
 
 String _getDomain() {

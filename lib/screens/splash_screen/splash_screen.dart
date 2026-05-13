@@ -11,6 +11,7 @@ import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import '../../routes/app_routes.dart';
 import '../../routes/app_routes_key.dart';
 import '../../services/storage/storage_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../utils/app_log.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -32,10 +33,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       }*/
 
       var token = await storageServices.getToken();
-      if (token.isEmpty) {
+      var firebaseUser = FirebaseAuth.instance.currentUser;
+      print("DEBUG: Splash token value: '$token', FirebaseUser: ${firebaseUser?.email}");
+      
+      if (token.isEmpty && firebaseUser == null) {
         AppRoutes.instance.go(AppRoutesKey.instance.loginScreen);
       } else {
-        // AppRoutes.instance.go(AppRoutesKey.instance.appNavigationScreen);
+        AppRoutes.instance.go(AppRoutesKey.instance.appNavigationScreen);
       }
     } catch (e) {
       errorLog("onAppInitial", e);
@@ -45,7 +49,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 2), () {
       onAppInitial();
     });
   }

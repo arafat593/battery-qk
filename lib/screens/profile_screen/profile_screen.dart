@@ -5,13 +5,15 @@ import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import '../../../widgets/texts/app_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../auth_screen/login_screen/provider/login_provider.dart';
 import '../../utils/gap.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA), // Light background
       appBar: CustomAppBar(
@@ -162,6 +164,19 @@ class ProfileScreen extends StatelessWidget {
                 titleColor: AppColors.instance.black500,
                 iconColor: AppColors.instance.black500,
                 borderColor: AppColors.instance.black500,
+                onTap: () async {
+                  final success = await ref.read(loginProvider.notifier).logOut();
+                  if (success) {
+                    AppRoutes.instance.goNamed(
+                      AppRoutesKey.instance.loginScreen,
+                    );
+                  } else {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Logout failed")),
+                    );
+                  }
+                },
               ),
             ),
             const Gap(height: 20),

@@ -1,12 +1,19 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:olabisiolai_flutter_app/firebase_options.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/main_app_entry.dart';
 
 Future<void> main() async {
   //////////////  flutter binding initialize
   WidgetsFlutterBinding.ensureInitialized();
+
+  ///////////// firebase initialize
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   ///////////// devices orientation set
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);

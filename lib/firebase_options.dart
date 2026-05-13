@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:233797822107:android:8c6ba77cc78275a9cd083e',
     messagingSenderId: '233797822107',
     projectId: 'olabisiolai-flutter-app',
+    databaseURL: 'https://olabisiolai-flutter-app-default-rtdb.firebaseio.com',
     storageBucket: 'olabisiolai-flutter-app.firebasestorage.app',
   );
 
@@ -62,7 +63,11 @@ class DefaultFirebaseOptions {
     appId: '1:233797822107:ios:8e99f68a6c20d713cd083e',
     messagingSenderId: '233797822107',
     projectId: 'olabisiolai-flutter-app',
+    databaseURL: 'https://olabisiolai-flutter-app-default-rtdb.firebaseio.com',
     storageBucket: 'olabisiolai-flutter-app.firebasestorage.app',
+    androidClientId: '233797822107-eqase75iv06ucn8ik2r4onue57v2hg4c.apps.googleusercontent.com',
+    iosClientId: '233797822107-v426oj9rnpfoj9jsiiqi39hlsv315jhr.apps.googleusercontent.com',
     iosBundleId: 'com.olabisiolai.gidira',
   );
+
 }

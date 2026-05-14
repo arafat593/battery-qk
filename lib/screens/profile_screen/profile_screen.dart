@@ -7,13 +7,30 @@ import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.da
 import '../../../widgets/texts/app_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../auth_screen/login_screen/provider/login_provider.dart';
+import '../account_settings_screen/provider/account_settings_provider.dart';
 import '../../utils/gap.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(accountSettingsProvider.notifier).fetchSettings();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final settingsState = ref.watch(accountSettingsProvider);
+    String fullName = "${settingsState.firstName} ${settingsState.lastName}".trim();
+    if (fullName.isEmpty) fullName = "User";
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA), // Light background
       appBar: CustomAppBar(
@@ -41,17 +58,17 @@ class ProfileScreen extends ConsumerWidget {
                   shape: BoxShape.circle,
                   gradient: LinearGradient(colors: [Colors.green, Colors.teal]),
                 ),
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: NetworkImage(
-                    'https://i.pravatar.cc/150?u=amara',
-                  ),
+                  backgroundImage: settingsState.photo.isNotEmpty 
+                      ? NetworkImage(settingsState.photo) 
+                      : const NetworkImage('https://i.pravatar.cc/150?u=amara'),
                 ),
               ),
             ),
             const Gap(height: 15),
             AppText(
-              text: "Amara Okafor",
+              text: fullName,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -65,7 +82,7 @@ class ProfileScreen extends ConsumerWidget {
                   color: Colors.grey,
                 ),
                 AppText(
-                  text: " Lagos, Nigeria",
+                  text: settingsState.location.isNotEmpty ? " ${settingsState.location}" : " Location not set",
                   fontSize: 14,
                   color: Colors.grey,
                 ),

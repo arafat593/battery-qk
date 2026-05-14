@@ -3,30 +3,37 @@ import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
 import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
 import '../../../widgets/texts/app_text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/gap.dart';
 import '../../widgets/custom_app_bar/custom_app_bar.dart';
+import '../account_settings_screen/provider/account_settings_provider.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   bool _obscureCurrent = true;
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(accountSettingsProvider);
+    final notifier = ref.read(accountSettingsProvider.notifier);
+
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       appBar: CustomAppBar(
         title: "Edit Profile",
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: state.isSaving ? null : () async {
+              await notifier.saveSettings();
+            },
             child: AppText(
-              text: "Save",
+              text: state.isSaving ? "Saving" : "Save",
               color: AppColors.instance.blue,
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -48,8 +55,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: 100,
                         height: 120,
                         width: 120,
-                        url:
-                            "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop",
+                        url: state.photo.isNotEmpty 
+                            ? state.photo 
+                            : "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop",
                       ),
                       Positioned(
                         bottom: 0,
@@ -87,20 +95,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SectionCard(
               icon: Icons.person_outline,
               title: "Personal Information",
-              children: [
-                AppInputWidgetTwo(title: "FULL NAME", hintText: "Amara Okafor"),
+              children: [ 
+                AppInputWidgetTwo(
+                  title: "FULL NAME",  
+                  controller: notifier.fullNameController,
+                ),
                 AppInputWidgetTwo(
                   title: "EMAIL ADDRESS",
-                  hintText: "chidi.okoro@gidira.com",
+                  controller: notifier.emailController,
                 ),
                 AppInputWidgetTwo(
                   title: "PHONE NUMBER",
-                  hintText: "+234 803 123 4567",
+                  controller: notifier.phoneController,
                 ),
                 AppInputWidgetTwo(
                   title: "LOCATION / ADDRESS",
-                  hintText: "Victoria Island, Lagos",
                   prefix: Icon(Icons.location_on_outlined),
+                  controller: notifier.locationController,
                 ),
               ],
             ),
@@ -113,15 +124,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 AppInputWidgetTwo(
                   title: "CURRENT PASSWORD",
-                  hintText: "****************",
+                  hintText: "Enter your current password",
                 ),
                 AppInputWidgetTwo(
                   title: "NEW PASSWORD",
-                  hintText: "****************",
+                  hintText: "Enter your new password",
                 ),
                 AppInputWidgetTwo(
                   title: "CONFIRM NEW PASSWORD",
-                  hintText: "****************",
+                  hintText: "Enter your confirm new password",
                 ),
               ],
             ),
@@ -169,4 +180,4 @@ class SectionCard extends StatelessWidget {
       ),
     );
   }
-}
+} 

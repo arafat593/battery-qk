@@ -33,7 +33,14 @@ class AppApiUrl {
   String authDeleteAccount = "/authDeleteAccount";
   String user = "/user";
   String changePassword = "/changePassword";
+  String userSettings = "/user/settings";
+  String userFavorites = "/user/favorites";
+  String userFavoritesToggle = "/user/favorites/toggle";
   
+  String businessesHome = "/businesses/home";
+  String businesses = "/businesses";
+  String reviews = "/reviews";
+  String reviewStore = "/reviews/store";
 }
 
 String _getDomain() {

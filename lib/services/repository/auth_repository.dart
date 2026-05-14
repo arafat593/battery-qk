@@ -245,6 +245,22 @@ class AuthRepository {
         body: formBodyData,
       );
       if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          var data = response["data"];
+          if (data["token"] != null) {
+            await storageServices.setToken(data["token"].toString());
+            await storageServices.setEmail(email);
+            
+            Map<String, String> userData = {
+               "first_name": firstName,
+               "last_name": lastName,
+               "name": "$firstName $lastName".trim(),
+               "email": email,
+               "phone": mobileNumber,
+            };
+            await storageServices.setLogDedData(userData);
+          }
+        }
         return true;
       }
     } catch (e) {

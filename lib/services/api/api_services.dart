@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/services/api/api.dart';
+import 'package:olabisiolai_flutter_app/services/repository/auth_repository.dart';
 import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
@@ -51,8 +52,15 @@ class ApiServices {
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
-          await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          String token = await storageServices.getToken();
+          if (token != "firebase_google_user") {
+            await storageServices.logout();
+            try {
+              await AuthRepository.instance.auth.signOut();
+              await AuthRepository.instance.googleSignIn.signOut();
+            } catch (_) {}
+            appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          }
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -94,8 +102,15 @@ class ApiServices {
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
-          await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          String token = await storageServices.getToken();
+          if (token != "firebase_google_user") {
+            await storageServices.logout();
+            try {
+              await AuthRepository.instance.auth.signOut();
+              await AuthRepository.instance.googleSignIn.signOut();
+            } catch (_) {}
+            appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          }
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -139,8 +154,15 @@ class ApiServices {
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
-          await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          String token = await storageServices.getToken();
+          if (token != "firebase_google_user") {
+            await storageServices.logout();
+            try {
+              await AuthRepository.instance.auth.signOut();
+              await AuthRepository.instance.googleSignIn.signOut();
+            } catch (_) {}
+            appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          }
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -190,8 +212,15 @@ class ApiServices {
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
-          await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          String token = await storageServices.getToken();
+          if (token != "firebase_google_user") {
+            await storageServices.logout();
+            try {
+              await AuthRepository.instance.auth.signOut();
+              await AuthRepository.instance.googleSignIn.signOut();
+            } catch (_) {}
+            appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          }
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -241,8 +270,15 @@ class ApiServices {
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
-          await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          String token = await storageServices.getToken();
+          if (token != "firebase_google_user") {
+            await storageServices.logout();
+            try {
+              await AuthRepository.instance.auth.signOut();
+              await AuthRepository.instance.googleSignIn.signOut();
+            } catch (_) {}
+            appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+          }
         }
 
         if (e.response?.data["message"].runtimeType != Null) {

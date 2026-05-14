@@ -5,6 +5,7 @@ import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/services/api/non_auth_api.dart';
 import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
+import 'package:olabisiolai_flutter_app/services/repository/auth_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -51,8 +52,15 @@ Error message: ${error.message}
             if (error.response?.statusCode == 401 && !error.requestOptions.path.contains("/auth/login")) {
               String token = await storageServices.getRefreshToken();
               if (token.isEmpty) {
-                await storageServices.logout();
-                appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+                String currentToken = await storageServices.getToken();
+                if (currentToken != "firebase_google_user") {
+                  await storageServices.logout();
+                  try {
+                    await AuthRepository.instance.auth.signOut();
+                    await AuthRepository.instance.googleSignIn.signOut();
+                  } catch (_) {}
+                  appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+                }
                 return handler.next(error);
               }
               final newAccessToken = await reFreshNewAccessToken(token);
@@ -60,8 +68,15 @@ Error message: ${error.message}
                 _dio.options.headers["Authorization"] = "Bearer $newAccessToken";
                 return handler.resolve(await _dio.fetch(error.requestOptions));
               } else {
-                await storageServices.logout();
-                appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+                String currentToken = await storageServices.getToken();
+                if (currentToken != "firebase_google_user") {
+                  await storageServices.logout();
+                  try {
+                    await AuthRepository.instance.auth.signOut();
+                    await AuthRepository.instance.googleSignIn.signOut();
+                  } catch (_) {}
+                  appRoutes.pushReplacement(AppRoutesKey.instance.splash);
+                }
                 return handler.next(error);
               }
             }
@@ -93,6 +108,10 @@ Future<String> reFreshNewAccessToken(String refreshToken) async {
       }
     } else {
       await StorageServices.instance.logout();
+      try {
+        await AuthRepository.instance.auth.signOut();
+        await AuthRepository.instance.googleSignIn.signOut();
+      } catch (_) {}
     }
   } catch (e) {
     errorLog("reFreshNewAccessToken", e);

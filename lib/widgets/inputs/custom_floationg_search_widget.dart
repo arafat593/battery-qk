@@ -44,6 +44,7 @@ class CustomFloatingSearchWidget extends StatelessWidget {
       margin: margin,
       child: TextField(
         controller: controller,
+        style: const TextStyle(color: Colors.black),
         onChanged: onChanged,
         onTap: onTap,
         onSubmitted: onSubmitted,

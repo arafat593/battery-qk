@@ -67,7 +67,10 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.appNavigationScreen}",
         name: AppRoutesKey.instance.appNavigationScreen,
-        builder: (context, state) => AppNavigationScreen(key: appNavigationKey),
+        builder: (context, state) {
+          final index = int.tryParse(state.uri.queryParameters['index'] ?? '') ?? 0;
+          return AppNavigationScreen(initialIndex: index);
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.homeScreen}",
@@ -95,9 +98,12 @@ class AppRoutes {
         builder: (context, state) => MapScreen(),
       ),
       GoRoute(
-        path: "/${AppRoutesKey.instance.businessProfile}",
+        path: "/${AppRoutesKey.instance.businessProfile}/:id",
         name: AppRoutesKey.instance.businessProfile,
-        builder: (context, state) => BusinessProfile(),
+        builder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return BusinessProfile(businessId: id);
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.businessProfilePhotosScreen}",
@@ -105,14 +111,26 @@ class AppRoutes {
         builder: (context, state) => BusinessProfilePhotosScreen(),
       ),
       GoRoute(
-        path: "/${AppRoutesKey.instance.businessProfileReviewScreen}",
+        path: "/${AppRoutesKey.instance.businessProfileReviewScreen}/:id",
         name: AppRoutesKey.instance.businessProfileReviewScreen,
-        builder: (context, state) => BusinessProfileReviewScreen(),
+        builder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          final extra = state.extra as Map<String, dynamic>?;
+          return BusinessProfileReviewScreen(
+            businessId: id,
+            businessName: extra?['name'] ?? "Business",
+            businessLogo: extra?['logo'],
+            location: extra?['location'] ?? "Unknown Location",
+          );
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.reviewSubmittedScreen}",
         name: AppRoutesKey.instance.reviewSubmittedScreen,
-        builder: (context, state) => ReviewSubmittedScreen(),
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>?;
+          return ReviewSubmittedScreen(data: data);
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.messagesDetailsScreen}",

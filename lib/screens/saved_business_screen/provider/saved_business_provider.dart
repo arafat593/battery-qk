@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
+import 'dart:developer';
 
 final savedBusinessProvider = StateNotifierProvider<SavedBusinessNotifier, SavedBusinessState>((ref) {
   return SavedBusinessNotifier();
@@ -39,17 +40,22 @@ class SavedBusinessNotifier extends StateNotifier<SavedBusinessState> {
       var response = await _userRepository.getFavorites();
       List<dynamic> items = [];
       if (response != null && response['data'] != null) {
-        if (response['data'] is List) {
+        if (response['data']['favorites'] is List) {
+          items = response['data']['favorites'];
+        } else if (response['data'] is List) {
           items = response['data'];
-        } else if (response['data'] is Map && response['data']['data'] is List) {
-          items = response['data']['data']; // Depending on pagination structure
         }
       }
+      log("Saved items fetched: ${items.length}");
       state = state.copyWith(isLoading: false, savedItems: items);
     } catch (e) {
       errorLog("fetchSavedBusinesses", e);
       state = state.copyWith(isLoading: false);
     }
+  }
+
+  void refresh() {
+    fetchSavedBusinesses();
   }
   
   Future<void> removeFavorite(int favoriteId) async {

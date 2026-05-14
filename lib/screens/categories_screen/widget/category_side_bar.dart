@@ -21,6 +21,7 @@ class CategorySidebar extends StatelessWidget {
       color: AppColors.instance.backGroundColor,
       width: 100,
       child: ListView.builder(
+        padding: EdgeInsets.zero,
         itemCount: categories.length,
         itemBuilder: (context, index) {
           bool isSelected = selectedIndex == index;
@@ -33,11 +34,17 @@ class CategorySidebar extends StatelessWidget {
                 color: isSelected
                     ? AppColors.instance.categoriesBackground
                     : Colors.transparent,
-                /*border: isSelected
-                    ? const Border(
-                        left: BorderSide(color: Colors.blue, width: 4),
-                      )
-                    : null,*/
+                borderRadius: isSelected ? BorderRadius.circular(12) : null,
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : null,
               ),
               child: Column(
                 children: [

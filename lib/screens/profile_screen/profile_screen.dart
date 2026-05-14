@@ -8,6 +8,7 @@ import '../../../widgets/texts/app_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../auth_screen/login_screen/provider/login_provider.dart';
 import '../account_settings_screen/provider/account_settings_provider.dart';
+import '../saved_business_screen/provider/saved_business_provider.dart';
 import '../../utils/gap.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -23,12 +24,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(accountSettingsProvider.notifier).fetchSettings();
+      ref.read(savedBusinessProvider.notifier).fetchSavedBusinesses();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final settingsState = ref.watch(accountSettingsProvider);
+    final savedState = ref.watch(savedBusinessProvider);
     String fullName = "${settingsState.firstName} ${settingsState.lastName}".trim();
     if (fullName.isEmpty) fullName = "User";
     return Scaffold(
@@ -95,7 +98,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  _buildStatCard("03", "SAVED"),
+                  _buildStatCard(
+                    savedState.isLoading 
+                      ? "--" 
+                      : savedState.savedItems.length.toString().padLeft(2, '0'), 
+                    "SAVED"
+                  ),
                   const Gap(width: 15),
                   _buildStatCard("12", "REVIEWS"),
                 ],

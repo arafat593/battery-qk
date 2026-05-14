@@ -8,7 +8,14 @@ import '../../../widgets/texts/app_text.dart';
 import 'business_profile_service_item.dart';
 
 class BusinessProfileServiceSection extends StatelessWidget {
-  const BusinessProfileServiceSection({super.key});
+  final List<String>? services;
+  final String? category;
+  
+  const BusinessProfileServiceSection({
+    super.key,
+    this.services,
+    this.category,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,28 +33,23 @@ class BusinessProfileServiceSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppText(
-              text: "Our Services",
+              text: category != null ? "$category Services" : "Our Services",
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.instance.success,
             ),
             Gap(height: 20),
-            BusinessProfileServiceItem(
-              name: "Deep Cleaning",
-              imagePath: AppAssertsIconsPath.instance.deepCleaning,
-            ),
-            BusinessProfileServiceItem(
-              name: "Office Cleaning",
-              imagePath: AppAssertsIconsPath.instance.officeCleaning,
-            ),
-            BusinessProfileServiceItem(
-              name: "Fumigation",
-              imagePath: AppAssertsIconsPath.instance.fumigation,
-            ),
-            BusinessProfileServiceItem(
-              name: "Post-Construction",
-              imagePath: AppAssertsIconsPath.instance.postConstruction,
-            ),
+            if (services == null || services!.isEmpty)
+              AppText(
+                text: "No services listed.",
+                fontSize: 14,
+                color: AppColors.instance.hintText,
+              )
+            else
+              ...services!.map((service) => BusinessProfileServiceItem(
+                name: service,
+                imagePath: AppAssertsIconsPath.instance.deepCleaning,
+              )),
           ],
         ),
       ),

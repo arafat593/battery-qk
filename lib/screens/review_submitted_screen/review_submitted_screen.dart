@@ -9,9 +9,11 @@ import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 import '../../widgets/custom_app_bar/custom_app_bar.dart';
+import '../app_navigation_screen/app_navigation_screen.dart';
 
 class ReviewSubmittedScreen extends StatelessWidget {
-  const ReviewSubmittedScreen({super.key});
+  final Map<String, dynamic>? data;
+  const ReviewSubmittedScreen({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +83,35 @@ class ReviewSubmittedScreen extends StatelessWidget {
 
                   // 3. Review Detail Card
                   BusinessReviewCard(
-                    businessName: "Luxe Clean Solutions",
-                    rating: 5,
-                    time: "2 days ago",
-                    reviewText: "Amazing service! Everything was spotless.",
-                    images: List.generate(
-                      6,
-                      (index) => 'https://picsum.photos/200/200?random=$index',
-                    ),
-                    onEdit: () {},
-                    onDelete: () {},
+                    businessName: data?['business_name'] ?? "Luxe Clean Solutions",
+                    rating: (data?['rating'] ?? 5.0).toDouble(), 
+                    time: "Just now",  
+                    reviewText: data?['review_text'] ?? "Amazing service! Everything was spotless.",
+                    images: data?['images'] is List ? List<String>.from(data!['images']) : [],
+                    onEdit: () {
+                       AppRoutes.instance.pop();
+                    },
+                    onDelete: () { 
+                       AppRoutes.instance.pop();
+                    },
                   ),
                   Gap(height: 16),
                   AppButton(
                     title: "Back to Profile",
                     onTap: () {
-                      AppRoutes.instance.pushNamed(
-                        AppRoutesKey.instance.appNavigationScreen,
-                      );
+                      if (data?['business_id'] != null) {
+                        AppRoutes.instance.pushReplacementNamed(
+                          AppRoutesKey.instance.businessProfile,
+                          pathParameters: {
+                            'id': data!['business_id'].toString()
+                          },
+                        );
+                      } else {
+                        AppRoutes.instance.pushReplacementNamed(
+                          AppRoutesKey.instance.appNavigationScreen,
+                          queryParameters: {'index': '3'}, // Profile tab
+                        );
+                      }
                     },
                   ),
                   Gap(height: 16),
@@ -108,8 +121,9 @@ class ReviewSubmittedScreen extends StatelessWidget {
                     borderColor: AppColors.instance.black500,
                     titleColor: AppColors.instance.black500,
                     onTap: () {
-                      AppRoutes.instance.pushNamed(
+                      AppRoutes.instance.pushReplacementNamed(
                         AppRoutesKey.instance.appNavigationScreen,
+                        queryParameters: {'index': '0'}, // Home tab
                       );
                     },
                   ),

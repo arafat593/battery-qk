@@ -111,10 +111,11 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
            apiLastName = parts.length > 1 ? parts.sublist(1).join(" ") : "";
         }
         
+        if (!mounted) return;
         state = state.copyWith(
-          isLoading: false,
+          isLoading: false, 
           firstName: apiFirstName,
-          lastName: apiLastName,
+          lastName: apiLastName, 
           email: apiEmail,
           phone: apiPhone,
           photo: profile?['photo'] ?? profile?['avatar'] ?? profile?['image'] ?? localPhoto,
@@ -130,10 +131,12 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
         phoneController.text = state.phone;
         locationController.text = state.location;
       } else {
+        if (!mounted) return;
         state = state.copyWith(isLoading: false);
       }
     } catch (e) {
       errorLog("fetchSettings", e);
+      if (!mounted) return;
       state = state.copyWith(isLoading: false);
     }
   }
@@ -174,6 +177,7 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
       Map<String, String> stringData = localData.map((key, value) => MapEntry(key.toString(), value.toString()));
       await StorageServices.instance.setLogDedData(stringData);
       
+      if (!mounted) return;
       state = state.copyWith(isSaving: false, location: locationController.text);
       if (response != null) {
          AppSnackBar.instance.success("Settings updated successfully.");
@@ -181,6 +185,7 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
       }
     } catch (e) {
       errorLog("saveSettings", e);
+      if (!mounted) return;
       state = state.copyWith(isSaving: false);
     }
   }

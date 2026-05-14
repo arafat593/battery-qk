@@ -6,8 +6,10 @@ import '../../../utils/gap.dart';
 import '../../../widgets/texts/app_text.dart';
 
 class BusinessProfileAboutSection extends StatelessWidget {
+  final String? description;
   const BusinessProfileAboutSection({
     super.key,
+    this.description,
   });
 
   @override
@@ -33,8 +35,7 @@ class BusinessProfileAboutSection extends StatelessWidget {
             ),
             Gap(height: 10),
             AppText(
-              text:
-              "Elite Home Cleaners provides premium, meticulous cleaning services tailored for Lagos' most sophisticated residents. We don't just clean; we restore your space to its original sanctuary.",
+              text: description ?? "No description available.",
               fontSize: 18,
               fontWeight: FontWeight.w300,
             ),

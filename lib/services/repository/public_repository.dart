@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:olabisiolai_flutter_app/constant/app_api_url.dart';
 import 'package:olabisiolai_flutter_app/services/api/api_services.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
@@ -51,17 +52,26 @@ class PublicRepository {
     required int isAnonymous,
     required int rating,
     required String reviewText,
+    List<File>? images,
   }) async {
     try {
+      Map<String, dynamic> body = {
+        "business_id": businessId,
+        "full_name": fullName,
+        "is_anonymous": isAnonymous,
+        "rating": rating,
+        "review_text": reviewText,
+      };
+
+      if (images != null && images.isNotEmpty) {
+        // Handle images if API supports multipart/form-data
+        // This is a placeholder for Dio multipart logic
+        // body["images[]"] = ...
+      }
+
       var response = await _apiServices.postServices(
         url: _api.reviewStore,
-        body: {
-          "business_id": businessId,
-          "full_name": fullName,
-          "is_anonymous": isAnonymous,
-          "rating": rating,
-          "review_text": reviewText,
-        }
+        body: body,
       );
       return response;
     } catch (e) {

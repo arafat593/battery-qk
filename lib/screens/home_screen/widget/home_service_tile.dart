@@ -11,6 +11,7 @@ class HomeServiceListTile extends StatelessWidget {
   final String location;
   final String distance;
   final double rating;
+  final String? imageUrl;
 
   const HomeServiceListTile({
     super.key,
@@ -18,6 +19,7 @@ class HomeServiceListTile extends StatelessWidget {
     required this.location,
     required this.distance,
     required this.rating,
+    this.imageUrl,
   });
 
   @override
@@ -32,8 +34,7 @@ class HomeServiceListTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: AppImage(
-                url:
-                "https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg",
+                url: imageUrl ?? "https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg",
                 width: 95,
                 height: 95,
               ),

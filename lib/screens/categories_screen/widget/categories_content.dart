@@ -9,13 +9,24 @@ import '../../common_widget/professional_card.dart';
 
 class CategoryContent extends StatelessWidget {
   final String? title;
+  final List<dynamic>? businesses;
 
-  const CategoryContent({super.key, this.title});
+  const CategoryContent({super.key, this.title, this.businesses});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.instance.categoriesBackground,
+      decoration: BoxDecoration(
+        color: AppColors.instance.categoriesBackground,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(-5, 0), // Shadow towards the sidebar
+          ),
+        ],
+      ),
       child: ListView(
         padding: EdgeInsets.symmetric(
           horizontal: AppSize.size.width * 0.05,
@@ -44,33 +55,40 @@ class CategoryContent extends StatelessWidget {
                 text:
                 "Trusted Nigerian professionals for your home maintenance and lifestyle needs.",
                 fontSize: 14,
-                color: AppColors.instance.hintText,
+                color: AppColors.instance.deepHintText,
               ),
-            ],
+            ], 
           ),
-
-          const Gap(height: 20),
 
           // LIST (FIXED)
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return ProfessionalCard(
-                onTap: () {
-                  AppRoutes.instance.pushNamed(
-                    AppRoutesKey.instance.businessProfile,
-                  );
-                },
-                name: "Elite Sparkle Cleaners",
-                rating: 4.9,
-                reviews: 128,
-                imageUrl:
-                'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
-              );
-            },
-          ),
+          businesses == null || businesses!.isEmpty
+              ? const Center(
+                  child: Padding( 
+                    padding: EdgeInsets.all(20),
+                    child: Text("No professionals found for this category"),
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: businesses!.length,
+                  itemBuilder: (context, index) {
+                    var pro = businesses![index];
+                    return ProfessionalCard(
+                      onTap: () {
+                        AppRoutes.instance.pushNamed(
+                          AppRoutesKey.instance.businessProfile,
+                          pathParameters: {"id": pro['id'].toString()},
+                        );
+                      },
+                      name: pro['business_name'] ?? "Unknown",
+                      rating: (pro['average_rating'] ?? 0.0).toDouble(),
+                      reviews: pro['reviews_count'] ?? 0,
+                      imageUrl: pro['logo_url'] ??
+                          'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                    );
+                  },
+                ),
         ],
       ),
     );

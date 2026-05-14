@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olabisiolai_flutter_app/screens/business_profile_review_screen/provider/business_profile_review_provider.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/screens/business_profile/widget/rating_widget.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
@@ -11,55 +14,102 @@ import '../../routes/app_routes.dart';
 import '../../routes/app_routes_key.dart';
 import '../../utils/gap.dart';
 
-class BusinessProfileReviewScreen extends StatelessWidget {
-  const BusinessProfileReviewScreen({super.key});
+class BusinessProfileReviewScreen extends ConsumerWidget {
+  final int businessId;
+  final String businessName;
+  final String? businessLogo;
+  final String location;
+
+  const BusinessProfileReviewScreen({
+    super.key,
+    required this.businessId,
+    required this.businessName,
+    this.businessLogo,
+    required this.location,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(businessProfileReviewProvider(BusinessReviewArgs(id: businessId, name: businessName)));
+    final notifier = ref.read(businessProfileReviewProvider(BusinessReviewArgs(id: businessId, name: businessName)).notifier);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Write a Review"),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Business Info Card
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.instance.hintText.withAlpha(30),
-                borderRadius: BorderRadius.circular(24),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20), 
+                border: Border.all(color: Colors.grey.shade100),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
-                  AppImageCircular(
-                    borderRadius: 24,
-                    url: "https://picsum.photos/200/200?random=6",
-                    width: 80,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: AppImageCircular(
+                      borderRadius: 16,
+                      url: businessLogo ?? "https://picsum.photos/200/200?random=6",
+                      width: 70,
+                      height: 70,
+                    ),
                   ),
-                  Gap(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppText(
-                        text: "CURRENTLY REVIEWING",
-                        fontSize: 10,
-                        color: AppColors.instance.error,
-                      ),
-                      Gap(height: 10),
-                      AppText(
-                        text: "Luxe Clean Solutions",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      Gap(height: 10),
-                      AppText(
-                        text: "Lagos, Nigeria",
-                        fontSize: 14,
-                        color: AppColors.instance.hintText,
-                      ),
-                    ],
+                  const Gap(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.instance.error.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: AppText(
+                            text: "CURRENTLY REVIEWING",
+                            fontSize: 9,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.instance.error,
+                          ),
+                        ),
+                        const Gap(height: 8),
+                        AppText(
+                          text: businessName,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        const Gap(height: 4),
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, size: 12, color: AppColors.instance.hintText),
+                            const Gap(width: 4),
+                            Expanded(
+                              child: AppText(
+                                text: location,
+                                fontSize: 12,
+                                color: AppColors.instance.hintText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -73,18 +123,24 @@ class BusinessProfileReviewScreen extends StatelessWidget {
             ),
             Gap(height: 16),
 
-            // Star Rating Row
-            RatingWidget(
-              totalReviews: 5,
-              rating: 4.1,
-              showText: false,
-              filledColor: AppColors.instance.error,
-              iconSize: 30,
-              maxRating: 5,
+            // Star Rating Row (Interactive)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(5, (index) {
+                final starRating = index + 1.0;
+                return GestureDetector(
+                  onTap: () => notifier.updateRating(starRating),
+                  child: Icon(
+                    starRating <= state.rating ? Icons.star : Icons.star_border,
+                    color: AppColors.instance.error,
+                    size: 40,
+                  ),
+                );
+              }),
             ),
-            Gap(height: 8),
+            const Gap(height: 8),
             AppText(
-              text: "VERY GOOD",
+              text: _getRatingText(state.rating),
               fontSize: 12,
               color: AppColors.instance.hintText,
             ),
@@ -102,10 +158,12 @@ class BusinessProfileReviewScreen extends StatelessWidget {
             ),
             Gap(height: 12),
             AppInputWidget(
+              controller: notifier.reviewController,
               minLines: 5,
               fillColor: AppColors.instance.hintText.withAlpha(80),
               hintText: "Describe your experience with this service...",
               hintStyle: TextStyle(color: AppColors.instance.hintText),
+              style: TextStyle(color: AppColors.instance.black500),
             ),
 
             Gap(height: 24),
@@ -130,23 +188,26 @@ class BusinessProfileReviewScreen extends StatelessWidget {
             Row(
               children: [
                 // Upload Placeholder
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]!),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt_outlined),
-                      AppText(
-                        text: "UPLOAD",
-                        fontSize: 10,
-                        color: AppColors.instance.hintText,
-                      ),
-                    ],
+                GestureDetector(
+                  onTap: () => notifier.pickImage(),
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[300]!),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.camera_alt_outlined),
+                        AppText(
+                          text: "UPLOAD",
+                          fontSize: 10,
+                          color: AppColors.instance.hintText,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -154,29 +215,30 @@ class BusinessProfileReviewScreen extends StatelessWidget {
 
                 // Image List
                 Expanded(
-                  child: SizedBox(
+                  child: SizedBox( 
                     height: 100,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: 5,
+                      itemCount: state.images.length,
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: Stack(
                           children: [
-                            AppImageCircular(
-                              borderRadius: 12,
-                              url: 'https://picsum.photos/200/200?random=6',
-                              width: 100,
-                              height: 100,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.file(
+                                File(state.images[index].path),
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             Positioned(
                               top: 4,
                               right: 4,
                               child: GestureDetector(
-                                onTap: () {
-                                  // delete action
-                                },
-                                child: CircleAvatar(
+                                onTap: () => notifier.removeImage(index),
+                                child: const CircleAvatar(
                                   radius: 10,
                                   backgroundColor: Colors.black54,
                                   child: Icon(
@@ -197,11 +259,8 @@ class BusinessProfileReviewScreen extends StatelessWidget {
             ),
             Gap(height: 16),
             AppButton(
-              onTap: () {
-                AppRoutes.instance.pushNamed(
-                  AppRoutesKey.instance.reviewSubmittedScreen,
-                );
-              },
+              isLoading: state.isLoading,
+              onTap: () => notifier.submitReview(),
               title: "Submit Review",
               trailing: Icons.play_arrow_outlined,
             ),
@@ -209,5 +268,14 @@ class BusinessProfileReviewScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getRatingText(double rating) {
+    if (rating == 0) return "SELECT RATING";
+    if (rating <= 1) return "POOR";
+    if (rating <= 2) return "FAIR";
+    if (rating <= 3) return "GOOD";
+    if (rating <= 4) return "VERY GOOD";
+    return "EXCELLENT";
   }
 }

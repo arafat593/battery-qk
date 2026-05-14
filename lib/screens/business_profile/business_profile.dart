@@ -19,11 +19,24 @@ import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
-class BusinessProfile extends StatelessWidget {
-  const BusinessProfile({super.key});
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olabisiolai_flutter_app/screens/business_profile/provider/business_profile_provider.dart';
+
+class BusinessProfile extends ConsumerWidget {
+  final int businessId;
+  const BusinessProfile({super.key, required this.businessId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(businessProfileProvider(businessId));
+    final details = state.businessDetails;
+
+    if (state.isLoading) {
+      return Scaffold(
+        appBar: CustomAppBar(title: "Business Profile"),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: CustomAppBar(
@@ -42,10 +55,10 @@ class BusinessProfile extends StatelessWidget {
           children: [
             // 1. Header Image Section
             BusinessProfileHeaderImage(
-              coverImage:
-              'https://images.unsplash.com/photo-1584622650111-993a426fbf0a',
-              logoImage:
-              'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+              coverImage: (details?['cover_photo_urls'] is List && (details?['cover_photo_urls'] as List).isNotEmpty)
+                  ? details!['cover_photo_urls'][0]
+                  : details?['logo_url'] ?? 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a',
+              logoImage: details?['logo_url'] ?? 'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
               onSeeAllTap: () {
                 AppRoutes.instance.pushNamed(
                   AppRoutesKey.instance.businessProfilePhotosScreen,
@@ -55,52 +68,87 @@ class BusinessProfile extends StatelessWidget {
             Gap(height: 16),
 
             // 2. Title & Rating Section
-            AppText(
-              text: "Elite Home Cleaners",
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: AppText(
+                    text: details?['business_name'] ?? "Business Profile",
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    ref.read(businessProfileProvider(businessId).notifier).toggleFavorite();
+                  },
+                  icon: Icon(
+                    state.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: state.isFavorite ? Colors.red : Colors.grey,
+                  ),
+                ),
+              ],
             ),
-            Gap(height: 8),
 
-            VerifiedBadge(
-              backgroundColor: AppColors.instance.redOrange,
-              textColor: AppColors.instance.black500,
-              iconColor: AppColors.instance.black500,
+            if (details?['verification_status'] == 'approved') ...[  
+              VerifiedBadge(
+                backgroundColor: AppColors.instance.redOrange,
+                textColor: AppColors.instance.black500,
+                iconColor: AppColors.instance.black500,
+              ),
+              Gap(height: 8),
+            ],
+
+            RatingWidget(
+              rating: (details?['average_rating'] ?? 0.0).toDouble(),
+              totalReviews: details?['reviews_count'] ?? 0,
             ),
-            Gap(height: 8),
-
-            const RatingWidget(rating: 4.8, totalReviews: 80),
             Gap(height: 8),
 
             BusinessProfileInfoRow(
               icon: Icons.shield_outlined,
-              text: "identity Verified",
-              iconColor: AppColors.instance.success,
-              textColor: AppColors.instance.success,
+              text: details?['verification_status'] == 'approved' ? "Identity Verified" : "Pending Verification",
+              iconColor: details?['verification_status'] == 'approved' ? AppColors.instance.success : AppColors.instance.hintText,
+              textColor: details?['verification_status'] == 'approved' ? AppColors.instance.success : AppColors.instance.hintText,
               iconSize: 14,
               fontSize: 14,
             ),
             BusinessProfileInfoRow(
               icon: Icons.location_on_outlined,
-              text: "identity Verified",
+              text: details?['location']?['full_name'] ?? "Location not set",
             ),
             BusinessProfileInfoRow(
               icon: Icons.check_circle_outline_outlined,
-              text: "identity Verified",
+              text: details?['business_status'] == 'active' ? "Business is Active" : "Business Inactive",
             ),
             Gap(height: 20),
 
-            BusinessProfileActionSection(),
+            BusinessProfileActionSection(
+              phone: details?['phone'],
+              whatsapp: details?['whatsapp'],
+              website: details?['website'],
+              isFavorite: state.isFavorite,
+              onFavoriteTap: () {
+                ref.read(businessProfileProvider(businessId).notifier).toggleFavorite();
+              },
+            ),
             Gap(height: 20),
 
             // 4. Business Hours Section
             BusinessProfileSecheduleScetion(),
             Gap(height: 20),
 
-            BusinessProfileAboutSection(),
+            BusinessProfileAboutSection(
+              description: details?['business_description'],
+            ),
             Gap(height: 20),
 
-            BusinessProfileServiceSection(),
+            BusinessProfileServiceSection(
+              services: details?['services_offered'] is List
+                  ? List<String>.from(details!['services_offered'])
+                  : [],
+              category: details?['category']?['name'],
+            ),
             Gap(height: 20),
 
             GestureDetector(
@@ -110,17 +158,11 @@ class BusinessProfile extends StatelessWidget {
                 );
               },
               child: BusinessProfilePhotoGrid(
-                imageUrls: [
-                  'https://picsum.photos/400/400?random=1',
-                  'https://picsum.photos/400/400?random=2',
-                  'https://picsum.photos/200/200?random=3',
-                  'https://picsum.photos/200/200?random=4',
-                  'https://picsum.photos/200/200?random=5',
-                  'https://picsum.photos/200/200?random=6',
-                  'https://picsum.photos/200/200?random=7',
-                  'https://picsum.photos/200/200?random=8',
-                  'https://picsum.photos/200/200?random=9',
-                ],
+                imageUrls: (details?['cover_photo_urls'] is List && (details?['cover_photo_urls'] as List).isNotEmpty)
+                    ? List<String>.from(details!['cover_photo_urls'])
+                    : [
+                        details?['logo_url'] ?? 'https://picsum.photos/400/400?random=1',
+                      ],
               ),
             ),
             Gap(height: 30),
@@ -140,6 +182,12 @@ class BusinessProfile extends StatelessWidget {
                   onTap: () {
                     AppRoutes.instance.pushNamed(
                       AppRoutesKey.instance.businessProfileReviewScreen,
+                      pathParameters: {"id": businessId.toString()},
+                      extra: {
+                        "name": details?['business_name'],
+                        "logo": details?['logo_url'],
+                        "location": details?['location']?['full_name'],
+                      },
                     );
                   },
                   child: AppText(
@@ -154,16 +202,17 @@ class BusinessProfile extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (context, index) =>
-                  BusinessProfileReviewCard(
-                    name: "Sarah Jenkins",
-                    date: "Oct 2023",
-                    imageUrl: "https://i.pravatar.cc/150?img=11",
-                    rating: 5,
-                    review:
-                    "Absolutely impeccable. The team arrived on time, were incredibly respectful of my home office space, and the attention to detail on the glass surfaces was beyond what I expected.",
-                  ),
+              itemCount: state.reviews.length,
+              itemBuilder: (context, index) {
+                var review = state.reviews[index];
+                return BusinessProfileReviewCard(
+                  name: review['full_name'] ?? "Anonymous",
+                  date: review['created_at'] ?? "",
+                  imageUrl: "https://i.pravatar.cc/150?img=${index + 1}",
+                  rating: (review['rating'] ?? 5).round(),
+                  review: review['review_text'] ?? "", 
+                );
+              },
             ),
             Gap(height: 30),
           ],

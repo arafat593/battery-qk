@@ -8,8 +8,19 @@ import '../../../widgets/buttons/app_button.dart';
 import 'business_profile_info_row.dart';
 
 class BusinessProfileActionSection extends StatelessWidget {
+  final String? phone;
+  final String? whatsapp;
+  final String? website;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteTap;
+
   const BusinessProfileActionSection({
     super.key,
+    this.phone,
+    this.whatsapp,
+    this.website,
+    this.isFavorite = false,
+    this.onFavoriteTap,
   });
 
   @override
@@ -30,14 +41,14 @@ class BusinessProfileActionSection extends StatelessWidget {
             AppButton(
               backgroundColor: AppColors.instance.error,
               borderColor: AppColors.instance.error,
-              title: "Show Phone Number",
+              title: phone != null ? phone! : "Phone Not Available",
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
             ),
             Gap(height: 20),
             AppButton(
               backgroundColor: AppColors.instance.buttonColor,
               borderColor: AppColors.instance.buttonColor,
-              title: "Show Phone Number",
+              title: whatsapp != null ? "WhatsApp" : "WhatsApp Not Available",
               leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
               iconColor: AppColors.instance.buttonColor,
             ),
@@ -45,7 +56,7 @@ class BusinessProfileActionSection extends StatelessWidget {
             AppButton(
               backgroundColor: AppColors.instance.buttonColor.withAlpha(15),
               borderColor: AppColors.instance.buttonColor,
-              title: "Show Phone Number",
+              title: website != null ? "Visit Website" : "Website Not Available",
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
               titleColor: AppColors.instance.buttonColor,
               iconColor: AppColors.instance.buttonColor,
@@ -66,10 +77,14 @@ class BusinessProfileActionSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  child: BusinessProfileInfoRow(
-                    icon: Icons.bookmark_border,
-                    text: "SAVE",
-                    iconColor: AppColors.instance.hintText,
+                  child: GestureDetector(
+                    onTap: onFavoriteTap,
+                    child: BusinessProfileInfoRow(
+                      icon: isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                      text: isFavorite ? "SAVED" : "SAVE",
+                      iconColor: isFavorite ? AppColors.instance.buttonColor : AppColors.instance.hintText,
+                      textColor: isFavorite ? AppColors.instance.buttonColor : AppColors.instance.hintText,
+                    ),
                   ),
                 ),
                 Expanded(

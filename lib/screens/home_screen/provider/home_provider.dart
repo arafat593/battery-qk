@@ -55,6 +55,16 @@ class HomeNotifier extends StateNotifier<HomeState> {
            loadedBusinesses = data['businesses'] ?? [];
            loadedCategories = data['categories'] ?? [];
         }
+        
+        if (loadedCategories.isEmpty && loadedBusinesses.isNotEmpty) {
+          final categoryMap = <int, dynamic>{};
+          for (var b in loadedBusinesses) {
+            if (b['category'] != null) {
+              categoryMap[b['category']['id']] = b['category'];
+            }
+          }
+          loadedCategories = categoryMap.values.toList();
+        }
 
         state = state.copyWith(
           isLoading: false,

@@ -11,7 +11,8 @@ import '../../utils/app_log.dart';
 final GlobalKey<_AppNavigationScreenState> appNavigationKey = GlobalKey<_AppNavigationScreenState>();
 
 class AppNavigationScreen extends StatefulWidget {
-  const AppNavigationScreen({super.key});
+  final int initialIndex;
+  const AppNavigationScreen({super.key, this.initialIndex = 0});
 
   @override
   State<AppNavigationScreen> createState() => _AppNavigationScreenState();
@@ -21,7 +22,7 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
   bool isLoading = true;
   StorageServices storageServices = StorageServices.instance;
   int selectedIndex = 0;
-  List<Widget> bodyWidget = [ErrorScreen()];
+  List<Widget> bodyWidget = [];
   List<BottomNavigationBarItem> bottomNavigation = [];
 
   void changeNavigation(int index) {
@@ -35,14 +36,13 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
     }
   }
 
-  Future<void> onAppInitial() async {
+  void onAppInitial() {
     try {
-      await Future.delayed(Durations.medium1);
       bodyWidget = [
-        HomeScreen(),
-        CategoriesScreen(),
-        MessageScreen(),
-        ProfileScreen(),
+        const HomeScreen(),
+        const CategoriesScreen(),
+        const MessageScreen(),
+        const ProfileScreen(),
       ];
       bottomNavigation = [
         _buildNavItem(AppAssertsIconsPath.instance.homeIcon, "HOME"),
@@ -50,17 +50,13 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
           AppAssertsIconsPath.instance.categoriesIcon,
           "CATEGORIES",
         ),
-        _buildNavItem(AppAssertsIconsPath.instance.bottomBarMessagesIcon, "MESSAGES"),
+        _buildNavItem(
+            AppAssertsIconsPath.instance.bottomBarMessagesIcon, "MESSAGES"),
         _buildNavItem(AppAssertsIconsPath.instance.profileIcon, "PROFILE"),
       ];
+      isLoading = false;
     } catch (e) {
       errorLog("onAppInitial", e);
-    } finally {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
     }
   }
 
@@ -95,9 +91,13 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: isLoading
+      body: (isLoading || bodyWidget.isEmpty)
           ? const Center(child: CircularProgressIndicator.adaptive())
-          : IndexedStack(index: selectedIndex, children: bodyWidget),
+          : IndexedStack(
+              index: (selectedIndex >= 0 && selectedIndex < bodyWidget.length)
+                  ? selectedIndex
+                  : 0,
+              children: bodyWidget),
       bottomNavigationBar: isLoading || bottomNavigation.length < 2
           ? const Gap()
           : Container(
@@ -131,8 +131,19 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant AppNavigationScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialIndex != oldWidget.initialIndex) {
+      setState(() {
+        selectedIndex = widget.initialIndex;
+      });
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    selectedIndex = widget.initialIndex;
     onAppInitial();
   }
 }

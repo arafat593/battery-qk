@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../constant/app_colors.dart';
@@ -123,7 +124,9 @@ class BusinessReviewCard extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(images[index], fit: BoxFit.cover),
+                  child: images[index].startsWith('http')
+                      ? Image.network(images[index], fit: BoxFit.cover)
+                      : Image.file(File(images[index]), fit: BoxFit.cover),
                 );
               },
             ),

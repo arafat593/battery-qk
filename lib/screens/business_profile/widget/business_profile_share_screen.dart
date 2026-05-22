@@ -1,28 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constant/app_colors.dart';
 import '../../../utils/gap.dart';
 import '../../../widgets/texts/app_text.dart';
-import '../business_profile.dart';
 
 class BusinessProfileShareSheet extends StatelessWidget {
-  const BusinessProfileShareSheet({super.key});
+  final String businessName;
+  final String? logoUrl;
+  final int businessId;
+  final String? categoryName;
 
-  static void show(BuildContext context) {
+  const BusinessProfileShareSheet({
+    super.key,
+    required this.businessName,
+    this.logoUrl,
+    required this.businessId,
+    this.categoryName,
+  });
+
+  static void show({
+    required BuildContext context,
+    required String businessName,
+    String? logoUrl,
+    required int businessId,
+    String? categoryName,
+  }) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (_) => const BusinessProfileShareSheet(),
+      builder: (_) => BusinessProfileShareSheet(
+        businessName: businessName,
+        logoUrl: logoUrl,
+        businessId: businessId,
+        categoryName: categoryName,
+      ),
     );
+  }
+
+  Future<void> _shareToSocial(String platform, String shareUrl) async {
+    final message = "Check out $businessName on Olabisi Olai: $shareUrl";
+    String url = "";
+    switch (platform) {
+      case "WHATSAPP":
+        url = "https://api.whatsapp.com/send?text=${Uri.encodeComponent(message)}";
+        break;
+      case "FACEBOOK":
+        url = "https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeComponent(shareUrl)}";
+        break;
+      case "TWITTER/X":
+        url = "https://twitter.com/intent/tweet?url=${Uri.encodeComponent(shareUrl)}&text=${Uri.encodeComponent("Check out $businessName on Olabisi Olai!")}";
+        break;
+      case "LINKEDIN":
+        url = "https://www.linkedin.com/sharing/share-offsite/?url=${Uri.encodeComponent(shareUrl)}";
+        break;
+      default:
+        await Clipboard.setData(ClipboardData(text: shareUrl));
+        AppSnackBar.instance.success("Link copied! You can now paste and share it on $platform.");
+        return;
+    }
+
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      AppSnackBar.instance.error("Could not open $platform");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final shareUrl = "https://olabisiolai.com/business/$businessId";
+
     return DraggableScrollableSheet(
-      minChildSize: 0.8,
-      maxChildSize: 0.9,
-      initialChildSize: 0.85,
+      minChildSize: 0.5,
+      maxChildSize: 0.7,
+      initialChildSize: 0.6,
+      expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: const BoxDecoration(
@@ -47,10 +103,14 @@ class BusinessProfileShareSheet extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppText(
-                      text: "Share Gidira",
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: AppText(
+                        text: "Share $businessName",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
@@ -78,30 +138,42 @@ class BusinessProfileShareSheet extends StatelessWidget {
                       Container(
                         width: 50,
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[350],
                           shape: BoxShape.circle,
+                          image: logoUrl != null && logoUrl!.isNotEmpty
+                              ? DecorationImage(
+                                  image: NetworkImage(logoUrl!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
-                        child: const Icon(
-                          Icons.star,
-                          color: Colors.orange,
-                          size: 24,
-                        ),
+                        child: logoUrl == null || logoUrl!.isEmpty
+                            ? const Icon(
+                                Icons.business,
+                                color: Colors.white,
+                                size: 24,
+                              )
+                            : null,
                       ),
                       const Gap(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             AppText(
-                              text: "Gidira: The Digital Curator",
+                              text: businessName,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             AppText(
-                              text: "Discover premium Nigerian businesses",
+                              text: categoryName ?? "Business Profile",
                               color: Colors.grey,
                               fontSize: 14,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -119,14 +191,34 @@ class BusinessProfileShareSheet extends StatelessWidget {
                   ),
                 ),
                 const Gap(height: 15),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SocialIcon(icon: Icons.chat, label: "WHATSAPP"),
-                    SocialIcon(icon: Icons.public, label: "FACEBOOK"),
-                    SocialIcon(icon: Icons.close, label: "TWITTER/X"),
-                    SocialIcon(icon: Icons.camera_alt, label: "INSTAGRAM"),
-                    SocialIcon(icon: Icons.work, label: "LINKEDIN"),
+                    ShareSocialIcon(
+                      icon: Icons.chat,
+                      label: "WHATSAPP",
+                      onTap: () => _shareToSocial("WHATSAPP", shareUrl),
+                    ),
+                    ShareSocialIcon(
+                      icon: Icons.public,
+                      label: "FACEBOOK",
+                      onTap: () => _shareToSocial("FACEBOOK", shareUrl),
+                    ),
+                    ShareSocialIcon(
+                      icon: Icons.close,
+                      label: "TWITTER/X",
+                      onTap: () => _shareToSocial("TWITTER/X", shareUrl),
+                    ),
+                    ShareSocialIcon(
+                      icon: Icons.camera_alt,
+                      label: "INSTAGRAM",
+                      onTap: () => _shareToSocial("INSTAGRAM", shareUrl),
+                    ),
+                    ShareSocialIcon(
+                      icon: Icons.work,
+                      label: "LINKEDIN",
+                      onTap: () => _shareToSocial("LINKEDIN", shareUrl),
+                    ),
                   ],
                 ),
                 const Gap(height: 25),
@@ -153,10 +245,10 @@ class BusinessProfileShareSheet extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          "https://gidira.app/explore/curated",
-                          style: TextStyle(
+                          shareUrl,
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontSize: 14,
                           ),
@@ -164,12 +256,13 @@ class BusinessProfileShareSheet extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          Clipboard.setData(
-                            const ClipboardData(
-                              text: "https://gidira.app/explore/curated",
+                        onPressed: () async {
+                          await Clipboard.setData(
+                            ClipboardData(
+                              text: shareUrl,
                             ),
                           );
+                          AppSnackBar.instance.success("Link copied to clipboard!");
                         },
                         icon: const Icon(Icons.copy, size: 16),
                         label: const Text("COPY LINK"),
@@ -206,7 +299,7 @@ class BusinessProfileShareSheet extends StatelessWidget {
                       ),
                       Gap(width: 6),
                       Text(
-                        "CURATED FOR EXCELLENCE IN NIGERIA",
+                        "OLA BISI OLAI - CURATED FOR EXCELLENCE",
                         style: TextStyle(
                           color: Color(0xFF1E88E5),
                           fontSize: 10,
@@ -222,6 +315,46 @@ class BusinessProfileShareSheet extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class ShareSocialIcon extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const ShareSocialIcon({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.black54, size: 24),
+          ),
+          const Gap(height: 8),
+          AppText(
+            text: label,
+            fontSize: 10,
+            color: Colors.grey,
+            fontWeight: FontWeight.w400,
+          ),
+        ],
+      ),
     );
   }
 }

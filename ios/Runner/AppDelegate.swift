@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import app_links
+import GoogleMaps
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -10,6 +11,7 @@ import app_links
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
 
+    GMSServices.provideAPIKey("AIzaSyDkW397ZVPp9dxR5hIUp-u5dvEhefNn52k")
     GeneratedPluginRegistrant.register(with: self)
 
     if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {

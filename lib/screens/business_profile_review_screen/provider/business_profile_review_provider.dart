@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/services/repository/public_repository.dart';
+import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
 
@@ -34,12 +35,14 @@ class BusinessProfileReviewState {
   final double rating;
   final String reviewText;
   final List<XFile> images;
+  final bool isAnonymous;
   
   BusinessProfileReviewState({
     this.isLoading = false,
     this.rating = 0.0,
     this.reviewText = "",
     this.images = const [],
+    this.isAnonymous = false,
   });
 
   BusinessProfileReviewState copyWith({
@@ -47,12 +50,14 @@ class BusinessProfileReviewState {
     double? rating,
     String? reviewText,
     List<XFile>? images,
+    bool? isAnonymous,
   }) {
     return BusinessProfileReviewState(
       isLoading: isLoading ?? this.isLoading,
       rating: rating ?? this.rating,
       reviewText: reviewText ?? this.reviewText,
       images: images ?? this.images,
+      isAnonymous: isAnonymous ?? this.isAnonymous,
     );
   }
 }
@@ -73,12 +78,16 @@ class BusinessProfileReviewNotifier extends StateNotifier<BusinessProfileReviewS
     state = state.copyWith(rating: newRating);
   }
 
+  void toggleAnonymous() {
+    state = state.copyWith(isAnonymous: !state.isAnonymous);
+  }
+
   Future<void> pickImage() async {
     try {
       final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        state = state.copyWith(images: [...state.images, image]);
+      final List<XFile> selectedImages = await picker.pickMultiImage();
+      if (selectedImages.isNotEmpty) {
+        state = state.copyWith(images: [...state.images, ...selectedImages]);
       }
     } catch (e) {
       errorLog("pickImage", e);
@@ -105,10 +114,23 @@ class BusinessProfileReviewNotifier extends StateNotifier<BusinessProfileReviewS
 
     state = state.copyWith(isLoading: true);
     try {
+      String fullName = "Anonymous";
+      if (!state.isAnonymous) {
+        try {
+          var localData = await StorageServices.instance.getLogDedData();
+          fullName = localData["name"] ?? "${localData["first_name"] ?? ""} ${localData["last_name"] ?? ""}".trim();
+          if (fullName.isEmpty) {
+            fullName = "User";
+          }
+        } catch (e) {
+          fullName = "User";
+        }
+      }
+
       var response = await _publicRepository.submitReview(
         businessId: businessId,
-        fullName: "Anonymous", // Update based on auth state if possible
-        isAnonymous: 1,
+        fullName: fullName,
+        isAnonymous: state.isAnonymous ? 1 : 0,
         rating: state.rating.toInt(),
         reviewText: state.reviewText,
         images: state.images.map((e) => File(e.path)).toList(),

@@ -38,43 +38,53 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   final PublicRepository _publicRepository = PublicRepository.instance;
 
-  Future<void> fetchHomeData() async {
+  Future<void> fetchHomeData({String? search}) async {
     state = state.copyWith(isLoading: true);
     try {
-      var response = await _publicRepository.getHomeBusinesses();
-      if (response != null && response['data'] != null) {
-        // Parse your response here based on your actual API response structure
-        // Assuming response['data'] is a list of businesses or contains businesses
-        var data = response['data'];
-        List<dynamic> loadedBusinesses = [];
-        List<dynamic> loadedCategories = [];
-        
-        if (data is List) {
-           loadedBusinesses = data;
-        } else if (data is Map) {
-           loadedBusinesses = data['businesses'] ?? [];
-           loadedCategories = data['categories'] ?? [];
-        }
-        
-        if (loadedCategories.isEmpty && loadedBusinesses.isNotEmpty) {
-          final categoryMap = <int, dynamic>{};
-          for (var b in loadedBusinesses) {
-            if (b['category'] != null) {
-              categoryMap[b['category']['id']] = b['category'];
-            }
-          }
-          loadedCategories = categoryMap.values.toList();
-        }
+      final results = await Future.wait([
+        _publicRepository.getHomeBusinesses(search: search),
+        _publicRepository.getCategories(),
+      ]);
 
-        state = state.copyWith(
-          isLoading: false,
-          businesses: loadedBusinesses,
-          categories: loadedCategories,
-        );
-      } else {
-        AppSnackBar.instance.error("Response or data was null");
-        state = state.copyWith(isLoading: false);
+      var responseHome = results[0];
+      var responseCategories = results[1];
+
+      List<dynamic> loadedBusinesses = [];
+      List<dynamic> loadedCategories = [];
+
+      if (responseHome != null && responseHome['data'] != null) {
+        var data = responseHome['data'];
+        if (data is List) {
+          loadedBusinesses = data;
+        } else if (data is Map) {
+          loadedBusinesses = data['businesses'] ?? [];
+        }
       }
+
+      if (responseCategories != null && responseCategories['data'] != null) {
+        var catData = responseCategories['data'];
+        if (catData is Map && catData['categories'] != null) {
+          loadedCategories = catData['categories'];
+        } else if (catData is List) {
+          loadedCategories = catData;
+        }
+      }
+
+      if (loadedCategories.isEmpty && loadedBusinesses.isNotEmpty) {
+        final categoryMap = <int, dynamic>{};
+        for (var b in loadedBusinesses) {
+          if (b['category'] != null) {
+            categoryMap[b['category']['id']] = b['category'];
+          }
+        }
+        loadedCategories = categoryMap.values.toList();
+      }
+
+      state = state.copyWith(
+        isLoading: false,
+        businesses: loadedBusinesses,
+        categories: loadedCategories,
+      );
     } catch (e) {
       errorLog("fetchHomeData", e);
       AppSnackBar.instance.error("Error: $e");

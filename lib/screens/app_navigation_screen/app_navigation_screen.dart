@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/screens/categories_screen/categories_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/home_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/message_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/profile_screen/profile_screen.dart';
+import 'package:olabisiolai_flutter_app/screens/home_screen/provider/home_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/account_settings_screen/provider/account_settings_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/message_screen/provider/message_provider.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import '../../constant/app_asserts_icons_path.dart';
 import '../../error_handling_screen/error_screen.dart';
 import '../../services/storage/storage_services.dart';
 import '../../utils/app_log.dart';
+
 final GlobalKey<_AppNavigationScreenState> appNavigationKey = GlobalKey<_AppNavigationScreenState>();
 
-class AppNavigationScreen extends StatefulWidget {
+class AppNavigationScreen extends ConsumerStatefulWidget {
   final int initialIndex;
   const AppNavigationScreen({super.key, this.initialIndex = 0});
 
   @override
-  State<AppNavigationScreen> createState() => _AppNavigationScreenState();
+  ConsumerState<AppNavigationScreen> createState() => _AppNavigationScreenState();
 }
 
-class _AppNavigationScreenState extends State<AppNavigationScreen> {
+class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
   bool isLoading = true;
   StorageServices storageServices = StorageServices.instance;
   int selectedIndex = 0;
@@ -31,6 +36,17 @@ class _AppNavigationScreenState extends State<AppNavigationScreen> {
       setState(() {
         selectedIndex = index;
       });
+      // Auto load/fetch updated data when switching tabs!
+      if (index == 0) {
+        ref.read(homeProvider.notifier).fetchHomeData();
+        ref.read(accountSettingsProvider.notifier).fetchSettings();
+      } else if (index == 1) {
+        ref.read(homeProvider.notifier).fetchHomeData();
+      } else if (index == 2) {
+        ref.read(messageProvider.notifier).fetchConversations();
+      } else if (index == 3) {
+        ref.read(accountSettingsProvider.notifier).fetchSettings();
+      }
     } catch (e) {
       errorLog("changeNavigation", e);
     }

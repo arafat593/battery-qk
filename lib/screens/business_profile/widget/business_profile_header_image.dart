@@ -4,7 +4,7 @@ import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class BusinessProfileHeaderImage extends StatelessWidget {
-  final String coverImage;
+  final String? coverImage;
   final String? logoImage;
   final VoidCallback? onSeeAllTap;
   final double height;
@@ -13,7 +13,7 @@ class BusinessProfileHeaderImage extends StatelessWidget {
 
   const BusinessProfileHeaderImage({
     super.key,
-    required this.coverImage,
+    this.coverImage,
     this.logoImage,
     this.onSeeAllTap,
     this.height = 200,
@@ -23,19 +23,34 @@ class BusinessProfileHeaderImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasCover = coverImage != null && coverImage!.isNotEmpty;
+    final hasLogo = showLogo && logoImage != null && logoImage!.isNotEmpty;
+
     return SizedBox(
       height: height,
       width: double.infinity,
       child: Stack(
         children: [
-          /// 🔹 Cover Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: AppImage(
-              url: coverImage,
-              height: height,
-              width: double.infinity,
-              fit: BoxFit.cover,
+          /// 🔹 Cover Image / Empty Placeholder
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: hasCover
+                  ? AppImage(
+                      url: coverImage!,
+                      height: height,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      color: Colors.grey[200],
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.image_not_supported_outlined,
+                        color: Colors.grey[400],
+                        size: 40,
+                      ),
+                    ),
             ),
           ),
 
@@ -48,7 +63,7 @@ class BusinessProfileHeaderImage extends StatelessWidget {
                 onTap: onSeeAllTap,
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -72,7 +87,7 @@ class BusinessProfileHeaderImage extends StatelessWidget {
             ),
 
           /// 🔹 Logo Image
-          if (showLogo && logoImage != null)
+          if (hasLogo)
             Positioned(
               bottom: 10,
               left: 10,

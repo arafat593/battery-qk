@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
@@ -61,11 +62,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   shape: BoxShape.circle,
                   gradient: LinearGradient(colors: [Colors.green, Colors.teal]),
                 ),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: settingsState.photo.isNotEmpty 
-                      ? NetworkImage(settingsState.photo) 
-                      : const NetworkImage('https://i.pravatar.cc/150?u=amara'),
+                child: AppImageCircular(
+                  borderRadius: 100,
+                  height: 100,
+                  width: 100,
+                  url: settingsState.photo.isNotEmpty 
+                      ? settingsState.photo 
+                      : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
                 ),
               ),
             ),

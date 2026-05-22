@@ -52,23 +52,26 @@ class MyReviewsCardWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.edit_outlined,
-                  size: 20,
-                  color: Colors.blueGrey,
+              if (editButton != null)
+                IconButton(
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    size: 20,
+                    color: Colors.blueGrey,
+                  ),
+                  onPressed: editButton,
                 ),
-                onPressed: editButton,
-              ),
-              const SizedBox(width: 12),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  size: 20,
-                  color: Colors.blueGrey,
+              if (editButton != null && deleteButton != null)
+                const SizedBox(width: 12),
+              if (deleteButton != null)
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    size: 20,
+                    color: Colors.blueGrey,
+                  ),
+                  onPressed: deleteButton,
                 ),
-                onPressed: deleteButton,
-              ),
             ],
           ),
 
@@ -115,6 +118,27 @@ class MyReviewsCardWidget extends StatelessWidget {
                       reviewImages![index],
                       width: 100,
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          width: 100,
+                          color: Colors.grey[100],
+                          child: const Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE93544)),
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 100,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.broken_image, color: Colors.grey),
+                        );
+                      },
                     ),
                   );
                 },

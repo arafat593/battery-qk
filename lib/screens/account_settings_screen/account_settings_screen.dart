@@ -51,47 +51,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                   "Manage your curated preferences, security settings, and personal identity.",
               fontSize: 16,
               color: AppColors.instance.deepHintText,
-            ),
-            const Gap(height: 25),
-
-            // --- Identity Section ---
-            AppText(
-              text: "IDENTITY",
-              color: AppColors.instance.success,
-              fontSize: 12,
-            ),
-            const Gap(height: 10),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  AppInputWidgetTwo(
-                    title: "FULL NAME",
-                    controller: notifier.fullNameController,
-                  ),
-                  Gap(height: 15),
-                  AppInputWidgetTwo(
-                    title: "EMAIL ADDRESS",
-                    controller: notifier.emailController,
-                  ),
-                  Gap(height: 15),
-                  AppInputWidgetTwo(
-                    title: "PHONE NUMBER",
-                    controller: notifier.phoneController,
-                  ),
-                  Gap(height: 15),
-                  AppInputWidgetTwo(
-                    title: "LOCATION / ADDRESS",
-                    prefix: Icon(Icons.location_on_outlined), 
-                    controller: notifier.locationController,
-                  ),
-                ],
-              ),
-            ),
+            ), 
 
             const Gap(height: 25),
 

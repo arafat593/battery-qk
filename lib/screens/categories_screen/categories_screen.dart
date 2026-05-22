@@ -22,6 +22,14 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(homeProvider.notifier).fetchHomeData();
+    });
+  }
+
   IconData _getCategoryIcon(String categoryName) {
     categoryName = categoryName.toLowerCase();
     if (categoryName.contains("food") || categoryName.contains("cater")) return Icons.restaurant;
@@ -46,25 +54,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     var apiCategories = homeState.categories;
     var uiCategories = <Map<String, dynamic>>[];
     
-    if (apiCategories.isEmpty) {
-      uiCategories = [
-        {'icon': Icons.home_repair_service_outlined, 'name': 'Home\nServices'},
-        {'icon': Icons.laptop_mac, 'name': 'Tech &\nGadgets'},
-        {'icon': Icons.gavel, 'name': 'Legal &\nAdvisory'},
-        {'icon': Icons.directions_car_filled_outlined, 'name': 'Automotive'},
-        {'icon': Icons.medical_services_outlined, 'name': 'Health &\nWellness'},
-        {'icon': Icons.local_shipping_outlined, 'name': 'Logistics'},
-        {'icon': Icons.restaurant_menu, 'name': 'Food &\nDining'},
-        {'icon': Icons.checkroom, 'name': 'Fashion &\nStyle'},
-      ];
-    } else {
-      for (var c in apiCategories) {
-         uiCategories.add({
-            'icon': _getCategoryIcon(c['name'] ?? ""),
-            'name': (c['name'] ?? "").toString().replaceAll(" & ", " &\n"),
-            'id': c['id']
-         });
-      }
+    for (var c in apiCategories) {
+       uiCategories.add({
+          'icon': _getCategoryIcon(c['name'] ?? ""),
+          'name': (c['name'] ?? "").toString().replaceAll(" & ", " &\n"),
+          'id': c['id']
+       });
     }
 
     int safeSelectedIndex = selectedIndex < uiCategories.length ? selectedIndex : 0;
@@ -78,12 +73,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           final matchesCategory = b['category'] != null && b['category']['id'] == categoryId;
           if (!matchesCategory) return false;
           
-          if (searchQuery.isEmpty) return true;
-          final name = (b['business_name'] ?? "").toString().toLowerCase();
-          return name.contains(searchQuery);
-       }).toList();
-    } else if (apiCategories.isEmpty) {
-       filteredBusinesses = homeState.businesses.where((b) {
           if (searchQuery.isEmpty) return true;
           final name = (b['business_name'] ?? "").toString().toLowerCase();
           return name.contains(searchQuery);
@@ -141,9 +130,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                 ),
 
                 Expanded(
-                  child: CategoryContent(
-                    title: selectedCategory != null ? selectedCategory['name'].toString().replaceAll("\n", "") : "Services",
-                    businesses: filteredBusinesses,
+                  child: RefreshIndicator(
+                    onRefresh: () => ref.read(homeProvider.notifier).fetchHomeData(),
+                    child: CategoryContent(
+                      title: selectedCategory != null ? selectedCategory['name'].toString().replaceAll("\n", "") : "Services",
+                      businesses: filteredBusinesses,
+                    ),
                   ),
                 ),
               ],

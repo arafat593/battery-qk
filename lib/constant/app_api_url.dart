@@ -13,16 +13,17 @@ class AppApiUrl {
 
   String refreshToken = "/refreshToken";
   String userProfile = "/user/profile";
-  String about = "/rule/about";
-  String privacyPolicy = "/rule/privacy-policy";
-  String termsAndConditions = "/rule/terms-and-conditions";
+  String about = "/about";
+  String privacyPolicy = "/privacy-policy";
+  String termsAndConditions = "/terms"; 
+  String userReviews = "/user/reviews";
   String faq = "/faq";
   String notification = "/notification";
 
   String login = "/auth/login";
   String register = "/auth/register";
   String authOtpVerify = "/auth/otp/verify";
-  String userResendOtp = "/auth/resend-otp";
+  String userResendOtp = "/auth/resend-otp"; 
 
   String authForgotPassword = "/auth/forgot-password";
   String authForgotResendOtp = "/auth/forgot-password/resend-otp";
@@ -31,7 +32,7 @@ class AppApiUrl {
   String logOut = "/auth/logout";
 
   String authDeleteAccount = "/authDeleteAccount";
-  String user = "/user";
+  String user = "/user"; 
   String changePassword = "/changePassword";
   String userSettings = "/user/settings";
   String userFavorites = "/user/favorites";
@@ -41,6 +42,9 @@ class AppApiUrl {
   String businesses = "/businesses";
   String reviews = "/reviews";
   String reviewStore = "/reviews/store";
+  String categories = "/categories";
+
+  String conversations = "/conversations";
 }
 
 String _getDomain() {

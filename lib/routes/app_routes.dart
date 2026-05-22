@@ -108,7 +108,10 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.businessProfilePhotosScreen}",
         name: AppRoutesKey.instance.businessProfilePhotosScreen,
-        builder: (context, state) => BusinessProfilePhotosScreen(),
+        builder: (context, state) {
+          final imageUrls = state.extra as List<String>? ?? const [];
+          return BusinessProfilePhotosScreen(imageUrls: imageUrls);
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.businessProfileReviewScreen}/:id",
@@ -135,7 +138,15 @@ class AppRoutes {
       GoRoute(
         path: "/${AppRoutesKey.instance.messagesDetailsScreen}",
         name: AppRoutesKey.instance.messagesDetailsScreen,
-        builder: (context, state) => MessagesDetailsScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return MessagesDetailsScreen(
+            conversationUuid: extra?['conversation_uuid'],
+            chatTitle: extra?['chat_title'] ?? "Chat",
+            otherUserUuid: extra?['other_user_uuid'],
+            avatarUrl: extra?['avatar_url'],
+          );
+        },
       ),
       GoRoute(
         path: "/${AppRoutesKey.instance.editProfileScreen}",
@@ -281,27 +292,28 @@ class AppRoutes {
     }
   }
 
-  void push(
+  Future<T?> push<T extends Object?>(
     String value, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
-  }) {
+  }) async {
     try {
-      router.push(_normalize(value), extra: extra);
+      return await router.push<T>(_normalize(value), extra: extra);
     } catch (e) {
       errorLog("push", e);
+      return null;
     }
   }
 
-  void pushNamed(
+  Future<T?> pushNamed<T extends Object?>(
     String value, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
-  }) {
+  }) async {
     try {
-      router.pushNamed(
+      return await router.pushNamed<T>(
         value,
         pathParameters: pathParameters,
         extra: extra,
@@ -309,6 +321,7 @@ class AppRoutes {
       );
     } catch (e) {
       errorLog("pushNamed", e);
+      return null;
     }
   }
 

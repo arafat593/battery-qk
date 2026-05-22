@@ -166,6 +166,57 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
               style: TextStyle(color: AppColors.instance.black500),
             ),
 
+            Gap(height: 20),
+
+            // Anonymous Switch Row
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade100),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const AppText(
+                          text: "Submit Anonymously",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                        AppText(
+                          text: "Hide your name and profile details",
+                          color: AppColors.instance.deepHintText,
+                          fontSize: 12,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Switch(
+                    value: state.isAnonymous,
+                    onChanged: (value) => notifier.toggleAnonymous(),
+                    activeThumbColor: Colors.white,
+                    activeTrackColor: AppColors.instance.success,
+                  ),
+                ],
+              ),
+            ),
+
             Gap(height: 24),
 
             // Photo Upload Section

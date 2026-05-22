@@ -5,13 +5,14 @@ void main() async {
   dio.options.baseUrl = "https://olabisiolai.maktechlaravel.cloud/api/v1";
   
   try {
-    var response = await dio.get("/businesses/home");
-    print("URL: ${response.requestOptions.uri}");
+    var response = await dio.get("/businesses/4");
     print("STATUS: ${response.statusCode}");
+    print("DATA: ${response.data}");
   } catch (e) {
     if (e is DioException) {
-      print("ERR URL: ${e.requestOptions.uri}");
-      print("ERR STATUS: ${e.response?.statusCode}");
+      print("ERR STATUS: ${e.response?.statusCode} - ${e.response?.data}");
+    } else {
+      print("ERROR: $e");
     }
   }
 }

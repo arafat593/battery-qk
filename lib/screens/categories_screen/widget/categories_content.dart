@@ -28,6 +28,7 @@ class CategoryContent extends StatelessWidget {
         ],
       ),
       child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
           horizontal: AppSize.size.width * 0.05,
         ),

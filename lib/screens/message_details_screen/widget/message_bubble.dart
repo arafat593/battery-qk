@@ -9,6 +9,7 @@ class MessageBubble extends StatelessWidget {
   final String time;
   final bool isMe;
   final bool showStatus;
+  final List<String>? imageUrls;
 
   const MessageBubble({
     super.key,
@@ -16,6 +17,7 @@ class MessageBubble extends StatelessWidget {
     required this.time,
     required this.isMe,
     this.showStatus = false,
+    this.imageUrls,
   });
 
   @override
@@ -39,11 +41,38 @@ class MessageBubble extends StatelessWidget {
                 bottomRight: Radius.circular(isMe ? 0 : 20),
               ),
             ),
-            child: AppText(
-              text: message,
-              color: isMe ? Colors.white : Colors.black87,
-              fontSize: 16,
-              height: 1.4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (imageUrls != null && imageUrls!.isNotEmpty) ...[
+                  ...imageUrls!.map((url) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          url,
+                          width: AppSize.size.width * 0.6,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            width: AppSize.size.width * 0.6,
+                            height: 100,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.broken_image, color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+                if (message.isNotEmpty)
+                  AppText(
+                    text: message,
+                    color: isMe ? Colors.white : Colors.black87,
+                    fontSize: 16,
+                    height: 1.4,
+                  ),
+              ],
             ),
           ),
           const Gap(height: 4),
@@ -65,3 +94,4 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
+

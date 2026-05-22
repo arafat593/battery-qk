@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
 import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
@@ -30,7 +31,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         actions: [
           TextButton(
             onPressed: state.isSaving ? null : () async {
-              await notifier.saveSettings();
+              final success = await notifier.saveSettings();
+              if (success && context.mounted) {
+                Navigator.pop(context);
+              }
             },
             child: AppText(
               text: state.isSaving ? "Saving" : "Save",
@@ -46,47 +50,89 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         child: Column(
           children: [
             // --- Profile Picture Update ---
-            Center(
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      AppImageCircular(
-                        borderRadius: 100,
-                        height: 120,
-                        width: 120,
-                        url: state.photo.isNotEmpty 
-                            ? state.photo 
-                            : "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop",
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 4),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt_outlined,
-                            size: 20,
-                            color: Colors.black,
+            GestureDetector(
+              onTap: state.isSaving ? null : () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => SafeArea(
+                    child: Wrap(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.camera_alt),
+                          title: const Text('Camera'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            notifier.pickImage(ImageSource.camera);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.photo_library),
+                          title: const Text('Gallery'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            notifier.pickImage(ImageSource.gallery);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        AppImageCircular(
+                          borderRadius: 100,
+                          height: 120,
+                          width: 120, 
+                          filePath: state.pickedImagePath.isNotEmpty ? state.pickedImagePath : null,
+                          url: state.pickedImagePath.isEmpty && state.photo.isNotEmpty 
+                              ? state.photo 
+                              : (state.pickedImagePath.isEmpty ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : null),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(color: Colors.black12, blurRadius: 4),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt_outlined,
+                              size: 20,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Gap(height: 10),
-                  AppText(
-                    text: "UPDATE LOGO",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
+                        if (state.isSaving)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black26,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const Gap(height: 10),
+                    AppText(
+                      text: state.isSaving ? "SAVING..." : "UPDATE LOGO",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ],
+                ),
               ),
             ),
             const Gap(height: 30),

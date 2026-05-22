@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:olabisiolai_flutter_app/screens/map_screen/widget/custom_map_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
@@ -15,6 +16,10 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  GoogleMapController? _mapController;
+  LatLng _currentPosition = const LatLng(6.5244, 3.3792); // Default to Lagos, Nigeria
+  bool _isMapReady = false;
+
   @override
   void initState() {
     super.initState();
@@ -22,20 +27,41 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // ===================== FAKE MAP =====================
-          Container(
-            color: Colors.grey[300],
-            child: const Center(
-              child: Text(
-                "Map Disabled",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          // ===================== REAL GOOGLE MAP =====================
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _currentPosition,
+              zoom: 14.0,
+            ),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              setState(() {
+                _isMapReady = true;
+              });
+              _getCurrentLocation();
+            },
+          ),
+
+          if (!_isMapReady)
+            Container(
+              color: Colors.white,
+              child: const Center(
+                child: CircularProgressIndicator(),
               ),
             ),
-          ),
 
           // ===================== APP BAR =====================
           CustomMapAppBar(
@@ -99,6 +125,19 @@ class _MapScreenState extends State<MapScreen> {
       );
 
       debugPrint("Lat: ${position.latitude}, Lng: ${position.longitude}");
+      
+      setState(() {
+        _currentPosition = LatLng(position.latitude, position.longitude);
+      });
+
+      _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _currentPosition,
+            zoom: 15.0,
+          ),
+        ),
+      );
     } catch (e) {
       debugPrint("Location error: $e");
     }

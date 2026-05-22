@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:olabisiolai_flutter_app/constant/app_api_url.dart';
 import 'package:olabisiolai_flutter_app/services/api/api_services.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
@@ -11,12 +14,25 @@ class PublicRepository {
   final ApiServices _apiServices = ApiServices.instance;
   final AppApiUrl _api = AppApiUrl.instance;
 
-  Future<dynamic> getHomeBusinesses() async {
+  Future<dynamic> getHomeBusinesses({String? search}) async {
     try {
-      var response = await _apiServices.getServices(_api.businessesHome);
+      final url = search != null && search.isNotEmpty
+          ? "${_api.businessesHome}?search=$search"
+          : _api.businessesHome;
+      var response = await _apiServices.getServices(url);
       return response;
     } catch (e) {
       errorLog("getHomeBusinesses repo", e);
+      return null;
+    }
+  }
+
+  Future<dynamic> getCategories() async {
+    try {
+      var response = await _apiServices.getServices(_api.categories);
+      return response;
+    } catch (e) {
+      errorLog("getCategories repo", e);
       return null;
     }
   }
@@ -63,15 +79,30 @@ class PublicRepository {
         "review_text": reviewText,
       };
 
+      dynamic requestBody = body;
+
       if (images != null && images.isNotEmpty) {
-        // Handle images if API supports multipart/form-data
-        // This is a placeholder for Dio multipart logic
-        // body["images[]"] = ...
+        List<MultipartFile> multipartImages = [];
+        for (var image in images) {
+          if (await image.exists()) {
+            String fileName = image.path.split('/').last;
+            var mimeType = lookupMimeType(image.path);
+            multipartImages.add(
+              await MultipartFile.fromFile(
+                image.path,
+                filename: fileName,
+                contentType: MediaType.parse(mimeType ?? "image/jpeg"),
+              ),
+            );
+          }
+        }
+        body["images[]"] = multipartImages;
+        requestBody = FormData.fromMap(body);
       }
 
       var response = await _apiServices.postServices(
         url: _api.reviewStore,
-        body: body,
+        body: requestBody,
       );
       return response;
     } catch (e) {

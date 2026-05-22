@@ -47,23 +47,38 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
             /// RIGHT: Location or custom actions
             if (showLocation)
-              GestureDetector(
-                onTap: onLocationTap,
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      color: Colors.black,
-                      size: 18,
-                    ),
-                    Gap(width: 4),
-                    AppText(
-                      text: locationText ?? "",
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ],
-                ),
-              )
+              onLocationTap != null
+                  ? GestureDetector(
+                      onTap: onLocationTap,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.black,
+                            size: 18,
+                          ),
+                          Gap(width: 4),
+                          AppText(
+                            text: locationText ?? "",
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.black,
+                          size: 18,
+                        ),
+                        Gap(width: 4),
+                        AppText(
+                          text: locationText ?? "",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ],
+                    )
             else if (actions != null)
               Row(children: actions!),
           ],

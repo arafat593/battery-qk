@@ -69,7 +69,9 @@ class MessageNotifier extends StateNotifier<MessageState> {
   }
 
   Future<void> fetchConversations() async {
-    state = state.copyWith(isLoading: true);
+    if (state.conversations.isEmpty) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
       var response = await _chatRepository.getConversations();
       List<dynamic> items = [];

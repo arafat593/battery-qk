@@ -78,10 +78,17 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                   onChanged: (val) {
                     ref.read(messageProvider.notifier).searchConversations(val);
                   },
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     hintText: "Search conversations...",
                     prefixIcon: const Icon(Icons.search),
-                    fillColor: const Color(0xFFEFEFEF),
+                    hintStyle: const TextStyle(color: Colors.black), 
+                    labelStyle: const TextStyle(color: Colors.black), 
+                    prefixIconColor: Colors.black,
+                    hoverColor: Colors.black,
+                    focusColor: Colors.black,
+                    suffixIconColor: Colors.black,
+                    fillColor: const Color(0xFFEFEFEF), 
                     filled: true,
                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                     border: OutlineInputBorder(

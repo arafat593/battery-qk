@@ -35,7 +35,9 @@ class MyReviewsNotifier extends StateNotifier<MyReviewsState> {
   }
 
   Future<void> fetchMyReviews() async {
-    state = state.copyWith(isLoading: true);
+    if (state.reviews.isEmpty) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
       var response = await _userRepository.getUserReviews();
       print("USER REVIEWS RESPONSE: $response");

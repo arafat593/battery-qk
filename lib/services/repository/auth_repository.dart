@@ -121,8 +121,9 @@ class AuthRepository {
       final UserCredential userCredential = await auth.signInWithCredential(credential);
 
       if (userCredential.user != null) {
-        // Save dummy token and email to persist login state
-        await storageServices.setToken("firebase_google_user");
+        // Save real Firebase ID token instead of dummy token
+        String? idToken = await userCredential.user!.getIdToken();
+        await storageServices.setToken(idToken ?? "firebase_google_user");
         await storageServices.setEmail(userCredential.user!.email ?? "");
         
         // Save basic user info
@@ -171,7 +172,7 @@ class AuthRepository {
           var mimeType = lookupMimeType(file.path);
           formData.files.add(
             MapEntry(
-              "profile",
+              "image",
               await MultipartFile.fromFile(
                 file.path,
                 filename: fileName,

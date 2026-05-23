@@ -108,13 +108,11 @@ class UserRepository {
         if (await file.exists()) {
           String fileName = file.path.split('/').last;
           var mimeType = lookupMimeType(file.path);
-          body["photo"] = await MultipartFile.fromFile(
+          body["image"] = await MultipartFile.fromFile(
             file.path,
             filename: fileName,
             contentType: MediaType.parse(mimeType ?? "image/jpeg"),
           );
-          // Add spoofed method for multipart patch support
-          body["_method"] = "PATCH";
         }
       }
 
@@ -148,12 +146,11 @@ class UserRepository {
       var mimeType = lookupMimeType(file.path);
       
       FormData formData = FormData.fromMap({
-        "profile": await MultipartFile.fromFile(
+        "image": await MultipartFile.fromFile(
           file.path,
           filename: fileName,
           contentType: MediaType.parse(mimeType ?? "image/jpeg"),
         ),
-        "_method": "PATCH",
       });
 
       var response = await _apiServices.postServices(

@@ -8,6 +8,7 @@ import '../../constant/app_asserts_icons_path.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/provider/home_provider.dart';
+import '../app_navigation_screen/app_navigation_screen.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});
@@ -50,10 +51,18 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
+    final selectedCategoryId = ref.watch(selectedCategoryIdProvider);
     
     var apiCategories = homeState.categories;
     var uiCategories = <Map<String, dynamic>>[];
     
+    // Add "All" category at the top
+    uiCategories.add({
+       'icon': Icons.grid_view_rounded, 
+       'name': "All",
+       'id': -1,
+    });
+
     for (var c in apiCategories) {
        uiCategories.add({
           'icon': _getCategoryIcon(c['name'] ?? ""),
@@ -62,21 +71,49 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
        });
     }
 
-    int safeSelectedIndex = selectedIndex < uiCategories.length ? selectedIndex : 0;
+    int safeSelectedIndex = 0;
+    if (selectedCategoryId != null) {
+      final index = uiCategories.indexWhere((c) => c['id'] == selectedCategoryId);
+      if (index != -1) {
+        safeSelectedIndex = index;
+      } else {
+        safeSelectedIndex = selectedIndex < uiCategories.length ? selectedIndex : 0;
+      }
+    } else {
+      safeSelectedIndex = selectedIndex < uiCategories.length ? selectedIndex : 0;
+    }
     
     final selectedCategory = uiCategories.isNotEmpty ? uiCategories[safeSelectedIndex] : null;
     final categoryId = selectedCategory != null ? selectedCategory['id'] : null;
     
     List<dynamic> filteredBusinesses = [];
-    if (categoryId != null) {
+    if (searchQuery.isNotEmpty) {
+      filteredBusinesses = homeState.businesses.where((b) {
+        final name = (b['business_name'] ?? "").toString().toLowerCase();
+        final catName = b['category'] != null ? (b['category']['name'] ?? "").toString().toLowerCase() : "";
+        return name.contains(searchQuery) || catName.contains(searchQuery);
+      }).toList();
+      filteredBusinesses.sort((a, b) {
+        final nameA = (a['business_name'] ?? "").toString().toLowerCase();
+        final nameB = (b['business_name'] ?? "").toString().toLowerCase();
+        return nameA.compareTo(nameB);
+      });
+    } else if (categoryId == -1) {
+       filteredBusinesses = List.from(homeState.businesses);
+       filteredBusinesses.sort((a, b) {
+         final nameA = (a['business_name'] ?? "").toString().toLowerCase();
+         final nameB = (b['business_name'] ?? "").toString().toLowerCase();
+         return nameA.compareTo(nameB);
+       });
+    } else if (categoryId != null) {
        filteredBusinesses = homeState.businesses.where((b) {
-          final matchesCategory = b['category'] != null && b['category']['id'] == categoryId;
-          if (!matchesCategory) return false;
-          
-          if (searchQuery.isEmpty) return true;
-          final name = (b['business_name'] ?? "").toString().toLowerCase();
-          return name.contains(searchQuery);
+          return b['category'] != null && b['category']['id'] == categoryId;
        }).toList();
+       filteredBusinesses.sort((a, b) {
+         final nameA = (a['business_name'] ?? "").toString().toLowerCase();
+         final nameB = (b['business_name'] ?? "").toString().toLowerCase();
+         return nameA.compareTo(nameB);
+       });
     }
 
     return Scaffold(
@@ -119,27 +156,37 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           Expanded(
             child: homeState.isLoading 
               ? const Center(child: CircularProgressIndicator())
-              : Row(
-              children: [
-                CategorySidebar(
-                  categories: uiCategories,
-                  selectedIndex: safeSelectedIndex,
-                  onTap: (index) {
-                    setState(() => selectedIndex = index);
-                  },
-                ),
-
-                Expanded(
-                  child: RefreshIndicator(
+              : searchQuery.isNotEmpty
+                ? RefreshIndicator(
                     onRefresh: () => ref.read(homeProvider.notifier).fetchHomeData(),
                     child: CategoryContent(
-                      title: selectedCategory != null ? selectedCategory['name'].toString().replaceAll("\n", "") : "Services",
+                      title: "Search Results",
                       businesses: filteredBusinesses,
                     ),
+                  )
+                : Row(
+                    children: [
+                      CategorySidebar(
+                        categories: uiCategories,
+                        selectedIndex: safeSelectedIndex,
+                        onTap: (index) {
+                          ref.read(selectedCategoryIdProvider.notifier).state = uiCategories[index]['id'];
+                          setState(() => selectedIndex = index);
+                        },
+                      ),
+                      Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () => ref.read(homeProvider.notifier).fetchHomeData(),
+                          child: CategoryContent(
+                            title: selectedCategory != null 
+                                ? (selectedCategory['name'] == "All" ? "All Services" : selectedCategory['name'].toString().replaceAll("\n", "")) 
+                                : "Services",
+                            businesses: filteredBusinesses,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

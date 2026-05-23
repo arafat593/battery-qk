@@ -60,36 +60,41 @@ class CategoryContent extends StatelessWidget {
               ),
             ], 
           ),
-
-          // LIST (FIXED)
-          businesses == null || businesses!.isEmpty
-              ? const Center(
-                  child: Padding( 
-                    padding: EdgeInsets.all(20),
-                    child: Text("No professionals found for this category"),
-                  ),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: businesses!.length,
-                  itemBuilder: (context, index) {
-                    var pro = businesses![index];
-                    return ProfessionalCard(
-                      onTap: () {
-                        AppRoutes.instance.pushNamed(
-                          AppRoutesKey.instance.businessProfile,
-                          pathParameters: {"id": pro['id'].toString()},
-                        );
-                      },
-                      name: pro['business_name'] ?? "Unknown",
-                      rating: (pro['average_rating'] ?? 0.0).toDouble(),
-                      reviews: pro['reviews_count'] ?? 0,
-                      imageUrl: pro['logo_url'] ??
-                          'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+          const Gap(height: 10), 
+          if (businesses == null || businesses!.isEmpty)
+            Center(
+              child: Padding( 
+                padding: const EdgeInsets.all(20),
+                child: AppText(
+                  text: title == "Search Results"
+                      ? "No services found matching search"
+                      : "No professionals found for this category",
+                ),
+              ),
+            ) 
+          else
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: businesses!.length,
+              itemBuilder: (context, index) {
+                var pro = businesses![index];
+                return ProfessionalCard(
+                  onTap: () {
+                    AppRoutes.instance.pushNamed(
+                      AppRoutesKey.instance.businessProfile,
+                      pathParameters: {"id": pro['id'].toString()},
                     );
                   },
-                ),
+                  name: pro['business_name'] ?? "Unknown",
+                  rating: (pro['average_rating'] ?? 0.0).toDouble(),
+                  reviews: pro['reviews_count'] ?? 0,
+                  imageUrl: pro['logo_url'] ??
+                      'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                );
+              },
+            ),
         ],
       ),
     );

@@ -26,7 +26,7 @@ class BusinessReviewArgs {
   int get hashCode => id.hashCode ^ name.hashCode;
 }
 
-final businessProfileReviewProvider = StateNotifierProvider.family<BusinessProfileReviewNotifier, BusinessProfileReviewState, BusinessReviewArgs>((ref, args) {
+final businessProfileReviewProvider = StateNotifierProvider.autoDispose.family<BusinessProfileReviewNotifier, BusinessProfileReviewState, BusinessReviewArgs>((ref, args) {
   return BusinessProfileReviewNotifier(args.id, args.name);
 });
 

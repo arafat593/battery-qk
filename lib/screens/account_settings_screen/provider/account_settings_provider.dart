@@ -88,7 +88,9 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
   }
 
   Future<void> fetchSettings() async {
-    state = state.copyWith(isLoading: true);
+    if (state.firstName.isEmpty && state.lastName.isEmpty) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
       var response = await _userRepository.getSettings();
       if (response != null && response['data'] != null) {

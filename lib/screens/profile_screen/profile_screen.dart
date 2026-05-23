@@ -51,8 +51,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: RefreshIndicator(
+        onRefresh: () => Future.wait([
+          ref.read(accountSettingsProvider.notifier).fetchSettings(),
+          ref.read(savedBusinessProvider.notifier).fetchSavedBusinesses(),
+        ]),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
           children: [
             const Gap(height: 20),
             Center(
@@ -217,6 +223,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ],
         ),
       ),
+     ),
     );
   }
 

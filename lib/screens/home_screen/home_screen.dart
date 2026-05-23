@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/provider/home_provider.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import '../account_settings_screen/provider/account_settings_provider.dart';
+import '../app_navigation_screen/app_navigation_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -182,23 +183,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               var service = filteredBusinesses[index];
                               return Padding(
                                 padding: EdgeInsets.symmetric(
-                                  vertical: AppSize.height(value: 2),
+                                  vertical: AppSize.height(value: 4),
                                   horizontal: AppSize.width(value: 8),
                                 ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    AppRoutes.instance.pushNamed(
+                                child: ProfessionalCard(
+                                  onTap: () async {
+                                    await AppRoutes.instance.pushNamed(
                                       AppRoutesKey.instance.businessProfile,
                                       pathParameters: {"id": service['id'].toString()},
                                     );
+                                    ref.read(homeProvider.notifier).fetchHomeData();
                                   },
-                                  child: HomeServiceListTile(
-                                    title: service['business_name'] ?? "Unknown",
-                                    location: service['location']?['name'] ?? "Unknown",
-                                    distance: "",
-                                    rating: (service['average_rating'] ?? 0.0).toDouble(),
-                                    imageUrl: service['logo_url'],
-                                  ),
+                                  name: service['business_name'] ?? "Unknown",
+                                  rating: (service['average_rating'] ?? 0.0).toDouble(),
+                                  reviews: service['reviews_count'] ?? 0,
+                                  imageUrl: service['logo_url'] ?? 'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
                                 ),
                               );
                             }),
@@ -242,9 +241,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                            icon = item['icon'] ?? _getCategoryIcon(item['name']);
                         }
           
-                        return CategoryCard(
-                          icon: icon,
-                          label: label.toUpperCase(),
+                        return GestureDetector(
+                          onTap: () {
+                            if (item is Map && item['id'] != null) {
+                              ref.read(selectedCategoryIdProvider.notifier).state = item['id'];
+                              ref.read(navigationIndexProvider.notifier).state = 1;
+                            }
+                          },
+                          child: CategoryCard(
+                            icon: icon,
+                            label: label.toUpperCase(),
+                          ),
                         );
                       },
                     ),
@@ -282,6 +289,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   rating: (pro['average_rating'] ?? 0.0).toDouble(),
                                   reviews: pro['reviews_count'] ?? 0,
                                   imageUrl: pro['logo_url'] ?? 'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                                  width: AppSize.size.width * 0.7,
                                 );
                               },
                             ),

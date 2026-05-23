@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/screens/categories_screen/categories_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/home_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/message_screen.dart';
@@ -12,6 +13,9 @@ import '../../constant/app_asserts_icons_path.dart';
 import '../../error_handling_screen/error_screen.dart';
 import '../../services/storage/storage_services.dart';
 import '../../utils/app_log.dart';
+
+final navigationIndexProvider = StateProvider<int>((ref) => 0);
+final selectedCategoryIdProvider = StateProvider<int?>((ref) => null);
 
 final GlobalKey<_AppNavigationScreenState> appNavigationKey = GlobalKey<_AppNavigationScreenState>();
 
@@ -105,6 +109,13 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provIndex = ref.watch(navigationIndexProvider);
+    if (provIndex != selectedIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        changeNavigation(provIndex);
+      });
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: (isLoading || bodyWidget.isEmpty)
@@ -123,7 +134,10 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
               ),
               child: BottomNavigationBar(
                 items: bottomNavigation,
-                onTap: changeNavigation,
+                onTap: (index) {
+                  ref.read(navigationIndexProvider.notifier).state = index;
+                  changeNavigation(index);
+                },
                 currentIndex: selectedIndex,
                 type: BottomNavigationBarType.fixed,
                 backgroundColor: Colors.white,

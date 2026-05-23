@@ -39,18 +39,20 @@ class HomeNotifier extends StateNotifier<HomeState> {
   final PublicRepository _publicRepository = PublicRepository.instance;
 
   Future<void> fetchHomeData({String? search}) async {
-    state = state.copyWith(isLoading: true);
+    if (state.businesses.isEmpty && state.categories.isEmpty) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
       final results = await Future.wait([
         _publicRepository.getHomeBusinesses(search: search),
-        _publicRepository.getCategories(),
+        state.categories.isEmpty ? _publicRepository.getCategories() : Future.value(null),
       ]);
 
       var responseHome = results[0];
       var responseCategories = results[1];
 
       List<dynamic> loadedBusinesses = [];
-      List<dynamic> loadedCategories = [];
+      List<dynamic> loadedCategories = List.from(state.categories);
 
       if (responseHome != null && responseHome['data'] != null) {
         var data = responseHome['data'];

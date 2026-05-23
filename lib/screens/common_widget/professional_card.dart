@@ -16,13 +16,16 @@ class ProfessionalCard extends StatelessWidget {
   final int reviews;
   final String imageUrl;
   final Function()? onTap;
+  final double? width;
 
   const ProfessionalCard({
     super.key,
     required this.name,
     required this.rating,
     required this.reviews,
-    required this.imageUrl, this.onTap,
+    required this.imageUrl,
+    this.onTap,
+    this.width,
   });
 
   @override
@@ -35,7 +38,7 @@ class ProfessionalCard extends StatelessWidget {
             vertical: AppSize.size.height * 0.01
         ),
         child: Container(
-          width: AppSize.size.width * 0.7,
+          width: width ?? double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -60,7 +63,7 @@ class ProfessionalCard extends StatelessWidget {
                     child: AppImage(
                       url: imageUrl,
                       height: 140,
-                      width: AppSize.size.width * 0.7,
+                      width: width ?? double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),

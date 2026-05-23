@@ -48,11 +48,19 @@ class BusinessProfileNotifier extends StateNotifier<BusinessProfileState> {
   }
 
   Future<void> fetchBusinessData() async {
-    state = state.copyWith(isLoading: true);
+    if (state.businessDetails == null) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
-      var detailsResponse = await _publicRepository.getBusinessDetails(businessId);
-      var reviewsResponse = await _publicRepository.getReviews(businessId);
-      var favoriteResponse = await _userRepository.checkFavoriteExists(businessId);
+      final results = await Future.wait([
+        _publicRepository.getBusinessDetails(businessId),
+        _publicRepository.getReviews(businessId),
+        _userRepository.checkFavoriteExists(businessId),
+      ]);
+      
+      var detailsResponse = results[0];
+      var reviewsResponse = results[1];
+      var favoriteResponse = results[2];
       
       dynamic details;
       List<dynamic> reviewsList = [];

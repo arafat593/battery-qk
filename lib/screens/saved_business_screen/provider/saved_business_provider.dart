@@ -35,7 +35,9 @@ class SavedBusinessNotifier extends StateNotifier<SavedBusinessState> {
   }
 
   Future<void> fetchSavedBusinesses() async {
-    state = state.copyWith(isLoading: true);
+    if (state.savedItems.isEmpty) {
+      state = state.copyWith(isLoading: true);
+    }
     try {
       var response = await _userRepository.getFavorites();
       List<dynamic> items = [];

@@ -29,9 +29,7 @@ class CategoryContent extends StatelessWidget {
       ),
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSize.size.width * 0.05,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.05),
         children: [
           const Gap(height: 20),
 
@@ -54,16 +52,16 @@ class CategoryContent extends StatelessWidget {
               const Gap(height: 6),
               AppText(
                 text:
-                "Trusted Nigerian professionals for your home maintenance and lifestyle needs.",
+                    "Trusted Nigerian professionals for your home maintenance and lifestyle needs.",
                 fontSize: 14,
                 color: AppColors.instance.deepHintText,
               ),
-            ], 
+            ],
           ),
-          const Gap(height: 10), 
+          const Gap(height: 10),
           if (businesses == null || businesses!.isEmpty)
             Center(
-              child: Padding( 
+              child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: AppText(
                   text: title == "Search Results"
@@ -71,7 +69,7 @@ class CategoryContent extends StatelessWidget {
                       : "No professionals found for this category",
                 ),
               ),
-            ) 
+            )
           else
             ListView.builder(
               shrinkWrap: true,
@@ -90,7 +88,8 @@ class CategoryContent extends StatelessWidget {
                   name: pro['business_name'] ?? "Unknown",
                   rating: (pro['average_rating'] ?? 0.0).toDouble(),
                   reviews: pro['reviews_count'] ?? 0,
-                  imageUrl: pro['logo_url'] ??
+                  imageUrl:
+                      pro['logo_url'] ??
                       'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
                 );
               },

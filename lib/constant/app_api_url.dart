@@ -15,7 +15,7 @@ class AppApiUrl {
   String userProfile = "/user/profile";
   String about = "/about";
   String privacyPolicy = "/privacy-policy";
-  String termsAndConditions = "/terms"; 
+  String termsAndConditions = "/terms";
   String userReviews = "/user/reviews";
   String faq = "/faq";
   String notification = "/notification";
@@ -23,7 +23,8 @@ class AppApiUrl {
   String login = "/auth/login";
   String register = "/auth/register";
   String authOtpVerify = "/auth/otp/verify";
-  String userResendOtp = "/auth/resend-otp"; 
+  String userResendOtp = "/auth/resend-otp";
+  String googleLogin = "/auth/google/login";
 
   String authForgotPassword = "/auth/forgot-password";
   String authForgotResendOtp = "/auth/forgot-password/resend-otp";
@@ -32,12 +33,12 @@ class AppApiUrl {
   String logOut = "/auth/logout";
 
   String authDeleteAccount = "/authDeleteAccount";
-  String user = "/user"; 
+  String user = "/user";
   String changePassword = "/changePassword";
   String userSettings = "/user/settings";
   String userFavorites = "/user/favorites";
   String userFavoritesToggle = "/user/favorites/toggle";
-  
+
   String businessesHome = "/businesses/home";
   String businesses = "/businesses";
   String reviews = "/reviews";

@@ -34,8 +34,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
       var token = await storageServices.getToken();
       var firebaseUser = FirebaseAuth.instance.currentUser;
-      print("DEBUG: Splash token value: '$token', FirebaseUser: ${firebaseUser?.email}");
-      
+      print(
+        "DEBUG: Splash token value: '$token', FirebaseUser: ${firebaseUser?.email}",
+      );
+
       if (token.isEmpty && firebaseUser == null) {
         AppRoutes.instance.go(AppRoutesKey.instance.loginScreen);
       } else {
@@ -59,7 +61,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-           image: DecorationImage(
+          image: DecorationImage(
             image: AssetImage(AppAssertsImagePath.instance.splashBackground),
           ),
         ),

@@ -22,11 +22,7 @@ class BusinessProfilePhotoGrid extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(text:
-          "Photos",
-            fontSize: 32,
-            fontWeight: FontWeight.w600,
-          ),
+          AppText(text: "Photos", fontSize: 32, fontWeight: FontWeight.w600),
           Gap(height: 16),
 
           // --- Top Row (1 or 2 images) ---
@@ -53,9 +49,9 @@ class BusinessProfilePhotoGrid extends StatelessWidget {
 
                 // 4th Image
                 if (totalImages > 3)
-                  Expanded(child: _buildImage(imageUrls[3], height: 120))
+                  Expanded(child: _buildImage(imageUrls[3], height: 120) )
                 else
-                  const Spacer(), // Placeholder jodi 4th image na thake
+                  const Spacer(), // Placeholder if the 4th image is not present
 
                 Gap(width: 10),
 
@@ -73,8 +69,8 @@ class BusinessProfilePhotoGrid extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Center(
-                                child: AppText(text:
-                                  "More (+${totalImages - 5})",
+                                child: AppText(
+                                  text: "More (+${totalImages - 5})",
                                   fontSize: 16,
                                   color: AppColors.instance.white50,
                                 ),

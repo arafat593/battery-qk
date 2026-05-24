@@ -34,7 +34,9 @@ class HomeServiceListTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: AppImage(
-                url: imageUrl ?? "https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg",
+                url:
+                    imageUrl ??
+                    "https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg",
                 width: 95,
                 height: 95,
               ),
@@ -45,13 +47,13 @@ class HomeServiceListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText(text: title, fontWeight: FontWeight.w700),
-                  Gap(height: 12,),
+                  Gap(height: 12),
                   AppText(
                     text: "$location • $distance",
                     fontSize: 12,
                     color: AppColors.instance.hintText,
                   ),
-                  Gap(height: 12,),
+                  Gap(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

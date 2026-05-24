@@ -10,20 +10,28 @@ class SearchAnimation extends StatefulWidget {
   final Duration duration;
   final Color? color;
 
-  const SearchAnimation({super.key, this.waveCount = 4, this.maxRadius, this.duration = const Duration(seconds: 4), this.color});
+  const SearchAnimation({
+    super.key,
+    this.waveCount = 4,
+    this.maxRadius,
+    this.duration = const Duration(seconds: 4),
+    this.color,
+  });
 
   @override
   State<SearchAnimation> createState() => _SearchAnimationState();
 }
 
-class _SearchAnimationState extends State<SearchAnimation> with SingleTickerProviderStateMixin {
+class _SearchAnimationState extends State<SearchAnimation>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(vsync: this, duration: widget.duration)..repeat();
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..repeat();
   }
 
   @override
@@ -60,7 +68,10 @@ class _SearchAnimationState extends State<SearchAnimation> with SingleTickerProv
                 border: Border.all(color: AppColors.instance.blue500, width: 5),
                 color: AppColors.instance.gray700,
               ),
-              child: AppImage(fit: BoxFit.fill, path: AppAssertsImagePath.instance.networkPlaceholderImage),
+              child: AppImage(
+                fit: BoxFit.fill,
+                path: AppAssertsImagePath.instance.networkPlaceholderImage,
+              ),
             ),
           ],
         ),
@@ -75,7 +86,12 @@ class _RippleCircle extends StatelessWidget {
   final Color color;
   final double maxRadius;
 
-  const _RippleCircle({required this.controller, required this.delay, required this.color, required this.maxRadius});
+  const _RippleCircle({
+    required this.controller,
+    required this.delay,
+    required this.color,
+    required this.maxRadius,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +108,10 @@ class _RippleCircle extends StatelessWidget {
           child: Container(
             width: size,
             height: size,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: color.withValues(alpha: 0.4)),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.4),
+            ),
           ),
         );
       },

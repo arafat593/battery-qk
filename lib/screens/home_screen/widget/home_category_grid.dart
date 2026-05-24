@@ -6,11 +6,7 @@ class CategoryCard extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const CategoryCard({
-    super.key,
-    required this.icon,
-    required this.label,
-  });
+  const CategoryCard({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +22,7 @@ class CategoryCard extends StatelessWidget {
           child: Icon(icon, size: 24),
         ),
         Gap(height: 8),
-        AppText(
-          text: label,
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
+        AppText(text: label, fontSize: 10, fontWeight: FontWeight.w500),
       ],
     );
   }

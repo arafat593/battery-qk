@@ -85,7 +85,8 @@ class BusinessProfileReviewCard extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: reviewImages!.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 8),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 8),
                       itemBuilder: (context, index) {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(8),
@@ -102,7 +103,10 @@ class BusinessProfileReviewCard extends StatelessWidget {
                                   child: SizedBox(
                                     width: 16,
                                     height: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE93544)),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Color(0xFFE93544),
+                                    ),
                                   ),
                                 ),
                               );
@@ -111,7 +115,11 @@ class BusinessProfileReviewCard extends StatelessWidget {
                               return Container(
                                 width: 80,
                                 color: Colors.grey[200],
-                                child: const Icon(Icons.broken_image, size: 20, color: Colors.grey),
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  size: 20,
+                                  color: Colors.grey,
+                                ),
                               );
                             },
                           ),

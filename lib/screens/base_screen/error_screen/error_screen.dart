@@ -19,15 +19,31 @@ class ErrorScreen extends StatelessWidget {
           spacing: AppSize.width(value: 5),
           children: [
             AppImage(path: "assets/images/error.webp"),
-            AppText(text: "Something went wrong", fontSize: AppSize.width(value: 25)),
+            AppText(
+              text: "Something went wrong",
+              fontSize: AppSize.width(value: 25),
+            ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.2),
-              child: AppText(text: "We encountered an error while trying to connect with our server.", textAlign: TextAlign.center, height: 1.5),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSize.size.width * 0.2,
+              ),
+              child: AppText(
+                text:
+                    "We encountered an error while trying to connect with our server.",
+                textAlign: TextAlign.center,
+                height: 1.5,
+              ),
             ),
             Gap(height: 5),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.2),
-              child: AppText(text: "Please try after some time.😓", textAlign: TextAlign.center, height: 1.5),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSize.size.width * 0.2,
+              ),
+              child: AppText(
+                text: "Please try after some time.😓",
+                textAlign: TextAlign.center,
+                height: 1.5,
+              ),
             ),
           ],
         ),

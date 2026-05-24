@@ -30,12 +30,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         title: "Edit Profile",
         actions: [
           TextButton(
-            onPressed: state.isSaving ? null : () async {
-              final success = await notifier.saveSettings();
-              if (success && context.mounted) {
-                Navigator.pop(context);
-              }
-            },
+            onPressed: state.isSaving
+                ? null
+                : () async {
+                    final success = await notifier.saveSettings();
+                    if (success && context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
             child: AppText(
               text: state.isSaving ? "Saving" : "Save",
               color: AppColors.instance.blue,
@@ -51,33 +53,35 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           children: [
             // --- Profile Picture Update ---
             GestureDetector(
-              onTap: state.isSaving ? null : () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => SafeArea(
-                    child: Wrap(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.camera_alt),
-                          title: const Text('Camera'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            notifier.pickImage(ImageSource.camera);
-                          },
+              onTap: state.isSaving
+                  ? null
+                  : () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SafeArea(
+                          child: Wrap(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.camera_alt),
+                                title: const Text('Camera'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  notifier.pickImage(ImageSource.camera);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text('Gallery'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  notifier.pickImage(ImageSource.gallery);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.photo_library),
-                          title: const Text('Gallery'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            notifier.pickImage(ImageSource.gallery);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                      );
+                    },
               child: Center(
                 child: Column(
                   children: [
@@ -86,11 +90,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         AppImageCircular(
                           borderRadius: 100,
                           height: 120,
-                          width: 120, 
-                          filePath: state.pickedImagePath.isNotEmpty ? state.pickedImagePath : null,
-                          url: state.pickedImagePath.isEmpty && state.photo.isNotEmpty 
-                              ? state.photo 
-                              : (state.pickedImagePath.isEmpty ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : null),
+                          width: 120,
+                          filePath: state.pickedImagePath.isNotEmpty
+                              ? state.pickedImagePath
+                              : null,
+                          url:
+                              state.pickedImagePath.isEmpty &&
+                                  state.photo.isNotEmpty
+                              ? state.photo
+                              : (state.pickedImagePath.isEmpty
+                                    ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                                    : null),
                         ),
                         Positioned(
                           bottom: 0,
@@ -119,7 +129,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 shape: BoxShape.circle,
                               ),
                               child: const Center(
-                                child: CircularProgressIndicator(color: Colors.white),
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -141,9 +153,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             SectionCard(
               icon: Icons.person_outline,
               title: "Personal Information",
-              children: [ 
+              children: [
                 AppInputWidgetTwo(
-                  title: "FULL NAME",  
+                  title: "FULL NAME",
                   controller: notifier.fullNameController,
                 ),
                 AppInputWidgetTwo(
@@ -226,4 +238,4 @@ class SectionCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

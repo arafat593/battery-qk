@@ -44,7 +44,7 @@ class ForgetPasswordGmailProvider extends StateNotifier<bool> {
 
       state = false;
 
-      return result; // 👈 must be bool এখন
+      return result; // must be bool
     } catch (e) {
       errorLog("verifyOtp", e);
       state = false;

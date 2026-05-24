@@ -24,14 +24,18 @@ class BusinessProfileScheduleRow extends StatelessWidget {
           AppText(
             text: day,
             fontSize: 14,
-            color: isClosed ? AppColors.instance.error : AppColors.instance.deepHintText,
+            color: isClosed
+                ? AppColors.instance.error
+                : AppColors.instance.deepHintText,
           ),
           AppText(
             text: isClosed ? "Closed" : time,
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: isClosed
-                ? AppColors.instance.error // optional
+                ? AppColors
+                      .instance
+                      .error // optional
                 : AppColors.instance.black500,
           ),
         ],

@@ -15,11 +15,7 @@ class PhoneInputField extends ConsumerStatefulWidget {
   final Color? containerColor;
   final Color? textColor;
 
-  const PhoneInputField({
-    super.key,
-    this.containerColor,
-    this.textColor,
-  });
+  const PhoneInputField({super.key, this.containerColor, this.textColor});
 
   @override
   ConsumerState<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -49,7 +45,9 @@ class _PhoneInputFieldState extends ConsumerState<PhoneInputField> {
     try {
       if (!formKey.currentState!.validate()) return;
 
-      final response = await ref.read(loginProvider.notifier).signIn(
+      final response = await ref
+          .read(loginProvider.notifier)
+          .signIn(
             emailTextEditingController.text.trim(),
             passwordTextEditingController.text.trim(),
           );
@@ -58,9 +56,9 @@ class _PhoneInputFieldState extends ConsumerState<PhoneInputField> {
         AppRoutes.instance.pushReplacement(
           AppRoutesKey.instance.appNavigationScreen,
         );
-      } 
+      }
       // else {
-      //   AppSnackBar.instance.error("Invalid email or password. Please try again.");  
+      //   AppSnackBar.instance.error("Invalid email or password. Please try again.");
       // }
     } catch (e) {
       errorLog("checkLoginFunction", e);
@@ -74,7 +72,7 @@ class _PhoneInputFieldState extends ConsumerState<PhoneInputField> {
       child: Column(
         children: [
           AppInputWidgetTwo(
-            validator: (String? value) { 
+            validator: (String? value) {
               if (value?.isEmpty == true) {
                 return "Enter your email";
               }
@@ -135,4 +133,3 @@ class _PhoneInputFieldState extends ConsumerState<PhoneInputField> {
     );
   }
 }
-

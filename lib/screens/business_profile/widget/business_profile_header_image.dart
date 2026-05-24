@@ -62,14 +62,14 @@ class BusinessProfileHeaderImage extends StatelessWidget {
               child: GestureDetector(
                 onTap: onSeeAllTap,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.instance.primary,
-                    ),
+                    border: Border.all(color: AppColors.instance.primary),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),

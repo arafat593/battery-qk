@@ -39,11 +39,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             /// LEFT: Logo
-            if (logoPath != null)
-              AppImage(
-                path: logoPath!,
-                width: 65,
-              ),
+            if (logoPath != null) AppImage(path: logoPath!, width: 65),
 
             /// RIGHT: Location or custom actions
             if (showLocation)

@@ -36,12 +36,14 @@ class FlutterSwitch extends StatefulWidget {
     this.duration = const Duration(milliseconds: 200),
     this.disabled = false,
   }) : assert(
-         (switchBorder == null || activeSwitchBorder == null) && (switchBorder == null || inactiveSwitchBorder == null),
+         (switchBorder == null || activeSwitchBorder == null) &&
+             (switchBorder == null || inactiveSwitchBorder == null),
          'Cannot provide switchBorder when an activeSwitchBorder or inactiveSwitchBorder was given\n'
          'To give the switch a border, use "activeSwitchBorder: border" or "inactiveSwitchBorder: border".',
        ),
        assert(
-         (toggleBorder == null || activeToggleBorder == null) && (toggleBorder == null || inactiveToggleBorder == null),
+         (toggleBorder == null || activeToggleBorder == null) &&
+             (toggleBorder == null || inactiveToggleBorder == null),
          'Cannot provide toggleBorder when an activeToggleBorder or inactiveToggleBorder was given\n'
          'To give the toggle a border, use "activeToggleBorder: color" or "inactiveToggleBorder: color".',
        );
@@ -82,15 +84,26 @@ class FlutterSwitch extends StatefulWidget {
   State<FlutterSwitch> createState() => _FlutterSwitchState();
 }
 
-class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProviderStateMixin {
+class _FlutterSwitchState extends State<FlutterSwitch>
+    with SingleTickerProviderStateMixin {
   late final Animation _toggleAnimation;
   late final AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, value: widget.value ? 1.0 : 0.0, duration: widget.duration);
-    _toggleAnimation = AlignmentTween(begin: Alignment.centerLeft, end: Alignment.centerRight).animate(CurvedAnimation(parent: _animationController, curve: Curves.linear));
+    _animationController = AnimationController(
+      vsync: this,
+      value: widget.value ? 1.0 : 0.0,
+      duration: widget.duration,
+    );
+    _toggleAnimation =
+        AlignmentTween(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.linear),
+        );
   }
 
   @override
@@ -122,13 +135,21 @@ class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProvider
     if (widget.value) {
       toggleColor = widget.activeToggleColor ?? widget.toggleColor;
       switchColor = widget.activeColor;
-      switchBorder = widget.activeSwitchBorder as Border? ?? widget.switchBorder as Border?;
-      toggleBorder = widget.activeToggleBorder as Border? ?? widget.toggleBorder as Border?;
+      switchBorder =
+          widget.activeSwitchBorder as Border? ??
+          widget.switchBorder as Border?;
+      toggleBorder =
+          widget.activeToggleBorder as Border? ??
+          widget.toggleBorder as Border?;
     } else {
       toggleColor = widget.inactiveToggleColor ?? widget.toggleColor;
       switchColor = widget.inactiveColor;
-      switchBorder = widget.inactiveSwitchBorder as Border? ?? widget.switchBorder as Border?;
-      toggleBorder = widget.inactiveToggleBorder as Border? ?? widget.toggleBorder as Border?;
+      switchBorder =
+          widget.inactiveSwitchBorder as Border? ??
+          widget.switchBorder as Border?;
+      toggleBorder =
+          widget.inactiveToggleBorder as Border? ??
+          widget.toggleBorder as Border?;
     }
 
     double textSpace = widget.width - widget.toggleSize;
@@ -157,20 +178,34 @@ class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProvider
                   width: widget.width,
                   height: widget.height,
                   padding: EdgeInsets.all(widget.padding),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(widget.borderRadius), color: switchColor, border: switchBorder),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(widget.borderRadius),
+                    color: switchColor,
+                    border: switchBorder,
+                  ),
                   child: Stack(
                     children: <Widget>[
                       AnimatedOpacity(
                         opacity: widget.value ? 1.0 : 0.0,
                         duration: widget.duration,
-                        child: Container(width: textSpace, padding: EdgeInsets.symmetric(horizontal: 4.0), alignment: Alignment.centerLeft, child: _activeText),
+                        child: Container(
+                          width: textSpace,
+                          padding: EdgeInsets.symmetric(horizontal: 4.0),
+                          alignment: Alignment.centerLeft,
+                          child: _activeText,
+                        ),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: AnimatedOpacity(
                           opacity: !widget.value ? 1.0 : 0.0,
                           duration: widget.duration,
-                          child: Container(width: textSpace, padding: EdgeInsets.symmetric(horizontal: 4.0), alignment: Alignment.centerRight, child: _inactiveText),
+                          child: Container(
+                            width: textSpace,
+                            padding: EdgeInsets.symmetric(horizontal: 4.0),
+                            alignment: Alignment.centerRight,
+                            child: _inactiveText,
+                          ),
                         ),
                       ),
                       Container(
@@ -180,14 +215,30 @@ class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProvider
                             width: widget.toggleSize,
                             height: widget.toggleSize,
                             padding: EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: toggleColor, border: toggleBorder),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: toggleColor,
+                              border: toggleBorder,
+                            ),
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Container(
                                 child: Stack(
                                   children: [
-                                    Center(child: AnimatedOpacity(opacity: widget.value ? 1.0 : 0.0, duration: widget.duration, child: widget.activeIcon)),
-                                    Center(child: AnimatedOpacity(opacity: !widget.value ? 1.0 : 0.0, duration: widget.duration, child: widget.inactiveIcon)),
+                                    Center(
+                                      child: AnimatedOpacity(
+                                        opacity: widget.value ? 1.0 : 0.0,
+                                        duration: widget.duration,
+                                        child: widget.activeIcon,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: AnimatedOpacity(
+                                        opacity: !widget.value ? 1.0 : 0.0,
+                                        duration: widget.duration,
+                                        child: widget.inactiveIcon,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -206,12 +257,21 @@ class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProvider
     );
   }
 
-  FontWeight get _activeTextFontWeight => widget.activeTextFontWeight ?? FontWeight.w900;
-  FontWeight get _inactiveTextFontWeight => widget.inactiveTextFontWeight ?? FontWeight.w900;
+  FontWeight get _activeTextFontWeight =>
+      widget.activeTextFontWeight ?? FontWeight.w900;
+  FontWeight get _inactiveTextFontWeight =>
+      widget.inactiveTextFontWeight ?? FontWeight.w900;
 
   Widget get _activeText {
     if (widget.showOnOff) {
-      return Text(widget.activeText ?? "On", style: TextStyle(color: widget.activeTextColor, fontWeight: _activeTextFontWeight, fontSize: widget.valueFontSize));
+      return Text(
+        widget.activeText ?? "On",
+        style: TextStyle(
+          color: widget.activeTextColor,
+          fontWeight: _activeTextFontWeight,
+          fontSize: widget.valueFontSize,
+        ),
+      );
     }
 
     return Text("");
@@ -219,7 +279,15 @@ class _FlutterSwitchState extends State<FlutterSwitch> with SingleTickerProvider
 
   Widget get _inactiveText {
     if (widget.showOnOff) {
-      return Text(widget.inactiveText ?? "Off", style: TextStyle(color: widget.inactiveTextColor, fontWeight: _inactiveTextFontWeight, fontSize: widget.valueFontSize), textAlign: TextAlign.right);
+      return Text(
+        widget.inactiveText ?? "Off",
+        style: TextStyle(
+          color: widget.inactiveTextColor,
+          fontWeight: _inactiveTextFontWeight,
+          fontSize: widget.valueFontSize,
+        ),
+        textAlign: TextAlign.right,
+      );
     }
 
     return Text("");

@@ -8,10 +8,6 @@ class CustomBoldSubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppText(
-      text: subTitle,
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-    );
+    return AppText(text: subTitle, fontSize: 16, fontWeight: FontWeight.w600);
   }
 }

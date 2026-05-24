@@ -29,7 +29,10 @@ class MessageHeadingTitle extends StatelessWidget {
       if (p['messageable'] != null && p['messageable'] is Map) {
         return Map<String, dynamic>.from(p['messageable']);
       }
-      if (p.containsKey('id') || p.containsKey('uuid') || p.containsKey('email') || p.containsKey('name')) {
+      if (p.containsKey('id') ||
+          p.containsKey('uuid') ||
+          p.containsKey('email') ||
+          p.containsKey('name')) {
         return Map<String, dynamic>.from(p);
       }
       return null;
@@ -43,16 +46,20 @@ class MessageHeadingTitle extends StatelessWidget {
     }
 
     final List<dynamic>? participants = conversation['participants'];
-    
+
     // Print to help debug API structures if needed
-    debugPrint("DEBUG MessageHeadingTitle conversation ID: ${conversation['id']}, participants: $participants, currentUserUuid: $currentUserUuid, currentUserId: $currentUserId");
+    debugPrint(
+      "DEBUG MessageHeadingTitle conversation ID: ${conversation['id']}, participants: $participants, currentUserUuid: $currentUserUuid, currentUserId: $currentUserId",
+    );
 
     if (otherParticipant == null && participants != null) {
       for (var p in participants) {
         final user = resolveUser(p);
         if (user != null) {
-          final bool isMe = (currentUserUuid != null && user['uuid'] == currentUserUuid) ||
-                            (currentUserId != null && user['id']?.toString() == currentUserId.toString());
+          final bool isMe =
+              (currentUserUuid != null && user['uuid'] == currentUserUuid) ||
+              (currentUserId != null &&
+                  user['id']?.toString() == currentUserId.toString());
           if (!isMe) {
             otherParticipant = user;
             break;
@@ -60,14 +67,18 @@ class MessageHeadingTitle extends StatelessWidget {
         }
       }
     }
-    
+
     // If otherParticipant is still null, fallback
-    if (otherParticipant == null && participants != null && participants.isNotEmpty) {
+    if (otherParticipant == null &&
+        participants != null &&
+        participants.isNotEmpty) {
       for (var p in participants) {
         final user = resolveUser(p);
         if (user != null) {
-          final bool isMe = (currentUserUuid != null && user['uuid'] == currentUserUuid) ||
-                            (currentUserId != null && user['id']?.toString() == currentUserId.toString());
+          final bool isMe =
+              (currentUserUuid != null && user['uuid'] == currentUserUuid) ||
+              (currentUserId != null &&
+                  user['id']?.toString() == currentUserId.toString());
           if (!isMe) {
             otherParticipant = user;
             break;
@@ -79,9 +90,16 @@ class MessageHeadingTitle extends StatelessWidget {
       }
     }
 
-    String displayName = conversation['display_name'] ?? conversation['conversation_name'] ?? conversation['name'] ?? "";
+    String displayName =
+        conversation['display_name'] ??
+        conversation['conversation_name'] ??
+        conversation['name'] ??
+        "";
     if (displayName.isEmpty && otherParticipant != null) {
-      final name = otherParticipant['display_name'] ?? otherParticipant['name'] ?? otherParticipant['full_name'];
+      final name =
+          otherParticipant['display_name'] ??
+          otherParticipant['name'] ??
+          otherParticipant['full_name'];
       if (name != null && name.toString().isNotEmpty) {
         displayName = name.toString();
       } else {
@@ -96,14 +114,16 @@ class MessageHeadingTitle extends StatelessWidget {
 
     String avatarUrl = conversation['conversation_image_url'] ?? "";
     if (avatarUrl.isEmpty && otherParticipant != null) {
-      avatarUrl = otherParticipant['avatar_url'] ?? 
-          otherParticipant['photo'] ?? 
-          otherParticipant['image_url'] ?? 
-          otherParticipant['avatar'] ?? 
-          otherParticipant['logo_url'] ?? 
-          otherParticipant['logo'] ?? "";
+      avatarUrl =
+          otherParticipant['avatar_url'] ??
+          otherParticipant['photo'] ??
+          otherParticipant['image_url'] ??
+          otherParticipant['avatar'] ??
+          otherParticipant['logo_url'] ??
+          otherParticipant['logo'] ??
+          "";
     }
-        
+
     if (avatarUrl.isNotEmpty) {
       if (avatarUrl.contains('/storage/')) {
         final storagePath = avatarUrl.substring(avatarUrl.indexOf('/storage/'));
@@ -113,26 +133,33 @@ class MessageHeadingTitle extends StatelessWidget {
       }
     }
 
-    final bool isVerified = conversation['is_verified'] == true ||
-        otherParticipant?['is_verified'] == true || 
+    final bool isVerified =
+        conversation['is_verified'] == true ||
+        otherParticipant?['is_verified'] == true ||
         otherParticipant?['shows_verified_badge'] == true;
 
     final lastMessageObj = conversation['last_message'];
-    String lastMessageText = conversation['last_message_preview'] ?? "No messages yet";
+    String lastMessageText =
+        conversation['last_message_preview'] ?? "No messages yet";
     String timeText = "";
-    
+
     if (lastMessageObj != null && lastMessageObj is Map) {
-      lastMessageText = lastMessageObj['body'] ?? conversation['last_message_preview'] ?? "";
+      lastMessageText =
+          lastMessageObj['body'] ?? conversation['last_message_preview'] ?? "";
     }
-    
-    final String? createdAt = (lastMessageObj is Map ? lastMessageObj['created_at'] : null) ?? conversation['last_message_at'];
+
+    final String? createdAt =
+        (lastMessageObj is Map ? lastMessageObj['created_at'] : null) ??
+        conversation['last_message_at'];
     if (createdAt != null) {
       try {
         final DateTime dt = DateTime.parse(createdAt).toLocal();
-        final int hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
+        final int hour = dt.hour > 12
+            ? dt.hour - 12
+            : (dt.hour == 0 ? 12 : dt.hour);
         final String minute = dt.minute.toString().padLeft(2, '0');
         final String ampm = dt.hour >= 12 ? "PM" : "AM";
-        
+
         final now = DateTime.now();
         if (dt.year == now.year && dt.month == now.month && dt.day == now.day) {
           timeText = "$hour:$minute $ampm";
@@ -144,13 +171,14 @@ class MessageHeadingTitle extends StatelessWidget {
       }
     }
 
-    final int unreadCount = int.tryParse(conversation['unread_count']?.toString() ?? '0') ?? 0;
+    final int unreadCount =
+        int.tryParse(conversation['unread_count']?.toString() ?? '0') ?? 0;
     final bool hasUnread = unreadCount > 0;
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Padding(  
+      child: Padding(
         padding: EdgeInsets.symmetric(vertical: AppSize.size.height * 0.005),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

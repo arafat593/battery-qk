@@ -4,7 +4,8 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class AppSocketAllOperation {
   AppSocketAllOperation._privateConstructor();
-  static final AppSocketAllOperation _instance = AppSocketAllOperation._privateConstructor();
+  static final AppSocketAllOperation _instance =
+      AppSocketAllOperation._privateConstructor();
   static AppSocketAllOperation get instance => _instance;
 
   io.Socket? appRootSocket;
@@ -19,7 +20,10 @@ class AppSocketAllOperation {
     _connectSocketToServer();
   }
 
-  void readEvent({required String event, required void Function(dynamic) handler}) {
+  void readEvent({
+    required String event,
+    required void Function(dynamic) handler,
+  }) {
     try {
       // Store the handler for reconnection scenarios
       if (!_eventHandlers.containsKey(event)) {
@@ -91,7 +95,12 @@ class AppSocketAllOperation {
 
       appRootSocket = io.io(
         AppApiUrl.socket,
-        io.OptionBuilder().setTransports(['websocket']).disableAutoConnect().setExtraHeaders({'foo': 'bar'}).enableReconnection().build(),
+        io.OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'foo': 'bar'})
+            .enableReconnection()
+            .build(),
       );
 
       // Setup connection listeners

@@ -61,7 +61,7 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                   color: AppColors.instance.hintText,
                 ),
                 Gap(height: 24),
-                
+
                 if (state.isLoading)
                   const Center(
                     child: Padding(
@@ -73,7 +73,9 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                   const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: AppText(text: "You haven't submitted any reviews yet."),
+                      child: AppText(
+                        text: "You haven't submitted any reviews yet.",
+                      ),
                     ),
                   )
                 else
@@ -83,13 +85,14 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                     itemCount: state.reviews.length,
                     itemBuilder: (context, index) {
                       final review = state.reviews[index];
-                      
+
                       // 1. Safe Business Name Mapping
                       String businessName = "Business Name";
                       if (review['business'] != null) {
                         if (review['business'] is Map) {
-                          businessName = review['business']['business_name'] ?? 
-                              review['business']['name'] ?? 
+                          businessName =
+                              review['business']['business_name'] ??
+                              review['business']['name'] ??
                               "Business Name";
                         } else {
                           businessName = review['business'].toString();
@@ -97,7 +100,7 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                       } else if (review['business_name'] != null) {
                         businessName = review['business_name'].toString();
                       }
-                          
+
                       // 2. Safe Date Mapping
                       String date = "";
                       if (review['created_at_human'] != null) {
@@ -107,23 +110,33 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                       } else if (review['date'] != null) {
                         date = review['date'].toString();
                       }
-                      
+
                       // 3. Safe Rating Mapping
                       int rating = 5;
                       if (review['rating'] != null) {
                         if (review['rating'] is num) {
                           rating = (review['rating'] as num).round();
                         } else {
-                          rating = double.tryParse(review['rating'].toString())?.round() ?? 5;
+                          rating =
+                              double.tryParse(
+                                review['rating'].toString(),
+                              )?.round() ??
+                              5;
                         }
                       }
-                      
+
                       // 4. Safe Review Text Mapping
-                      String reviewText = review['review_text'] ?? review['review'] ?? "";
-                      if (reviewText.startsWith('"') && reviewText.endsWith('"') && reviewText.length > 1) {
-                        reviewText = reviewText.substring(1, reviewText.length - 1);
+                      String reviewText =
+                          review['review_text'] ?? review['review'] ?? "";
+                      if (reviewText.startsWith('"') &&
+                          reviewText.endsWith('"') &&
+                          reviewText.length > 1) {
+                        reviewText = reviewText.substring(
+                          1,
+                          reviewText.length - 1,
+                        );
                       }
-                      
+
                       // 5. Safe Review Images Parser
                       List<String> reviewImages = [];
                       final rawImages = review['images'] ?? review['photos'];
@@ -132,13 +145,20 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                           if (img != null) {
                             String imgUrl = "";
                             if (img is Map) {
-                              imgUrl = img['url'] ?? img['image_url'] ?? img['path'] ?? img['image_path'] ?? "";
+                              imgUrl =
+                                  img['url'] ??
+                                  img['image_url'] ??
+                                  img['path'] ??
+                                  img['image_path'] ??
+                                  "";
                             } else {
                               imgUrl = img.toString();
                             }
                             if (imgUrl.isNotEmpty) {
                               if (imgUrl.contains('/storage/')) {
-                                final storagePath = imgUrl.substring(imgUrl.indexOf('/storage/'));
+                                final storagePath = imgUrl.substring(
+                                  imgUrl.indexOf('/storage/'),
+                                );
                                 imgUrl = "${AppApiUrl.domain}$storagePath";
                               } else if (!imgUrl.startsWith('http')) {
                                 imgUrl = "${AppApiUrl.domain}/storage/$imgUrl";
@@ -151,23 +171,31 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
 
                       // 6. Safe Business Logo Mapping
                       String businessLogo = "";
-                      if (review['business'] != null && review['business'] is Map) {
-                        businessLogo = review['business']['logo_url'] ?? 
-                            review['business']['logo'] ?? "";
+                      if (review['business'] != null &&
+                          review['business'] is Map) {
+                        businessLogo =
+                            review['business']['logo_url'] ??
+                            review['business']['logo'] ??
+                            "";
                       }
                       if (businessLogo.isEmpty) {
                         businessLogo = review['logo_url'] ?? "";
                       }
                       if (businessLogo.isNotEmpty) {
                         if (businessLogo.contains('/storage/')) {
-                          final storagePath = businessLogo.substring(businessLogo.indexOf('/storage/'));
+                          final storagePath = businessLogo.substring(
+                            businessLogo.indexOf('/storage/'),
+                          );
                           businessLogo = "${AppApiUrl.domain}$storagePath";
                         } else if (!businessLogo.startsWith('http')) {
-                          businessLogo = "${AppApiUrl.domain}/storage/$businessLogo";
+                          businessLogo =
+                              "${AppApiUrl.domain}/storage/$businessLogo";
                         }
                       }
 
-                      print("PARSED REVIEW IMAGES: $reviewImages for business: $businessName");
+                      print(
+                        "PARSED REVIEW IMAGES: $reviewImages for business: $businessName",
+                      );
 
                       return MyReviewsCardWidget(
                         name: businessName,
@@ -179,12 +207,18 @@ class _MyReviewsScreenState extends ConsumerState<MyReviewsScreen> {
                         editButton: () {
                           int? businessId;
                           if (review['business_id'] != null) {
-                            businessId = int.tryParse(review['business_id'].toString());
+                            businessId = int.tryParse(
+                              review['business_id'].toString(),
+                            );
                           }
-                          if (businessId == null && review['business'] != null && review['business'] is Map) {
-                            businessId = int.tryParse(review['business']['id'].toString());
+                          if (businessId == null &&
+                              review['business'] != null &&
+                              review['business'] is Map) {
+                            businessId = int.tryParse(
+                              review['business']['id'].toString(),
+                            );
                           }
-                          
+
                           if (businessId != null) {
                             AppRoutes.instance.pushNamed(
                               AppRoutesKey.instance.businessProfileReviewScreen,

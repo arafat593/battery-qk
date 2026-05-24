@@ -184,36 +184,38 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                         return "Add lowercase";
                       }
 
-                      if (!value.contains(RegExp(r'[A-Z]'))) {  
+                      if (!value.contains(RegExp(r'[A-Z]'))) {
                         return "Add uppercase";
-                      } 
+                      }
 
                       if (!value.contains(RegExp(r'[0-9]'))) {
                         return "Add number";
-                      } 
+                      }
 
                       if (!value.contains(RegExp(r'[!@#$%^&*]'))) {
-                        return "Add special char"; 
-                    }
-                    if (widget.isEmail) {
-                      if (isValidEmail(value.toString())) return null;
-                      return "Please provide a valid email address";
-                    }
-                    if (widget.isPassWord &&
-                        widget.isPassWordSecondValidation) {
-                      if (widget.isPassWordSecondValidationController != null) {
-                        if (value.toLowerCase() !=
-                            widget.isPassWordSecondValidationController!.text
-                                .toLowerCase()) {
-                          return "Both passwords most match";
-                        } else {
-                          return null;
+                        return "Add special char";
+                      }
+                      if (widget.isEmail) {
+                        if (isValidEmail(value.toString())) return null;
+                        return "Please provide a valid email address";
+                      }
+                      if (widget.isPassWord &&
+                          widget.isPassWordSecondValidation) {
+                        if (widget.isPassWordSecondValidationController !=
+                            null) {
+                          if (value.toLowerCase() !=
+                              widget.isPassWordSecondValidationController!.text
+                                  .toLowerCase()) {
+                            return "Both passwords most match";
+                          } else {
+                            return null;
+                          }
                         }
                       }
-                    }
 
-                    return null;
-                  };
+                      return null;
+                    }
+                    ;
                   },
               inputFormatters: widget.inputFormatters,
               keyboardType: widget.keyboardType,

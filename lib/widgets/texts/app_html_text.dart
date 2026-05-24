@@ -10,7 +10,13 @@ import 'package:html/dom.dart';
 import 'package:translator/translator.dart';
 
 class AppHtmlWidget extends ConsumerStatefulWidget {
-  const AppHtmlWidget({super.key, required this.html, this.textStyle, this.translate = true, this.isDynamic = true});
+  const AppHtmlWidget({
+    super.key,
+    required this.html,
+    this.textStyle,
+    this.translate = true,
+    this.isDynamic = true,
+  });
 
   final String html;
   final TextStyle? textStyle;
@@ -60,7 +66,10 @@ class _AppHtmlWidgetState extends ConsumerState<AppHtmlWidget> {
         await Future.wait(
           textNodes.map((node) async {
             try {
-              var translated = await translator.translate(node.text, to: targetLang);
+              var translated = await translator.translate(
+                node.text,
+                to: targetLang,
+              );
               node.text = translated.text;
             } catch (e) {
               errorLog("Translate node error", e);
@@ -86,7 +95,11 @@ class _AppHtmlWidgetState extends ConsumerState<AppHtmlWidget> {
     final language = ref.watch(languageProvider);
 
     if (!widget.isDynamic) {
-      return HtmlWidget(widget.html, textStyle: widget.textStyle, enableCaching: true);
+      return HtmlWidget(
+        widget.html,
+        textStyle: widget.textStyle,
+        enableCaching: true,
+      );
     }
 
     return FutureBuilder<String>(
@@ -98,10 +111,18 @@ class _AppHtmlWidgetState extends ConsumerState<AppHtmlWidget> {
         }
 
         if (snapshot.hasError) {
-          return HtmlWidget(widget.html, textStyle: widget.textStyle, enableCaching: true);
+          return HtmlWidget(
+            widget.html,
+            textStyle: widget.textStyle,
+            enableCaching: true,
+          );
         }
 
-        return HtmlWidget(snapshot.data ?? widget.html, textStyle: widget.textStyle, enableCaching: true);
+        return HtmlWidget(
+          snapshot.data ?? widget.html,
+          textStyle: widget.textStyle,
+          enableCaching: true,
+        );
       },
     );
   }

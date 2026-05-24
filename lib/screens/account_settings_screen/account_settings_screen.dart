@@ -16,7 +16,8 @@ class AccountSettingsScreen extends ConsumerStatefulWidget {
   const AccountSettingsScreen({super.key});
 
   @override
-  ConsumerState<AccountSettingsScreen> createState() => _AccountSettingsScreenState();
+  ConsumerState<AccountSettingsScreen> createState() =>
+      _AccountSettingsScreenState();
 }
 
 class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
@@ -51,7 +52,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                   "Manage your curated preferences, security settings, and personal identity.",
               fontSize: 16,
               color: AppColors.instance.deepHintText,
-            ), 
+            ),
 
             const Gap(height: 25),
 

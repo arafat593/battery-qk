@@ -57,29 +57,39 @@ class BusinessProfileActionSection extends StatelessWidget {
               borderColor: (phone != null && phone!.trim().isNotEmpty)
                   ? AppColors.instance.error
                   : AppColors.instance.hintText.withAlpha(50),
-              title: (phone != null && phone!.trim().isNotEmpty) ? phone! : "Phone Not Available",
-              titleColor: (phone != null && phone!.trim().isNotEmpty) ? Colors.white : AppColors.instance.hintText,
-              iconColor: (phone != null && phone!.trim().isNotEmpty) ? Colors.white : AppColors.instance.hintText,
+              title: (phone != null && phone!.trim().isNotEmpty)
+                  ? phone!
+                  : "Phone Not Available",
+              titleColor: (phone != null && phone!.trim().isNotEmpty)
+                  ? Colors.white
+                  : AppColors.instance.hintText,
+              iconColor: (phone != null && phone!.trim().isNotEmpty)
+                  ? Colors.white
+                  : AppColors.instance.hintText,
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
-              onTap: (phone != null && phone!.trim().isNotEmpty) ? () async {
-                final Uri launchUri = Uri(
-                  scheme: 'tel',
-                  path: phone!.trim(),
-                );
-                if (await canLaunchUrl(launchUri)) {
-                  await launchUrl(launchUri);
-                } else {
-                  AppSnackBar.instance.error("Could not launch phone dialer");
-                }
-              } : () {
-                AppSnackBar.instance.error("Phone number not available");
-              },
+              onTap: (phone != null && phone!.trim().isNotEmpty)
+                  ? () async {
+                      final Uri launchUri = Uri(
+                        scheme: 'tel',
+                        path: phone!.trim(),
+                      );
+                      if (await canLaunchUrl(launchUri)) {
+                        await launchUrl(launchUri);
+                      } else {
+                        AppSnackBar.instance.error(
+                          "Could not launch phone dialer",
+                        );
+                      }
+                    }
+                  : () {
+                      AppSnackBar.instance.error("Phone number not available");
+                    },
             ),
             Gap(height: 20),
             AppButton(
               backgroundColor: AppColors.instance.buttonColor,
               borderColor: AppColors.instance.buttonColor,
-              title: "Direct massage", 
+              title: "Direct massage",
               leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
               iconColor: AppColors.instance.buttonColor,
               onTap: () {
@@ -94,19 +104,23 @@ class BusinessProfileActionSection extends StatelessWidget {
                     },
                   );
                 } else {
-                  AppSnackBar.instance.error("Direct messaging is not available for this vendor (Missing UUID)");
+                  AppSnackBar.instance.error(
+                    "Direct messaging is not available for this vendor (Missing UUID)",
+                  );
                 }
               },
-            ), 
-            Gap(height: 20),  
-            AppButton( 
+            ),
+            Gap(height: 20),
+            AppButton(
               backgroundColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor.withAlpha(15)
                   : AppColors.instance.hintText.withAlpha(20),
               borderColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor
                   : AppColors.instance.hintText,
-              title: (whatsapp != null && whatsapp!.trim().isNotEmpty) ? "Chat Via WhatsApp" : "WhatsApp Not Available",  
+              title: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+                  ? "Chat Via WhatsApp"
+                  : "WhatsApp Not Available",
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
               titleColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor
@@ -114,19 +128,31 @@ class BusinessProfileActionSection extends StatelessWidget {
               iconColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor
                   : AppColors.instance.hintText,
-              onTap: (whatsapp != null && whatsapp!.trim().isNotEmpty) ? () async {
-                final cleanNumber = whatsapp!.replaceAll(RegExp(r'[^0-9]'), '');
-                final Uri whatsappUri = Uri.parse("https://wa.me/$cleanNumber");
-                if (await canLaunchUrl(whatsappUri)) {
-                  await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
-                } else {
-                  AppSnackBar.instance.error("Could not launch WhatsApp");
-                }
-              } : () {
-                AppSnackBar.instance.error("WhatsApp number not available");
-              },
+              onTap: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+                  ? () async {
+                      final cleanNumber = whatsapp!.replaceAll(
+                        RegExp(r'[^0-9]'),
+                        '',
+                      );
+                      final Uri whatsappUri = Uri.parse(
+                        "https://wa.me/$cleanNumber",
+                      );
+                      if (await canLaunchUrl(whatsappUri)) {
+                        await launchUrl(
+                          whatsappUri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        AppSnackBar.instance.error("Could not launch WhatsApp");
+                      }
+                    }
+                  : () {
+                      AppSnackBar.instance.error(
+                        "WhatsApp number not available",
+                      );
+                    },
             ),
-            
+
             Gap(height: 30),
             BusinessProfileInfoRow(
               icon: Icons.av_timer_outlined,
@@ -148,27 +174,39 @@ class BusinessProfileActionSection extends StatelessWidget {
                     child: BusinessProfileInfoRow(
                       icon: isFavorite ? Icons.bookmark : Icons.bookmark_border,
                       text: isFavorite ? "SAVED" : "SAVE",
-                      iconColor: isFavorite ? AppColors.instance.buttonColor : AppColors.instance.hintText,
-                      textColor: isFavorite ? AppColors.instance.buttonColor : AppColors.instance.hintText,
+                      iconColor: isFavorite
+                          ? AppColors.instance.buttonColor
+                          : AppColors.instance.hintText,
+                      textColor: isFavorite
+                          ? AppColors.instance.buttonColor
+                          : AppColors.instance.hintText,
                     ),
                   ),
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (website != null && website!.trim().isNotEmpty) ? () async {
-                      var urlString = website!.trim();
-                      if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
-                        urlString = 'https://$urlString';
-                      }
-                      final Uri uri = Uri.parse(urlString);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      } else {
-                        AppSnackBar.instance.error("Could not open website");
-                      }
-                    } : () {
-                      AppSnackBar.instance.error("Website not available");
-                    },
+                    onTap: (website != null && website!.trim().isNotEmpty)
+                        ? () async {
+                            var urlString = website!.trim();
+                            if (!urlString.startsWith('http://') &&
+                                !urlString.startsWith('https://')) {
+                              urlString = 'https://$urlString';
+                            }
+                            final Uri uri = Uri.parse(urlString);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
+                            } else {
+                              AppSnackBar.instance.error(
+                                "Could not open website",
+                              );
+                            }
+                          }
+                        : () {
+                            AppSnackBar.instance.error("Website not available");
+                          },
                     child: BusinessProfileInfoRow(
                       icon: Icons.language,
                       text: "WEBSITE",

@@ -18,14 +18,27 @@ class NoInternetScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: AppSize.width(value: 5),
           children: [
-            AppImage(path: "assets/images/no_internet.webp", width: AppSize.size.width * 0.4),
+            AppImage(
+              path: "assets/images/no_internet.webp",
+              width: AppSize.size.width * 0.4,
+            ),
             Gap(height: 5),
-            AppText(text: "Ooops!", fontSize: AppSize.width(value: 25), fontWeight: FontWeight.bold),
+            AppText(
+              text: "Ooops!",
+              fontSize: AppSize.width(value: 25),
+              fontWeight: FontWeight.bold,
+            ),
 
             Gap(height: 5),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.2),
-              child: AppText(text: "No Internet Connection found Check your connection", textAlign: TextAlign.center, height: 1.5),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSize.size.width * 0.2,
+              ),
+              child: AppText(
+                text: "No Internet Connection found Check your connection",
+                textAlign: TextAlign.center,
+                height: 1.5,
+              ),
             ),
           ],
         ),

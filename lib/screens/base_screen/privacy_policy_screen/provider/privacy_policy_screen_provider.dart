@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/base_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
-final privacyPolicyScreenProvider = StateNotifierProvider((ref) => _PrivacyPolicyScreenProvider());
+final privacyPolicyScreenProvider = StateNotifierProvider(
+  (ref) => _PrivacyPolicyScreenProvider(),
+);
 
 class _PrivacyPolicyScreenProvider extends StateNotifier<AsyncValue<String>> {
   final BaseRepository _repo = BaseRepository.instance;

@@ -3,7 +3,11 @@ import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 
 class CustomerFavoriteButton extends StatefulWidget {
-  const CustomerFavoriteButton({super.key, this.isSelected = false, required this.onValueChange});
+  const CustomerFavoriteButton({
+    super.key,
+    this.isSelected = false,
+    required this.onValueChange,
+  });
   final bool isSelected;
   final void Function(bool value) onValueChange;
   @override
@@ -30,7 +34,11 @@ class _CustomerFavoriteButtonState extends State<CustomerFavoriteButton> {
       },
       overlayColor: WidgetStatePropertyAll(AppColors.instance.transparent),
       child: ImageIcon(
-        AssetImage(isSelected ? AppAssertsIconsPath.instance.loveFill : AppAssertsIconsPath.instance.love),
+        AssetImage(
+          isSelected
+              ? AppAssertsIconsPath.instance.loveFill
+              : AppAssertsIconsPath.instance.love,
+        ),
         color: AppColors.instance.orange500,
       ),
     );

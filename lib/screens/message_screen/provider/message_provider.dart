@@ -4,7 +4,9 @@ import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'dart:developer';
 
-final messageProvider = StateNotifierProvider<MessageNotifier, MessageState>((ref) {
+final messageProvider = StateNotifierProvider<MessageNotifier, MessageState>((
+  ref,
+) {
   return MessageNotifier();
 });
 
@@ -118,7 +120,9 @@ class MessageNotifier extends StateNotifier<MessageState> {
       var success = await _chatRepository.deleteConversation(uuid);
       if (success != null) {
         // Remove from local list
-        final updatedList = state.conversations.where((conv) => conv['uuid'] != uuid).toList();
+        final updatedList = state.conversations
+            .where((conv) => conv['uuid'] != uuid)
+            .toList();
         state = state.copyWith(conversations: updatedList);
       }
     } catch (e) {

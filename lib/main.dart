@@ -11,12 +11,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ///////////// firebase initialize
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   ///////////// devices orientation set
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   //////////// app navigation style set
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -32,13 +33,12 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
 
   runApp(const MainAppEntry());
-
-
 }
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (cert, host, port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (cert, host, port) => true;
   }
 }

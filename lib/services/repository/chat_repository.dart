@@ -26,14 +26,17 @@ class ChatRepository {
   }
 
   /// Create a conversation with a participant (vendor user uuid)
-  Future<dynamic> createConversation(String participantUuid, {String? name}) async {
+  Future<dynamic> createConversation(
+    String participantUuid, {
+    String? name,
+  }) async {
     try {
       var response = await _apiServices.postServices(
         url: _api.conversations,
         body: {
           "type": "direct",
           if (name != null) "name": name,
-          "participants": [participantUuid]
+          "participants": [participantUuid],
         },
       );
       return response;
@@ -84,13 +87,15 @@ class ChatRepository {
   }
 
   /// Send message
-  Future<dynamic> sendMessage(String conversationUuid, String body, {List<String>? attachmentIds}) async {
+  Future<dynamic> sendMessage(
+    String conversationUuid,
+    String body, {
+    List<dynamic>? attachmentIds,
+  }) async {
     try {
-      Map<String, dynamic> requestBody = {
-        "body": body,
-      };
+      Map<String, dynamic> requestBody = {"body": body};
       if (attachmentIds != null && attachmentIds.isNotEmpty) {
-        requestBody["attachments"] = attachmentIds;
+        requestBody["attachment_ids"] = attachmentIds;
       }
       var response = await _apiServices.postServices(
         url: "${_api.conversations}/$conversationUuid/messages",
@@ -108,7 +113,7 @@ class ChatRepository {
     try {
       String fileName = file.path.split('/').last;
       var mimeType = lookupMimeType(file.path);
-      
+
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(
           file.path,
@@ -133,9 +138,7 @@ class ChatRepository {
     try {
       var response = await _apiServices.putServices(
         url: "/messages/$messageUuid",
-        body: {
-          "body": body,
-        },
+        body: {"body": body},
       );
       return response;
     } catch (e) {
@@ -171,13 +174,14 @@ class ChatRepository {
   }
 
   /// Send typing status indication
-  Future<dynamic> setTypingStatus(String conversationUuid, bool isTyping) async {
+  Future<dynamic> setTypingStatus(
+    String conversationUuid,
+    bool isTyping,
+  ) async {
     try {
       var response = await _apiServices.postServices(
         url: "${_api.conversations}/$conversationUuid/typing",
-        body: {
-          "is_typing": isTyping,
-        },
+        body: {"is_typing": isTyping},
       );
       return response;
     } catch (e) {

@@ -10,7 +10,7 @@ import 'business_profile_service_item.dart';
 class BusinessProfileServiceSection extends StatelessWidget {
   final List<String>? services;
   final String? category;
-  
+
   const BusinessProfileServiceSection({
     super.key,
     this.services,
@@ -46,10 +46,12 @@ class BusinessProfileServiceSection extends StatelessWidget {
                 color: AppColors.instance.hintText,
               )
             else
-              ...services!.map((service) => BusinessProfileServiceItem(
-                name: service,
-                imagePath: AppAssertsIconsPath.instance.deepCleaning,
-              )),
+              ...services!.map(
+                (service) => BusinessProfileServiceItem(
+                  name: service,
+                  imagePath: AppAssertsIconsPath.instance.deepCleaning,
+                ),
+              ),
           ],
         ),
       ),

@@ -4,7 +4,12 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 
 class CustomCheckBoxButton extends StatefulWidget {
-  const CustomCheckBoxButton({super.key, this.value, required this.onChange, this.color});
+  const CustomCheckBoxButton({
+    super.key,
+    this.value,
+    required this.onChange,
+    this.color,
+  });
   final Function(bool value) onChange;
   final bool? value;
   final Color? color;
@@ -57,7 +62,11 @@ class _CustomCheckBoxButtonState extends State<CustomCheckBoxButton> {
           visualDensity: VisualDensity(horizontal: -4, vertical: -4),
           side: WidgetStateBorderSide.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return BorderSide(color: isValue ? widget.color ?? AppColors.instance.purple500 : AppColors.instance.white500);
+              return BorderSide(
+                color: isValue
+                    ? widget.color ?? AppColors.instance.purple500
+                    : AppColors.instance.white500,
+              );
             } else {
               return BorderSide(color: AppColors.instance.gray200);
             }
@@ -66,7 +75,9 @@ class _CustomCheckBoxButtonState extends State<CustomCheckBoxButton> {
           checkColor: widget.color ?? AppColors.instance.purple500,
           fillColor: WidgetStatePropertyAll(AppColors.instance.white50),
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: widget.color ?? AppColors.instance.purple500),
+            side: BorderSide(
+              color: widget.color ?? AppColors.instance.purple500,
+            ),
             borderRadius: BorderRadius.circular(AppSize.width(value: 5.0)),
           ),
           onChanged: (value) {

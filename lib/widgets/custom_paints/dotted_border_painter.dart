@@ -18,13 +18,22 @@ class DottedBorderPainter extends CustomPainter {
     const double dashSpace = 5; // Space between each dash
 
     // Create a path with rounded corners
-    final path = Path()..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(cornerRadius)));
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(0, 0, size.width, size.height),
+          Radius.circular(cornerRadius),
+        ),
+      );
 
     // Draw dashes along the rounded path
     double distance = 0.0;
     for (PathMetric pathMetric in path.computeMetrics()) {
       while (distance < pathMetric.length) {
-        final extractPath = pathMetric.extractPath(distance, distance + dashWidth);
+        final extractPath = pathMetric.extractPath(
+          distance,
+          distance + dashWidth,
+        );
         canvas.drawPath(extractPath, paint);
         distance += dashWidth + dashSpace;
       }

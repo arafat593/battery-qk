@@ -13,14 +13,24 @@ Future<void> customTimePicker({
       initialTime: TimeOfDay.now(),
       builder: (context, child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: alwaysUse24HourFormat),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(alwaysUse24HourFormat: alwaysUse24HourFormat),
           child: Theme(
             data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(primary: AppColors.instance.primary, onPrimary: AppColors.instance.black900, onSurface: Colors.black),
+              colorScheme: ColorScheme.light(
+                primary: AppColors.instance.primary,
+                onPrimary: AppColors.instance.black900,
+                onSurface: Colors.black,
+              ),
               timePickerTheme: TimePickerThemeData(
-                backgroundColor: AppColors.instance.primary, // Main background color
-                hourMinuteTextColor: Colors.black, // Text color for hour and minute
-                hourMinuteColor: AppColors.instance.primary, // Background color for hour and minute
+                backgroundColor:
+                    AppColors.instance.primary, // Main background color
+                hourMinuteTextColor:
+                    Colors.black, // Text color for hour and minute
+                hourMinuteColor: AppColors
+                    .instance
+                    .primary, // Background color for hour and minute
                 dayPeriodColor: WidgetStateColor.resolveWith(
                   (states) => states.contains(WidgetState.selected)
                       ? AppColors
@@ -32,10 +42,14 @@ Future<void> customTimePicker({
                 //     ? Colors.white // Text color when AM/PM is selected
                 //     : Colors.black),
                 //// Text color when AM/PM is not selected
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) => Colors.black),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => Colors.black,
+                ),
                 dialBackgroundColor: AppColors.instance.primary,
                 dayPeriodBorderSide: BorderSide(
-                  color: AppColors.instance.primary, // Custom border color for AM/PM selector
+                  color: AppColors
+                      .instance
+                      .primary, // Custom border color for AM/PM selector
                   width: 2, // Border width
                 ),
               ),

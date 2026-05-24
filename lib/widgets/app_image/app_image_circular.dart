@@ -49,7 +49,11 @@ class AppImageCircular extends StatelessWidget {
             errorBuilder: (context, error, stackTrace) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
-                child: Container(width: width, height: height, color: AppColors.instance.primary),
+                child: Container(
+                  width: width,
+                  height: height,
+                  color: AppColors.instance.primary,
+                ),
               );
             },
           ),
@@ -62,7 +66,13 @@ class AppImageCircular extends StatelessWidget {
         child: Container(
           padding: filledPadding,
           decoration: BoxDecoration(color: filledColor),
-          child: NetworkImageWithRetry(imageUrl: url!, fit: fit, height: height, width: width, borderRadius: borderRadius),
+          child: NetworkImageWithRetry(
+            imageUrl: url!,
+            fit: fit,
+            height: height,
+            width: width,
+            borderRadius: borderRadius,
+          ),
         ),
       );
     }
@@ -80,7 +90,11 @@ class AppImageCircular extends StatelessWidget {
             errorBuilder: (context, error, stackTrace) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
-                child: Container(width: width, height: height, color: AppColors.instance.primary),
+                child: Container(
+                  width: width,
+                  height: height,
+                  color: AppColors.instance.primary,
+                ),
               );
             },
           ),
@@ -106,13 +120,21 @@ class NetworkImageWithRetry extends StatefulWidget {
   final BoxFit? fit;
   final double borderRadius;
 
-  const NetworkImageWithRetry({super.key, required this.imageUrl, this.fit, this.height, this.width, required this.borderRadius});
+  const NetworkImageWithRetry({
+    super.key,
+    required this.imageUrl,
+    this.fit,
+    this.height,
+    this.width,
+    required this.borderRadius,
+  });
 
   @override
   State<NetworkImageWithRetry> createState() => _NetworkImageWithRetryState();
 }
 
-class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with AutomaticKeepAliveClientMixin {
+class _NetworkImageWithRetryState extends State<NetworkImageWithRetry>
+    with AutomaticKeepAliveClientMixin {
   bool isHoldImage = false;
   int retryCount = 0;
   final int maxRetries = 3;
@@ -175,7 +197,10 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
   Widget build(BuildContext context) {
     super.build(context);
     if (isHoldImage) {
-      return ClipRRect(borderRadius: BorderRadius.circular(widget.borderRadius), child: _errorPlaceholder());
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+        child: _errorPlaceholder(),
+      );
     }
     return ClipRRect(
       borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -188,7 +213,8 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
         fadeInDuration: const Duration(milliseconds: 100),
         fadeOutDuration: const Duration(milliseconds: 100),
         useOldImageOnUrlChange: true,
-        placeholder: (context, url) => _loadingPlaceholder(borderRadius: widget.borderRadius),
+        placeholder: (context, url) =>
+            _loadingPlaceholder(borderRadius: widget.borderRadius),
         errorWidget: (context, url, error) {
           _retry();
           return _errorPlaceholder();
@@ -204,8 +230,14 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
       child: Container(
         width: widget.width,
         height: widget.height,
-        decoration: BoxDecoration(color: AppColors.instance.white300, borderRadius: BorderRadius.circular(borderRadius)),
-        child: Image.asset(AppAssertsImagePath.instance.networkPlaceholderImage, fit: BoxFit.fill),
+        decoration: BoxDecoration(
+          color: AppColors.instance.white300,
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        child: Image.asset(
+          AppAssertsImagePath.instance.networkPlaceholderImage,
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
@@ -215,7 +247,10 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
       width: widget.width,
       height: widget.height,
       color: Colors.grey,
-      child: Image.asset(AppAssertsImagePath.instance.networkPlaceholderImage, fit: BoxFit.fill),
+      child: Image.asset(
+        AppAssertsImagePath.instance.networkPlaceholderImage,
+        fit: BoxFit.fill,
+      ),
     );
   }
 

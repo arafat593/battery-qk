@@ -11,7 +11,7 @@ class HomeState {
   final bool isLoading;
   final List<dynamic> businesses;
   final List<dynamic> categories;
-  
+
   HomeState({
     this.isLoading = false,
     this.businesses = const [],
@@ -45,7 +45,9 @@ class HomeNotifier extends StateNotifier<HomeState> {
     try {
       final results = await Future.wait([
         _publicRepository.getHomeBusinesses(search: search),
-        state.categories.isEmpty ? _publicRepository.getCategories() : Future.value(null),
+        state.categories.isEmpty
+            ? _publicRepository.getCategories()
+            : Future.value(null),
       ]);
 
       var responseHome = results[0];

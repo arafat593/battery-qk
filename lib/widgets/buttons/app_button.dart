@@ -72,84 +72,83 @@ class AppButton extends StatelessWidget {
         alignment: alignment ?? Alignment.center,
         margin: margin,
         padding:
-        padding ??
+            padding ??
             EdgeInsets.symmetric(vertical: AppSize.size.height * 0.013),
         decoration:
-        decoration ??
+            decoration ??
             BoxDecoration(
               color: backgroundColor ?? AppColors.instance.buttonColor,
               border:
-              border ??
+                  border ??
                   Border.all(
                     color: borderColor ?? AppColors.instance.buttonColor,
                   ),
               borderRadius:
-              borderRadius ??
+                  borderRadius ??
                   BorderRadius.circular(
                     AppSize.width(value: AppSize.width(value: 8.0)),
                   ),
             ),
         child: isLoading
             ? SizedBox(
-          width: loadingSize ?? AppSize.size.height * 0.04,
-          height: loadingSize ?? AppSize.size.height * 0.04,
-          child: CircularProgressIndicator(
-            color: loaderColor ?? AppColors.instance.white50,
-          ),
-        )
+                width: loadingSize ?? AppSize.size.height * 0.04,
+                height: loadingSize ?? AppSize.size.height * 0.04,
+                child: CircularProgressIndicator(
+                  color: loaderColor ?? AppColors.instance.white50,
+                ),
+              )
             : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // ✅ child priority
-            if (child != null) child!,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // ✅ child priority
+                  if (child != null) child!,
 
-            // ✅ leading icon safe
-            if (leading != null)
-              Icon(
-                leading,
-                weight: 13,
-                color: iconColor ?? AppColors.instance.white50,
-              ),
+                  // ✅ leading icon safe
+                  if (leading != null)
+                    Icon(
+                      leading,
+                      weight: 13,
+                      color: iconColor ?? AppColors.instance.white50,
+                    ),
 
-            // ✅ leading image safe
-            if (leadingIconImage != null)
-              AppImage(
-                path: leadingIconImage,
-                width: 13,
-                color: iconColor ?? AppColors.instance.white50,
-              ),
+                  // ✅ leading image safe
+                  if (leadingIconImage != null)
+                    AppImage(
+                      path: leadingIconImage,
+                      width: 13,
+                      color: iconColor ?? AppColors.instance.white50,
+                    ),
 
-            if (title != null)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSize.size.width * 0.02,
-                ),
-                child: AppText(
-                  text: title ?? "",
-                  color:
-                  titleColor ?? AppColors.instance.white50,
-                  fontWeight: fontWeight ?? FontWeight.w500,
-                  fontSize: fontSize ?? 18,
-                ),
-              ),
+                  if (title != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.size.width * 0.02,
+                      ),
+                      child: AppText(
+                        text: title ?? "",
+                        color: titleColor ?? AppColors.instance.white50,
+                        fontWeight: fontWeight ?? FontWeight.w500,
+                        fontSize: fontSize ?? 18,
+                      ),
+                    ),
 
-            // ✅ trailing icon safe
-            if (trailing != null)
-              Icon(
-                trailing,
-                weight: 13,
-                color: iconColor ?? AppColors.instance.white50,
-              ),
+                  // ✅ trailing icon safe
+                  if (trailing != null)
+                    Icon(
+                      trailing,
+                      weight: 13,
+                      color: iconColor ?? AppColors.instance.white50,
+                    ),
 
-            // ✅ trailing image safe
-            if (trailingIconImage != null)
-              AppImage(
-                path: trailingIconImage,
-                width: 13,
-                color: iconColor ?? AppColors.instance.white50,
+                  // ✅ trailing image safe
+                  if (trailingIconImage != null)
+                    AppImage(
+                      path: trailingIconImage,
+                      width: 13,
+                      color: iconColor ?? AppColors.instance.white50,
+                    ),
+                ],
               ),
-          ],
-        ),
       ),
     );
   }

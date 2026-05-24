@@ -51,7 +51,8 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
+        if (e.response?.statusCode == 401 &&
+            !e.requestOptions.path.contains("/auth/login")) {
           String token = await storageServices.getToken();
           if (token != "firebase_google_user") {
             await storageServices.logout();
@@ -101,7 +102,8 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
+        if (e.response?.statusCode == 401 &&
+            !e.requestOptions.path.contains("/auth/login")) {
           String token = await storageServices.getToken();
           if (token != "firebase_google_user") {
             await storageServices.logout();
@@ -153,7 +155,8 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
+        if (e.response?.statusCode == 401 &&
+            !e.requestOptions.path.contains("/auth/login")) {
           String token = await storageServices.getToken();
           if (token != "firebase_google_user") {
             await storageServices.logout();
@@ -211,7 +214,8 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
+        if (e.response?.statusCode == 401 &&
+            !e.requestOptions.path.contains("/auth/login")) {
           String token = await storageServices.getToken();
           if (token != "firebase_google_user") {
             await storageServices.logout();
@@ -269,7 +273,8 @@ class ApiServices {
       return null;
     } on DioException catch (e) {
       if (e.response.runtimeType != Null) {
-        if (e.response?.statusCode == 401 && !e.requestOptions.path.contains("/auth/login")) {
+        if (e.response?.statusCode == 401 &&
+            !e.requestOptions.path.contains("/auth/login")) {
           String token = await storageServices.getToken();
           if (token != "firebase_google_user") {
             await storageServices.logout();

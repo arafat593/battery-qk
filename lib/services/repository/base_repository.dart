@@ -15,22 +15,32 @@ class BaseRepository {
 
   String _parseCmsContent(dynamic data) {
     if (data == null || data is! Map) return "";
-    
+
     // Check if "page" exists and is a Map
     if (data["page"] != null && data["page"] is Map) {
       var page = data["page"];
       var content = page["description"] ?? page["content"];
       if (content != null) {
-        return content.toString().replaceAll('white-space:pre-wrap;', '').replaceAll('\u00A0', ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+        return content
+            .toString()
+            .replaceAll('white-space:pre-wrap;', '')
+            .replaceAll('\u00A0', ' ')
+            .replaceAll(RegExp(r'\s+'), ' ')
+            .trim();
       }
     }
-    
+
     // Fallback directly to data properties
     var directContent = data["content"] ?? data["description"];
     if (directContent != null) {
-      return directContent.toString().replaceAll('white-space:pre-wrap;', '').replaceAll('\u00A0', ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+      return directContent
+          .toString()
+          .replaceAll('white-space:pre-wrap;', '')
+          .replaceAll('\u00A0', ' ')
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
     }
-    
+
     return "";
   }
 

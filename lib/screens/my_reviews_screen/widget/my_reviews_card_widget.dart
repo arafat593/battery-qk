@@ -127,7 +127,10 @@ class MyReviewsCardWidget extends StatelessWidget {
                             child: SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE93544)),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Color(0xFFE93544),
+                              ),
                             ),
                           ),
                         );
@@ -136,7 +139,10 @@ class MyReviewsCardWidget extends StatelessWidget {
                         return Container(
                           width: 100,
                           color: Colors.grey[200],
-                          child: const Icon(Icons.broken_image, color: Colors.grey),
+                          child: const Icon(
+                            Icons.broken_image,
+                            color: Colors.grey,
+                          ),
                         );
                       },
                     ),

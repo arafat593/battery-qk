@@ -11,19 +11,29 @@ class BaseDataWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: AppSize.width(value: 20.0)),
-      padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0), vertical: AppSize.width(value: 20.0)),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSize.width(value: 20.0),
+        vertical: AppSize.width(value: 20.0),
+      ),
       width: AppSize.size.width,
       height: AppSize.size.height,
       decoration: BoxDecoration(
         color: AppColors.instance.white50,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(AppSize.width(value: 20.0)), topRight: Radius.circular(AppSize.width(value: 20.0))),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(AppSize.width(value: 20.0)),
+          topRight: Radius.circular(AppSize.width(value: 20.0)),
+        ),
       ),
       child: SingleChildScrollView(
         padding: EdgeInsets.all(AppSize.width(value: 20)),
 
         child: AppHtmlWidget(
           html: data,
-          textStyle: TextStyle(fontFamily: AppConstant.instance.font, height: 1.5, color: AppColors.instance.dark600),
+          textStyle: TextStyle(
+            fontFamily: AppConstant.instance.font,
+            height: 1.5,
+            color: AppColors.instance.dark600,
+          ),
         ),
       ),
     );

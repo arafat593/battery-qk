@@ -16,7 +16,13 @@ void showCustomCalendarView({
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return CalendarView(initialDate: initialDate, firstDate: firstDate, onDateSelected: onDateSelected, isSecond: isSecond, yearInFast: yearInFast);
+      return CalendarView(
+        initialDate: initialDate,
+        firstDate: firstDate,
+        onDateSelected: onDateSelected,
+        isSecond: isSecond,
+        yearInFast: yearInFast,
+      );
     },
   );
 }
@@ -46,7 +52,20 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime selectedDate = DateTime.now();
   DateTime selectedCurrentDate = DateTime.now();
   int? selectedYear;
-  List<String> months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  List<String> months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   List<String> weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -72,7 +91,11 @@ class _CalendarViewState extends State<CalendarView> {
   void _changeMonth(int delta) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        selectedDate = DateTime(selectedDate.year, selectedDate.month + delta, selectedDate.day);
+        selectedDate = DateTime(
+          selectedDate.year,
+          selectedDate.month + delta,
+          selectedDate.day,
+        );
       });
     });
   }
@@ -86,7 +109,9 @@ class _CalendarViewState extends State<CalendarView> {
           return false;
         }
       } else {
-        if (dateTime.isBefore(widget.firstDate.subtract(const Duration(days: 1)))) {
+        if (dateTime.isBefore(
+          widget.firstDate.subtract(const Duration(days: 1)),
+        )) {
           return true;
         } else {
           return false;
@@ -100,9 +125,21 @@ class _CalendarViewState extends State<CalendarView> {
 
   // Build the days for the current month
   List<Widget> _buildDays() {
-    int daysInMonth = DateTime(selectedDate.year, selectedDate.month + 1, 0).day;
-    int firstWeekdayOfMonth = DateTime(selectedDate.year, selectedDate.month, 1).weekday;
-    int lastWeekdayOfMonth = DateTime(selectedDate.year, selectedDate.month, daysInMonth).weekday;
+    int daysInMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month + 1,
+      0,
+    ).day;
+    int firstWeekdayOfMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      1,
+    ).weekday;
+    int lastWeekdayOfMonth = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      daysInMonth,
+    ).weekday;
 
     // Determine the number of days needed from the previous and next months
     int prevMonthDays = firstWeekdayOfMonth == 7 ? 0 : firstWeekdayOfMonth;
@@ -112,30 +149,52 @@ class _CalendarViewState extends State<CalendarView> {
 
     // Add empty containers for the previous month's days before the start of the current month
     for (int i = prevMonthDays; i > 0; i--) {
-      DateTime prevMonthDay = DateTime(selectedDate.year, selectedDate.month, -i);
+      DateTime prevMonthDay = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        -i,
+      );
       dayWidgets.add(
         Center(
-          child: AppText(text: prevMonthDay.day.toString(), color: AppColors.instance.black200),
+          child: AppText(
+            text: prevMonthDay.day.toString(),
+            color: AppColors.instance.black200,
+          ),
         ),
       );
     }
 
     // Actual days of the current month
     for (int day = 1; day <= daysInMonth; day++) {
-      DateTime currentDay = DateTime(selectedDate.year, selectedDate.month, day);
+      DateTime currentDay = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        day,
+      );
       bool isSelected =
-          currentDay.day == selectedCurrentDate.day && currentDay.year == selectedCurrentDate.year && currentDay.month == selectedCurrentDate.month;
+          currentDay.day == selectedCurrentDate.day &&
+          currentDay.year == selectedCurrentDate.year &&
+          currentDay.month == selectedCurrentDate.month;
       dayWidgets.add(
         GestureDetector(
           // onTap: currentDay.month == selectedDate.month ? () => _onDaySelected(currentDay) : null,
           onTap: () => _onDaySelected(currentDay),
           child: Container(
-            decoration: BoxDecoration(color: _active(dateTime: currentDay) ? AppColors.instance.black200 : AppColors.instance.black200),
+            decoration: BoxDecoration(
+              color: _active(dateTime: currentDay)
+                  ? AppColors.instance.black200
+                  : AppColors.instance.black200,
+            ),
             child: Container(
               margin: EdgeInsets.all(AppSize.width(value: 5)),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(width: 2, color: isSelected ? AppColors.instance.primary : AppColors.instance.transparent),
+                border: Border.all(
+                  width: 2,
+                  color: isSelected
+                      ? AppColors.instance.primary
+                      : AppColors.instance.transparent,
+                ),
               ),
               child: Center(child: AppText(text: day.toString())),
             ),
@@ -146,10 +205,17 @@ class _CalendarViewState extends State<CalendarView> {
 
     // Add empty containers for the next month's days after the end of the current month
     for (int i = 1; i <= nextMonthDays; i++) {
-      DateTime nextMonthDay = DateTime(selectedDate.year, selectedDate.month + 1, i);
+      DateTime nextMonthDay = DateTime(
+        selectedDate.year,
+        selectedDate.month + 1,
+        i,
+      );
       dayWidgets.add(
         Center(
-          child: AppText(text: nextMonthDay.day.toString(), color: AppColors.instance.black200),
+          child: AppText(
+            text: nextMonthDay.day.toString(),
+            color: AppColors.instance.black200,
+          ),
         ),
       );
     }
@@ -193,7 +259,13 @@ class _CalendarViewState extends State<CalendarView> {
             decoration: BoxDecoration(
               color: AppColors.instance.primary,
               borderRadius: BorderRadius.circular(AppSize.width(value: 10)),
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -210,7 +282,11 @@ class _CalendarViewState extends State<CalendarView> {
                           PopupMenuButton(
                             color: AppColors.instance.primary,
                             position: PopupMenuPosition.under,
-                            child: AppText(text: selectedYear.toString(), fontSize: 24, fontWeight: FontWeight.bold),
+                            child: AppText(
+                              text: selectedYear.toString(),
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                             onSelected: (value) {
                               _changeYear(value);
                             },
@@ -220,7 +296,11 @@ class _CalendarViewState extends State<CalendarView> {
                                   int year = DateTime.now().year - index;
                                   return PopupMenuItem(
                                     value: year,
-                                    child: AppText(text: year.toString(), color: AppColors.instance.black900, fontWeight: FontWeight.w500),
+                                    child: AppText(
+                                      text: year.toString(),
+                                      color: AppColors.instance.black900,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   );
                                 });
                               }
@@ -228,26 +308,46 @@ class _CalendarViewState extends State<CalendarView> {
                                 int year = DateTime.now().year + index;
                                 return PopupMenuItem(
                                   value: year,
-                                  child: AppText(text: year.toString(), color: AppColors.instance.black900, fontWeight: FontWeight.w500),
+                                  child: AppText(
+                                    text: year.toString(),
+                                    color: AppColors.instance.black900,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 );
                               });
                             },
                           ),
-                          AppText(text: "  -  ", fontSize: 24, fontWeight: FontWeight.bold),
+                          AppText(
+                            text: "  -  ",
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                           PopupMenuButton(
                             color: AppColors.instance.primary,
                             position: PopupMenuPosition.under,
-                            child: AppText(text: months[selectedDate.month - 1], fontSize: 24, fontWeight: FontWeight.bold),
+                            child: AppText(
+                              text: months[selectedDate.month - 1],
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                             onSelected: (value) {
                               setState(() {
-                                selectedDate = DateTime(selectedDate.year, value + 1, 1);
+                                selectedDate = DateTime(
+                                  selectedDate.year,
+                                  value + 1,
+                                  1,
+                                );
                               });
                             },
                             itemBuilder: (context) {
                               return List.generate(months.length - 1, (index) {
                                 return PopupMenuItem(
                                   value: index,
-                                  child: AppText(text: months[index], color: AppColors.instance.black900, fontWeight: FontWeight.w500),
+                                  child: AppText(
+                                    text: months[index],
+                                    color: AppColors.instance.black900,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 );
                               });
                             },
@@ -261,13 +361,19 @@ class _CalendarViewState extends State<CalendarView> {
                             onPressed: () {
                               _changeMonth(-1);
                             },
-                            icon: Icon(Icons.arrow_back_ios, color: AppColors.instance.black900),
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: AppColors.instance.black900,
+                            ),
                           ),
                           IconButton(
                             onPressed: () {
                               _changeMonth(1);
                             },
-                            icon: Icon(Icons.arrow_forward_ios, color: AppColors.instance.black900),
+                            icon: Icon(
+                              Icons.arrow_forward_ios,
+                              color: AppColors.instance.black900,
+                            ),
                           ),
                         ],
                       ),
@@ -283,7 +389,10 @@ class _CalendarViewState extends State<CalendarView> {
                         (day) => Expanded(
                           child: Container(
                             alignment: Alignment.center,
-                            child: AppText(text: day, fontWeight: FontWeight.bold),
+                            child: AppText(
+                              text: day,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       )

@@ -45,20 +45,26 @@ class BusinessProfileShareSheet extends StatelessWidget {
     String url = "";
     switch (platform) {
       case "WHATSAPP":
-        url = "https://api.whatsapp.com/send?text=${Uri.encodeComponent(message)}";
+        url =
+            "https://api.whatsapp.com/send?text=${Uri.encodeComponent(message)}";
         break;
       case "FACEBOOK":
-        url = "https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeComponent(shareUrl)}";
+        url =
+            "https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeComponent(shareUrl)}";
         break;
       case "TWITTER/X":
-        url = "https://twitter.com/intent/tweet?url=${Uri.encodeComponent(shareUrl)}&text=${Uri.encodeComponent("Check out $businessName on Olabisi Olai!")}";
+        url =
+            "https://twitter.com/intent/tweet?url=${Uri.encodeComponent(shareUrl)}&text=${Uri.encodeComponent("Check out $businessName on Olabisi Olai!")}";
         break;
       case "LINKEDIN":
-        url = "https://www.linkedin.com/sharing/share-offsite/?url=${Uri.encodeComponent(shareUrl)}";
+        url =
+            "https://www.linkedin.com/sharing/share-offsite/?url=${Uri.encodeComponent(shareUrl)}";
         break;
       default:
         await Clipboard.setData(ClipboardData(text: shareUrl));
-        AppSnackBar.instance.success("Link copied! You can now paste and share it on $platform.");
+        AppSnackBar.instance.success(
+          "Link copied! You can now paste and share it on $platform.",
+        );
         return;
     }
 
@@ -258,11 +264,11 @@ class BusinessProfileShareSheet extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () async {
                           await Clipboard.setData(
-                            ClipboardData(
-                              text: shareUrl,
-                            ),
+                            ClipboardData(text: shareUrl),
                           );
-                          AppSnackBar.instance.success("Link copied to clipboard!");
+                          AppSnackBar.instance.success(
+                            "Link copied to clipboard!",
+                          );
                         },
                         icon: const Icon(Icons.copy, size: 16),
                         label: const Text("COPY LINK"),
@@ -292,11 +298,7 @@ class BusinessProfileShareSheet extends StatelessWidget {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.verified,
-                        color: Color(0xFF1E88E5),
-                        size: 16,
-                      ),
+                      Icon(Icons.verified, color: Color(0xFF1E88E5), size: 16),
                       Gap(width: 6),
                       Text(
                         "OLA BISI OLAI - CURATED FOR EXCELLENCE",

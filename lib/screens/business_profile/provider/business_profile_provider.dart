@@ -5,16 +5,21 @@ import 'package:olabisiolai_flutter_app/services/repository/public_repository.da
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
-final businessProfileProvider = StateNotifierProvider.family<BusinessProfileNotifier, BusinessProfileState, int>((ref, businessId) {
-  return BusinessProfileNotifier(businessId, ref);
-});
+final businessProfileProvider =
+    StateNotifierProvider.family<
+      BusinessProfileNotifier,
+      BusinessProfileState,
+      int
+    >((ref, businessId) {
+      return BusinessProfileNotifier(businessId, ref);
+    });
 
 class BusinessProfileState {
   final bool isLoading;
   final dynamic businessDetails;
   final List<dynamic> reviews;
   final bool isFavorite;
-  
+
   BusinessProfileState({
     this.isLoading = false,
     this.businessDetails,
@@ -43,7 +48,8 @@ class BusinessProfileNotifier extends StateNotifier<BusinessProfileState> {
   final PublicRepository _publicRepository = PublicRepository.instance;
   final UserRepository _userRepository = UserRepository.instance;
 
-  BusinessProfileNotifier(this.businessId, this._ref) : super(BusinessProfileState()) {
+  BusinessProfileNotifier(this.businessId, this._ref)
+    : super(BusinessProfileState()) {
     fetchBusinessData();
   }
 
@@ -57,17 +63,18 @@ class BusinessProfileNotifier extends StateNotifier<BusinessProfileState> {
         _publicRepository.getReviews(businessId),
         _userRepository.checkFavoriteExists(businessId),
       ]);
-      
+
       var detailsResponse = results[0];
       var reviewsResponse = results[1];
       var favoriteResponse = results[2];
-      
+
       dynamic details;
       List<dynamic> reviewsList = [];
       bool favorite = false;
 
       if (detailsResponse != null && detailsResponse['data'] != null) {
-        if (detailsResponse['data'] is Map && detailsResponse['data']['business'] != null) {
+        if (detailsResponse['data'] is Map &&
+            detailsResponse['data']['business'] != null) {
           details = detailsResponse['data']['business'];
           // Use is_favorite from the business details if available
           favorite = details['is_favorite'] ?? false;
@@ -75,16 +82,16 @@ class BusinessProfileNotifier extends StateNotifier<BusinessProfileState> {
           details = detailsResponse['data'];
         }
       }
-      
+
       if (reviewsResponse != null && reviewsResponse['data'] != null) {
         if (reviewsResponse['data'] is List) {
-           reviewsList = reviewsResponse['data'];
+          reviewsList = reviewsResponse['data'];
         }
       }
-      
+
       // Fallback or override with specific check if needed
       if (favoriteResponse != null && favoriteResponse['data'] != null) {
-         favorite = favoriteResponse['data']['favorited'] ?? favorite;
+        favorite = favoriteResponse['data']['favorited'] ?? favorite;
       }
 
       state = state.copyWith(
@@ -105,13 +112,15 @@ class BusinessProfileNotifier extends StateNotifier<BusinessProfileState> {
     try {
       var response = await _userRepository.toggleFavorite(businessId);
       if (response != null && response['data'] != null) {
-         // Update state with the actual status returned from the server
-         state = state.copyWith(isFavorite: response['data']['favorited'] ?? !currentFav);
-         // Refresh the saved businesses list using invalidate
-         _ref.invalidate(savedBusinessProvider);
+        // Update state with the actual status returned from the server
+        state = state.copyWith(
+          isFavorite: response['data']['favorited'] ?? !currentFav,
+        );
+        // Refresh the saved businesses list using invalidate
+        _ref.invalidate(savedBusinessProvider);
       } else {
-         // Revert on failure
-         state = state.copyWith(isFavorite: currentFav);
+        // Revert on failure
+        state = state.copyWith(isFavorite: currentFav);
       }
     } catch (e) {
       errorLog("toggleFavorite", e);

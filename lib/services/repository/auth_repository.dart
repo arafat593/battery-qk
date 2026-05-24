@@ -61,13 +61,17 @@ class AuthRepository {
             await storageServices.setToken(data["token"].toString());
           }
           if (data["refreshToken"] != null && data["refreshToken"] is String) {
-            await storageServices.setRefreshToken(data["refreshToken"].toString());
+            await storageServices.setRefreshToken(
+              data["refreshToken"].toString(),
+            );
           }
           if (data["user"] != null && data["user"] is Map) {
             // Save full user data
-            Map<String, String> userData = (data["user"] as Map).map((key, value) => MapEntry(key.toString(), value.toString()));
+            Map<String, String> userData = (data["user"] as Map).map(
+              (key, value) => MapEntry(key.toString(), value.toString()),
+            );
             await storageServices.setLogDedData(userData);
-            
+
             // Save email specifically if available
             if (data["user"]["email"] != null) {
               await storageServices.setEmail(data["user"]["email"].toString());
@@ -86,7 +90,8 @@ class AuthRepository {
     try {
       // Ensure GoogleSignIn is initialized with the Web Client ID from google-services.json
       await googleSignIn.initialize(
-        serverClientId: "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
+        serverClientId:
+            "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
       );
 
       // Trigger the authentication flow
@@ -102,12 +107,15 @@ class AuthRepository {
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       // Note: In v7.0.0+, accessToken is separated from authentication.
-      // If we need it, we should use authorizeScopes, but for Firebase 
-      // often idToken is sufficient. However, GoogleAuthProvider.credential 
+      // If we need it, we should use authorizeScopes, but for Firebase
+      // often idToken is sufficient. However, GoogleAuthProvider.credential
       // usually wants both or at least idToken.
-      
+
       // Let's request scopes to get the accessToken if needed
-      final authClient = await googleUser.authorizationClient.authorizeScopes(['email', 'profile']);
+      final authClient = await googleUser.authorizationClient.authorizeScopes([
+        'email',
+        'profile',
+      ]);
       final String? accessToken = authClient.accessToken;
       final String? idToken = googleAuth.idToken;
 
@@ -118,25 +126,60 @@ class AuthRepository {
       );
 
       // Once signed in, return the UserCredential
-      final UserCredential userCredential = await auth.signInWithCredential(credential);
+      final UserCredential userCredential = await auth.signInWithCredential(
+        credential
+      );
 
       if (userCredential.user != null) {
-        // Save real Firebase ID token instead of dummy token
         String? idToken = await userCredential.user!.getIdToken();
-        await storageServices.setToken(idToken ?? "firebase_google_user");
-        await storageServices.setEmail(userCredential.user!.email ?? "");
-        
-        // Save basic user info
-        Map<String, String> userData = {
-          "name": userCredential.user!.displayName ?? "",
-          "email": userCredential.user!.email ?? "",
-          "photo": userCredential.user!.photoURL ?? "",
-          "id": userCredential.user!.uid,
-        };
-        await storageServices.setLogDedData(userData);
+        if (idToken != null) {
+          print(idToken);
+          // Send token to backend /auth/google/login
+          var response = await apiServices.postServices(
+            url: api.googleLogin,
+            body: {"id_token": idToken},
+          );
+
+          if (response != null &&
+              response["data"] != null &&
+              response["data"] is Map) {
+            var data = response["data"];
+            if (data["role"] != null && data["role"] is String) {
+              await storageServices.setAppRoll(data["role"].toString());
+            }
+            if (data["accessToken"] != null && data["accessToken"] is String) {
+              await storageServices.setToken(data["accessToken"].toString());
+            } else if (data["token"] != null && data["token"] is String) {
+              await storageServices.setToken(data["token"].toString());
+            }
+            if (data["refreshToken"] != null &&
+                data["refreshToken"] is String) {
+              await storageServices.setRefreshToken(
+                data["refreshToken"].toString(),
+              );
+            }
+            if (data["user"] != null && data["user"] is Map) {
+              Map<String, String> userData = (data["user"] as Map).map(
+                (key, value) => MapEntry(key.toString(), value.toString()),
+              );
+              await storageServices.setLogDedData(userData);
+              if (data["user"]["email"] != null) {
+                await storageServices.setEmail(
+                  data["user"]["email"].toString(),
+                );
+              }
+            }
+            return userCredential.user;
+          }
+        }
+
+        // If backend verification fails, sign out
+        await auth.signOut();
+        await googleSignIn.signOut();
+        return null;
       }
 
-      return userCredential.user;
+      return null;
     } catch (e) {
       errorLog("signInWithGoogle", e);
       return null;
@@ -251,13 +294,13 @@ class AuthRepository {
           if (data["token"] != null) {
             await storageServices.setToken(data["token"].toString());
             await storageServices.setEmail(email);
-            
+
             Map<String, String> userData = {
-               "first_name": firstName,
-               "last_name": lastName,
-               "name": "$firstName $lastName".trim(),
-               "email": email,
-               "phone": mobileNumber,
+              "first_name": firstName,
+              "last_name": lastName,
+              "name": "$firstName $lastName".trim(),
+              "email": email,
+              "phone": mobileNumber,
             };
             await storageServices.setLogDedData(userData);
           }
@@ -412,11 +455,12 @@ class AuthRepository {
 
     return false;
   }
+
   Future<bool> logOut() async {
     try {
       // 1. Check token to see if we should call backend logout
       String token = await storageServices.getToken();
-      
+
       // Only call backend logout if we have a real backend token
       if (token.isNotEmpty && token != "firebase_google_user") {
         try {

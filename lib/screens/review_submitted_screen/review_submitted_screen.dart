@@ -83,16 +83,21 @@ class ReviewSubmittedScreen extends StatelessWidget {
 
                   // 3. Review Detail Card
                   BusinessReviewCard(
-                    businessName: data?['business_name'] ?? "Luxe Clean Solutions",
-                    rating: (data?['rating'] ?? 5.0).toDouble(), 
-                    time: "Just now",  
-                    reviewText: data?['review_text'] ?? "Amazing service! Everything was spotless.",
-                    images: data?['images'] is List ? List<String>.from(data!['images']) : [],
+                    businessName:
+                        data?['business_name'] ?? "Luxe Clean Solutions",
+                    rating: (data?['rating'] ?? 5.0).toDouble(),
+                    time: "Just now",
+                    reviewText:
+                        data?['review_text'] ??
+                        "Amazing service! Everything was spotless.",
+                    images: data?['images'] is List
+                        ? List<String>.from(data!['images'])
+                        : [],
                     onEdit: () {
-                       AppRoutes.instance.pop();
+                      AppRoutes.instance.pop();
                     },
-                    onDelete: () { 
-                       AppRoutes.instance.pop();
+                    onDelete: () {
+                      AppRoutes.instance.pop();
                     },
                   ),
                   Gap(height: 16),
@@ -103,7 +108,7 @@ class ReviewSubmittedScreen extends StatelessWidget {
                         AppRoutes.instance.pushReplacementNamed(
                           AppRoutesKey.instance.businessProfile,
                           pathParameters: {
-                            'id': data!['business_id'].toString()
+                            'id': data!['business_id'].toString(),
                           },
                         );
                       } else {

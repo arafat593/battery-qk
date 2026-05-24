@@ -26,7 +26,8 @@ class MessagesDetailsScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MessagesDetailsScreen> createState() => _MessagesDetailsScreenState();
+  ConsumerState<MessagesDetailsScreen> createState() =>
+      _MessagesDetailsScreenState();
 }
 
 class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
@@ -95,9 +96,13 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
               if (p is Map) {
                 if (p['user'] != null && p['user'] is Map) {
                   u = Map<String, dynamic>.from(p['user']);
-                } else if (p['messageable'] != null && p['messageable'] is Map) {
+                } else if (p['messageable'] != null &&
+                    p['messageable'] is Map) {
                   u = Map<String, dynamic>.from(p['messageable']);
-                } else if (p.containsKey('id') || p.containsKey('uuid') || p.containsKey('email') || p.containsKey('name')) {
+                } else if (p.containsKey('id') ||
+                    p.containsKey('uuid') ||
+                    p.containsKey('email') ||
+                    p.containsKey('name')) {
                   u = Map<String, dynamic>.from(p);
                 }
               }
@@ -181,9 +186,12 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(chatDetailsProvider(_resolvedConversationUuid));
-    final notifier = ref.read(chatDetailsProvider(_resolvedConversationUuid).notifier);
+    final notifier = ref.read(
+      chatDetailsProvider(_resolvedConversationUuid).notifier,
+    );
 
-    final String chatTitle = (state.conversationName != null && state.conversationName!.isNotEmpty)
+    final String chatTitle =
+        (state.conversationName != null && state.conversationName!.isNotEmpty)
         ? state.conversationName!
         : widget.chatTitle;
 
@@ -194,9 +202,16 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
         avatarUrl = state.peer!['avatar_url'] ?? "";
       }
     }
-    
-    bool isOnline = state.isOtherUserTyping || (state.peer != null && state.peer!['presence'] != null && state.peer!['presence']['status'] == 'online');
-    final String? lastSeenAt = state.peer != null && state.peer!['presence'] != null ? state.peer!['presence']['last_seen_at']?.toString() : null;
+
+    bool isOnline =
+        state.isOtherUserTyping ||
+        (state.peer != null &&
+            state.peer!['presence'] != null &&
+            state.peer!['presence']['status'] == 'online');
+    final String? lastSeenAt =
+        state.peer != null && state.peer!['presence'] != null
+        ? state.peer!['presence']['last_seen_at']?.toString()
+        : null;
 
     // Search for other participant to display presence and avatar (fallback)
     if (avatarUrl.isEmpty && state.messages.isNotEmpty) {
@@ -204,11 +219,13 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
       for (var msg in state.messages) {
         final sender = msg['sender'];
         if (sender != null && sender['uuid'] != state.currentUserUuid) {
-          avatarUrl = sender['photo'] ?? 
-              sender['image_url'] ?? 
-              sender['avatar'] ?? 
-              sender['logo_url'] ?? 
-              sender['logo'] ?? "";
+          avatarUrl =
+              sender['photo'] ??
+              sender['image_url'] ??
+              sender['avatar'] ??
+              sender['logo_url'] ??
+              sender['logo'] ??
+              "";
           break;
         }
       }
@@ -244,11 +261,7 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
                     : const CircleAvatar(
                         radius: 20,
                         backgroundColor: Color(0xFFF3F4F6),
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.person, color: Colors.grey, size: 20),
                       ),
                 Positioned(
                   bottom: 0,
@@ -298,69 +311,79 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
             child: state.isLoading && state.messages.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : state.messages.isEmpty
-                    ? Center(
-                        child: AppText(
-                          text: "Send a message to start the conversation.",
-                          fontSize: 14,
-                          color: AppColors.instance.hintText,
-                        ),
-                      )
-                    : ListView.builder(
-                        controller: _scrollController,
-                        reverse: true, // Latest messages at the bottom
-                        padding: const EdgeInsets.all(16),
-                        itemCount: state.messages.length,
-                        itemBuilder: (context, index) {
-                          final msg = state.messages[index];
-                          final sender = msg['sender'];
-                          final bool isMe = sender != null &&
-                              (sender['id'] == state.currentUserId ||
-                                  sender['uuid'] == state.currentUserUuid);
+                ? Center(
+                    child: AppText(
+                      text: "Send a message to start the conversation.",
+                      fontSize: 14,
+                      color: AppColors.instance.hintText,
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    reverse: true, // Latest messages at the bottom
+                    padding: const EdgeInsets.all(16),
+                    itemCount: state.messages.length,
+                    itemBuilder: (context, index) {
+                      final msg = state.messages[index];
+                      final sender = msg['sender'];
+                      final bool isMe =
+                          sender != null &&
+                          (sender['id'] == state.currentUserId ||
+                              sender['uuid'] == state.currentUserUuid);
 
-                          // Parse attachment URLs
-                          List<String> attachmentUrls = [];
-                          final List<dynamic>? attachments = msg['attachments'];
-                          if (attachments != null) {
-                            for (var att in attachments) {
-                              if (att is Map) {
-                                String url = att['url'] ?? att['path'] ?? "";
-                                if (url.isNotEmpty) {
-                                  if (url.contains('/storage/')) {
-                                    final storagePath = url.substring(url.indexOf('/storage/'));
-                                    url = "${AppApiUrl.domain}$storagePath";
-                                  } else if (!url.startsWith('http')) {
-                                    url = "${AppApiUrl.domain}/storage/$url";
-                                  }
-                                  attachmentUrls.add(url);
-                                }
+                      // Parse attachment URLs
+                      List<String> attachmentUrls = [];
+                      final List<dynamic>? attachments = msg['attachments'];
+                      if (attachments != null) {
+                        for (var att in attachments) {
+                          if (att is Map) {
+                            String url = att['url'] ?? att['path'] ?? "";
+                            if (url.isNotEmpty) {
+                              if (url.contains('/storage/')) {
+                                final storagePath = url.substring(
+                                  url.indexOf('/storage/'),
+                                );
+                                url = "${AppApiUrl.domain}$storagePath";
+                              } else if (!url.startsWith('http')) {
+                                url = "${AppApiUrl.domain}/storage/$url";
                               }
+                              attachmentUrls.add(url);
                             }
                           }
+                        }
+                      }
 
-                          // Time formatter
-                          String timeText = "";
-                          final String? createdAt = msg['created_at'];
-                          if (createdAt != null) {
-                            try {
-                              final DateTime dt = DateTime.parse(createdAt).toLocal();
-                              final int hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-                              final String minute = dt.minute.toString().padLeft(2, '0');
-                              final String ampm = dt.hour >= 12 ? "PM" : "AM";
-                              timeText = "$hour:$minute $ampm";
-                            } catch (_) {
-                              timeText = createdAt.split('T').last.substring(0, 5);
-                            }
-                          }
-
-                          return MessageBubble(
-                            message: msg['body'] ?? "",
-                            time: timeText,
-                            isMe: isMe,
-                            showStatus: isMe,
-                            imageUrls: attachmentUrls,
+                      // Time formatter
+                      String timeText = "";
+                      final String? createdAt = msg['created_at'];
+                      if (createdAt != null) {
+                        try {
+                          final DateTime dt = DateTime.parse(
+                            createdAt,
+                          ).toLocal();
+                          final int hour = dt.hour > 12
+                              ? dt.hour - 12
+                              : (dt.hour == 0 ? 12 : dt.hour);
+                          final String minute = dt.minute.toString().padLeft(
+                            2,
+                            '0',
                           );
-                        },
-                      ),
+                          final String ampm = dt.hour >= 12 ? "PM" : "AM";
+                          timeText = "$hour:$minute $ampm";
+                        } catch (_) {
+                          timeText = createdAt.split('T').last.substring(0, 5);
+                        }
+                      }
+
+                      return MessageBubble(
+                        message: msg['body'] ?? "",
+                        time: timeText,
+                        isMe: isMe,
+                        showStatus: isMe,
+                        imageUrls: attachmentUrls,
+                      );
+                    },
+                  ),
           ),
 
           // Selected Image Preview Card
@@ -393,7 +416,7 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
                   IconButton(
                     icon: const Icon(Icons.cancel, color: Colors.grey),
                     onPressed: _clearSelectedImage,
-                  )
+                  ),
                 ],
               ),
             ),

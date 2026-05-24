@@ -65,7 +65,7 @@ class DefaultFirebaseOptions {
     projectId: 'olabisiolai-flutter-app',
     databaseURL: 'https://olabisiolai-flutter-app-default-rtdb.firebaseio.com',
     storageBucket: 'olabisiolai-flutter-app.firebasestorage.app',
-    androidClientId: '233797822107-eqase75iv06ucn8ik2r4onue57v2hg4c.apps.googleusercontent.com',
+    androidClientId: '233797822107-mdvmmrg6hl45lgqhimr9or66n85vrbln.apps.googleusercontent.com',
     iosClientId: '233797822107-v426oj9rnpfoj9jsiiqi39hlsv315jhr.apps.googleusercontent.com',
     iosBundleId: 'com.olabisiolai.gidira',
   );

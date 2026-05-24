@@ -49,7 +49,8 @@ Error message: ${error.message}
 """);
 
           try {
-            if (error.response?.statusCode == 401 && !error.requestOptions.path.contains("/auth/login")) {
+            if (error.response?.statusCode == 401 &&
+                !error.requestOptions.path.contains("/auth/login")) {
               String token = await storageServices.getRefreshToken();
               if (token.isEmpty) {
                 String currentToken = await storageServices.getToken();
@@ -65,7 +66,8 @@ Error message: ${error.message}
               }
               final newAccessToken = await reFreshNewAccessToken(token);
               if (newAccessToken.isNotEmpty) {
-                _dio.options.headers["Authorization"] = "Bearer $newAccessToken";
+                _dio.options.headers["Authorization"] =
+                    "Bearer $newAccessToken";
                 return handler.resolve(await _dio.fetch(error.requestOptions));
               } else {
                 String currentToken = await storageServices.getToken();
@@ -88,7 +90,16 @@ Error message: ${error.message}
           return handler.next(error); // Continue with error
         },
       ),
-      if (kDebugMode) PrettyDioLogger(requestHeader: true, request: true, compact: true, error: true, requestBody: true, responseHeader: true, responseBody: true),
+      if (kDebugMode)
+        PrettyDioLogger(
+          requestHeader: true,
+          request: true,
+          compact: true,
+          error: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+        ),
     });
   }
   Dio get sendRequest => _dio;
@@ -97,7 +108,10 @@ Error message: ${error.message}
 // Token refresh logic
 Future<String> reFreshNewAccessToken(String refreshToken) async {
   try {
-    final response = await NonAuthApi().sendRequest.post(AppApiUrl.instance.refreshToken, data: {"token": refreshToken});
+    final response = await NonAuthApi().sendRequest.post(
+      AppApiUrl.instance.refreshToken,
+      data: {"token": refreshToken},
+    );
     if (response.statusCode == 200) {
       if (response.data["data"] != null && response.data["data"] is Map) {
         var data = response.data["data"];

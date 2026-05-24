@@ -7,9 +7,13 @@ import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olabisiolai_flutter_app/constant/app_api_url.dart';
 
-final accountSettingsProvider = StateNotifierProvider.autoDispose<AccountSettingsNotifier, AccountSettingsState>((ref) {
-  return AccountSettingsNotifier();
-});
+final accountSettingsProvider =
+    StateNotifierProvider.autoDispose<
+      AccountSettingsNotifier,
+      AccountSettingsState
+    >((ref) {
+      return AccountSettingsNotifier();
+    });
 
 class AccountSettingsState {
   final bool isLoading;
@@ -25,7 +29,7 @@ class AccountSettingsState {
   final String photo;
   final String location;
   final String pickedImagePath;
-  
+
   AccountSettingsState({
     this.isLoading = false,
     this.isSaving = false,
@@ -77,7 +81,7 @@ class AccountSettingsState {
 
 class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
   final UserRepository _userRepository = UserRepository.instance;
-  
+
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -112,42 +116,62 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
         String apiFullName = profile?['name'] ?? "";
         String apiEmail = profile?['email'] ?? "";
         String apiPhone = profile?['phone'] ?? "";
-        String apiPhoto = profile?['image_url'] ?? profile?['image_path'] ?? profile?['photo'] ?? profile?['avatar'] ?? "";
+        String apiPhoto =
+            profile?['image_url'] ??
+            profile?['image_path'] ??
+            profile?['photo'] ??
+            profile?['avatar'] ??
+            "";
         String apiLocation = profile?['location'] ?? profile?['address'] ?? "";
 
         // If API data is missing, then fallback to localData
-        if (apiFirstName.isEmpty && apiLastName.isEmpty && apiFullName.isNotEmpty) {
-           var parts = apiFullName.trim().split(" ");
-           apiFirstName = parts.first;
-           apiLastName = parts.length > 1 ? parts.sublist(1).join(" ") : "";
+        if (apiFirstName.isEmpty &&
+            apiLastName.isEmpty &&
+            apiFullName.isNotEmpty) {
+          var parts = apiFullName.trim().split(" ");
+          apiFirstName = parts.first;
+          apiLastName = parts.length > 1 ? parts.sublist(1).join(" ") : "";
         }
-        
+
         // Final resolution with fallback
-        String firstName = apiFirstName.isNotEmpty ? apiFirstName : (localData['first_name'] ?? "");
-        String lastName = apiLastName.isNotEmpty ? apiLastName : (localData['last_name'] ?? "");
-        String email = apiEmail.isNotEmpty ? apiEmail : (localData['email'] ?? "");
-        String phone = apiPhone.isNotEmpty ? apiPhone : (localData['phone'] ?? "");
+        String firstName = apiFirstName.isNotEmpty
+            ? apiFirstName
+            : (localData['first_name'] ?? "");
+        String lastName = apiLastName.isNotEmpty
+            ? apiLastName
+            : (localData['last_name'] ?? "");
+        String email = apiEmail.isNotEmpty
+            ? apiEmail
+            : (localData['email'] ?? "");
+        String phone = apiPhone.isNotEmpty
+            ? apiPhone
+            : (localData['phone'] ?? "");
         String photo = apiPhoto.isNotEmpty ? apiPhoto : localPhoto;
         String location = apiLocation.isNotEmpty ? apiLocation : localLocation;
 
         // Ensure photo URL is absolute if it's from API
         if (photo.isNotEmpty && !photo.startsWith('http')) {
-           photo = "${AppApiUrl.domain}/storage/$photo";
+          photo = "${AppApiUrl.domain}/storage/$photo";
         }
 
         if (!mounted) return;
         state = state.copyWith(
-          isLoading: false, 
+          isLoading: false,
           firstName: firstName,
-          lastName: lastName, 
+          lastName: lastName,
           email: email,
           phone: phone,
           photo: photo,
           location: location,
-          wantsMarketingEmails: profile?['wants_marketing_emails'] == 1 || profile?['wants_marketing_emails'] == true,
-          emailNotifications: notifications['email'] == 1 || notifications['email'] == true,
-          pushNotifications: notifications['push'] == 1 || notifications['push'] == true,
-          smsNotifications: notifications['sms'] == 1 || notifications['sms'] == true,
+          wantsMarketingEmails:
+              profile?['wants_marketing_emails'] == 1 ||
+              profile?['wants_marketing_emails'] == true,
+          emailNotifications:
+              notifications['email'] == 1 || notifications['email'] == true,
+          pushNotifications:
+              notifications['push'] == 1 || notifications['push'] == true,
+          smsNotifications:
+              notifications['sms'] == 1 || notifications['sms'] == true,
         );
 
         fullNameController.text = "${state.firstName} ${state.lastName}".trim();
@@ -165,10 +189,14 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
     }
   }
 
-  void updateWantsMarketingEmails(bool value) => state = state.copyWith(wantsMarketingEmails: value);
-  void updateEmailNotifications(bool value) => state = state.copyWith(emailNotifications: value);
-  void updatePushNotifications(bool value) => state = state.copyWith(pushNotifications: value);
-  void updateSmsNotifications(bool value) => state = state.copyWith(smsNotifications: value);
+  void updateWantsMarketingEmails(bool value) =>
+      state = state.copyWith(wantsMarketingEmails: value);
+  void updateEmailNotifications(bool value) =>
+      state = state.copyWith(emailNotifications: value);
+  void updatePushNotifications(bool value) =>
+      state = state.copyWith(pushNotifications: value);
+  void updateSmsNotifications(bool value) =>
+      state = state.copyWith(smsNotifications: value);
 
   Future<bool> saveSettings() async {
     state = state.copyWith(isSaving: true);
@@ -189,10 +217,10 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
             "email": state.emailNotifications,
             "push": state.pushNotifications,
             "sms": state.smsNotifications,
-          }
-        }
+          },
+        },
       );
-      
+
       // Update local storage so it reflects immediately
       var localData = await StorageServices.instance.getLogDedData();
       localData["first_name"] = firstName;
@@ -200,15 +228,21 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
       localData["name"] = "$firstName $lastName".trim();
       localData["phone"] = phoneController.text;
       localData["location"] = locationController.text;
-      Map<String, String> stringData = localData.map((key, value) => MapEntry(key.toString(), value.toString()));
+      Map<String, String> stringData = localData.map(
+        (key, value) => MapEntry(key.toString(), value.toString()),
+      );
       await StorageServices.instance.setLogDedData(stringData);
-      
+
       if (!mounted) return false;
-      state = state.copyWith(isSaving: false, location: locationController.text, pickedImagePath: "");
+      state = state.copyWith(
+        isSaving: false,
+        location: locationController.text,
+        pickedImagePath: "",
+      );
       if (response != null) {
-         AppSnackBar.instance.success("Settings updated successfully.");
-         fetchSettings();
-         return true;
+        AppSnackBar.instance.success("Settings updated successfully.");
+        fetchSettings();
+        return true;
       }
       return false;
     } catch (e) {

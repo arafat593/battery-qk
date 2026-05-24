@@ -11,7 +11,10 @@ class FaqCardLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: AppSize.size.width * 0.05),
-      padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.05, vertical: AppSize.size.width * 0.05),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSize.size.width * 0.05,
+        vertical: AppSize.size.width * 0.05,
+      ),
       decoration: BoxDecoration(
         color: AppColors.instance.transparent,
         border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
@@ -33,7 +36,11 @@ class FaqCardLoader extends StatelessWidget {
           AnimatedRotation(
             duration: Durations.medium4,
             turns: 0.25,
-            child: Icon(Icons.arrow_forward_ios, color: AppColors.instance.dark400, weight: 500),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.instance.dark400,
+              weight: 500,
+            ),
           ),
         ],
       ),

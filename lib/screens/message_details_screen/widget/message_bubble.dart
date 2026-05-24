@@ -54,12 +54,16 @@ class MessageBubble extends StatelessWidget {
                           url,
                           width: AppSize.size.width * 0.6,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            width: AppSize.size.width * 0.6,
-                            height: 100,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.broken_image, color: Colors.grey),
-                          ),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                width: AppSize.size.width * 0.6,
+                                height: 100,
+                                color: Colors.grey[200],
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  color: Colors.grey,
+                                ),
+                              ),
                         ),
                       ),
                     );
@@ -94,4 +98,3 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
-

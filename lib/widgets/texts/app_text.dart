@@ -102,7 +102,14 @@ class _AppTextState extends ConsumerState<AppText> {
         }
         final txt = snapshot.data ?? widget.text;
 
-        return Text(txt, maxLines: widget.maxLines, overflow: widget.overflow, textAlign: widget.textAlign, style: style, textScaler: TextScaler.linear(widget.textScaleFactor));
+        return Text(
+          txt,
+          maxLines: widget.maxLines,
+          overflow: widget.overflow,
+          textAlign: widget.textAlign,
+          style: style,
+          textScaler: TextScaler.linear(widget.textScaleFactor),
+        );
       },
     );
   }

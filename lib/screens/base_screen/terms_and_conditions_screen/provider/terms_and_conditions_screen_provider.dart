@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/base_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
-final termsAndConditionsScreenProvider = StateNotifierProvider((ref) => _TermsAndConditionsScreenProvider());
+final termsAndConditionsScreenProvider = StateNotifierProvider(
+  (ref) => _TermsAndConditionsScreenProvider(),
+);
 
-class _TermsAndConditionsScreenProvider extends StateNotifier<AsyncValue<String>> {
+class _TermsAndConditionsScreenProvider
+    extends StateNotifier<AsyncValue<String>> {
   final BaseRepository _repo = BaseRepository.instance;
   _TermsAndConditionsScreenProvider() : super(AsyncLoading()) {
     onAppLoading();

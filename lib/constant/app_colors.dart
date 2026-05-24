@@ -12,7 +12,7 @@ class AppColors {
   final Color yellow = Color(0xFFFFBE00);
   final Color blue = Color(0xFF0051FF);
   final Color buttonColor = Color(0xff158DE0);
-  final Color hintText = Color(0xffa0a0a0); 
+  final Color hintText = Color(0xffa0a0a0);
   final Color deepHintText = Color(0xFF737686);
   final Color containerColor = Color(0xFFE7E8EA);
   final Color backGroundColor = Color(0xFFF3F4F6);

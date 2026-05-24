@@ -7,7 +7,9 @@ Widget appLoader({double? width, double? height, Color? loaderColor}) {
     child: SizedBox(
       width: width ?? AppSize.width(value: 50),
       height: height ?? AppSize.width(value: 50),
-      child: CircularProgressIndicator(color: loaderColor ?? AppColors.instance.primary),
+      child: CircularProgressIndicator(
+        color: loaderColor ?? AppColors.instance.primary,
+      ),
     ),
   );
 }

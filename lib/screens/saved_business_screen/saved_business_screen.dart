@@ -14,7 +14,8 @@ class SavedBusinessesScreen extends ConsumerStatefulWidget {
   const SavedBusinessesScreen({super.key});
 
   @override
-  ConsumerState<SavedBusinessesScreen> createState() => _SavedBusinessesScreenState();
+  ConsumerState<SavedBusinessesScreen> createState() =>
+      _SavedBusinessesScreenState();
 }
 
 class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
@@ -37,56 +38,63 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
       body: savedState.isLoading && savedItems.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-              onRefresh: () => ref.read(savedBusinessProvider.notifier).fetchSavedBusinesses(),
+              onRefresh: () => ref
+                  .read(savedBusinessProvider.notifier)
+                  .fetchSavedBusinesses(),
               child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(
-                    text: "MY CURATION",
-                    color: AppColors.instance.success,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  const Gap(height: 5),
-                  AppText(
-                    text: "Your Saved\nBusinesses",
-                    fontSize: 36,
-                    fontWeight: FontWeight.w800,
-                  ),
-                  const Gap(height: 25),
-                  savedItems.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(40),
-                            child: Column(
-                              children: [
-                                Icon(Icons.bookmark_border, size: 60, color: Colors.grey[300]),
-                                const Gap(height: 16),
-                                AppText(
-                                  text: "No saved businesses yet",
-                                  fontSize: 16,
-                                  color: AppColors.instance.hintText,
-                                ),
-                              ],
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText(
+                      text: "MY CURATION",
+                      color: AppColors.instance.success,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    const Gap(height: 5),
+                    AppText(
+                      text: "Your Saved\nBusinesses",
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    const Gap(height: 25),
+                    savedItems.isEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(40),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.bookmark_border,
+                                    size: 60,
+                                    color: Colors.grey[300],
+                                  ),
+                                  const Gap(height: 16),
+                                  AppText(
+                                    text: "No saved businesses yet",
+                                    fontSize: 16,
+                                    color: AppColors.instance.hintText,
+                                  ),
+                                ],
+                              ),
                             ),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: savedItems.length,
+                            separatorBuilder: (context, index) =>
+                                const Gap(height: 20),
+                            itemBuilder: (context, index) {
+                              final item = savedItems[index];
+                              return _buildBusinessCard(context, item);
+                            },
                           ),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: savedItems.length,
-                          separatorBuilder: (context, index) => const Gap(height: 20),
-                          itemBuilder: (context, index) {
-                            final item = savedItems[index];
-                            return _buildBusinessCard(context, item);
-                          },
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
     );
   }
 
@@ -94,11 +102,19 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
     final business = item['business_info'] ?? item;
     final businessId = business['business_info_id'] ?? business['id'];
     final businessName = business['business_name'] ?? "Unknown";
-    final category = business['category_name'] ?? (business['category']?['name'] ?? "");
-    final location = business['location'] is Map ? (business['location']['name'] ?? business['location']['city'] ?? "") : (business['location'] ?? "");
-    final rating = (business['average_rating'] ?? business['rating'] ?? 0.0).toString();
-    final isVerified = business['verification_status'] == 'approved' || business['is_verified'] == true;
-    final imageUrl = business['logo_url'] ?? 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a';
+    final category =
+        business['category_name'] ?? (business['category']?['name'] ?? "");
+    final location = business['location'] is Map
+        ? (business['location']['name'] ?? business['location']['city'] ?? "")
+        : (business['location'] ?? "");
+    final rating = (business['average_rating'] ?? business['rating'] ?? 0.0)
+        .toString();
+    final isVerified =
+        business['verification_status'] == 'approved' ||
+        business['is_verified'] == true;
+    final imageUrl =
+        business['logo_url'] ??
+        'https://images.unsplash.com/photo-1584622650111-993a426fbf0a';
     final favoriteId = item['id'] ?? item['business_info_id'];
     return InkWell(
       onTap: () {
@@ -143,7 +159,11 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
                     errorBuilder: (_, __, ___) => Container(
                       height: 200,
                       color: Colors.grey[200],
-                      child: const Icon(Icons.image_not_supported, size: 40, color: Colors.grey),
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
@@ -153,7 +173,9 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (favoriteId != null) {
-                        ref.read(savedBusinessProvider.notifier).removeFavorite(favoriteId);
+                        ref
+                            .read(savedBusinessProvider.notifier)
+                            .removeFavorite(favoriteId);
                       }
                     },
                     child: Container(
@@ -179,90 +201,92 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
                     ),
                   ),
                 ),
-            ],
-          ),
+              ],
+            ),
 
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isVerified ? Colors.pink[50] : Colors.red[50],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          isVerified ? "VERIFIED" : "UNVERIFIED",
+                          style: TextStyle(
+                            color: isVerified ? Colors.pink : Colors.red,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: isVerified ? Colors.pink[50] : Colors.red[50],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        isVerified ? "VERIFIED" : "UNVERIFIED",
-                        style: TextStyle(
-                          color: isVerified ? Colors.pink : Colors.red,
+                      const Gap(width: 8),
+                      Text(
+                        category.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.grey,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    const Gap(width: 8),
-                    Text(
-                      category.toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      const Spacer(),
+                      const Icon(
+                        Icons.bookmark,
+                        color: Colors.redAccent,
+                        size: 22,
                       ),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.bookmark,
-                      color: Colors.redAccent,
-                      size: 22,
-                    ),
-                  ],
-                ),
-                const Gap(height: 8),
-                AppText(
-                  text: businessName,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
-                Text(
-                  location,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-                const Gap(height: 16),
+                    ],
+                  ),
+                  const Gap(height: 8),
+                  AppText(
+                    text: businessName,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  Text(
+                    location,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  const Gap(height: 16),
 
-                // Buttons
-                AppButton(
-                  title: "Direct Message",
-                  leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
-                ),
-                const Gap(height: 10),
-                AppButton(
-                  title: "View Profile",
-                  backgroundColor: AppColors.instance.transparent,
-                  borderColor: AppColors.instance.hintText,
-                  titleColor: AppColors.instance.black500,
-                  onTap: () {
-                    debugPrint("Clicked View Profile button for: $businessName (ID: $businessId)");
-                    if (businessId != null) {
-                      AppRoutes.instance.pushNamed(
-                        AppRoutesKey.instance.businessProfile,
-                        pathParameters: {"id": businessId.toString()},
+                  // Buttons
+                  AppButton(
+                    title: "Direct Message",
+                    leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
+                  ),
+                  const Gap(height: 10),
+                  AppButton(
+                    title: "View Profile",
+                    backgroundColor: AppColors.instance.transparent,
+                    borderColor: AppColors.instance.hintText,
+                    titleColor: AppColors.instance.black500,
+                    onTap: () {
+                      debugPrint(
+                        "Clicked View Profile button for: $businessName (ID: $businessId)",
                       );
-                    }
-                  },
-                )
-              ],
+                      if (businessId != null) {
+                        AppRoutes.instance.pushNamed(
+                          AppRoutesKey.instance.businessProfile,
+                          pathParameters: {"id": businessId.toString()},
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }

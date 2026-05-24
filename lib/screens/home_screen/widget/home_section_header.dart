@@ -40,7 +40,8 @@ class HomeSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? EdgeInsets.symmetric(vertical: AppSize.height(value: 16)),
+      padding:
+          padding ?? EdgeInsets.symmetric(vertical: AppSize.height(value: 16)),
       child: Row(
         mainAxisAlignment: alignment,
         children: [

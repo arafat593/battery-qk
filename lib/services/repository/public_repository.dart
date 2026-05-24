@@ -8,7 +8,8 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
 class PublicRepository {
   PublicRepository._privateConstructor();
-  static final PublicRepository _instance = PublicRepository._privateConstructor();
+  static final PublicRepository _instance =
+      PublicRepository._privateConstructor();
   static PublicRepository get instance => _instance;
 
   final ApiServices _apiServices = ApiServices.instance;
@@ -51,9 +52,7 @@ class PublicRepository {
     try {
       var response = await _apiServices.postServices(
         url: _api.reviews,
-        body: {
-          "business_id": businessId
-        }
+        body: {"business_id": businessId},
       );
       return response;
     } catch (e) {

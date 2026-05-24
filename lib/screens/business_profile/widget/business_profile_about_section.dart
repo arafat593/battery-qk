@@ -7,10 +7,7 @@ import '../../../widgets/texts/app_text.dart';
 
 class BusinessProfileAboutSection extends StatelessWidget {
   final String? description;
-  const BusinessProfileAboutSection({
-    super.key,
-    this.description,
-  });
+  const BusinessProfileAboutSection({super.key, this.description});
 
   @override
   Widget build(BuildContext context) {

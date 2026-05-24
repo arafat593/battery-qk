@@ -24,8 +24,17 @@ class NotFoundScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: AppSize.width(value: 5),
                 children: [
-                  AppText(text: "404", fontWeight: FontWeight.bold, fontSize: AppSize.width(value: 40)),
-                  AppText(text: "Page Not Found!", fontWeight: FontWeight.bold, color: AppColors.instance.white400, fontSize: AppSize.width(value: 20)),
+                  AppText(
+                    text: "404",
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppSize.width(value: 40),
+                  ),
+                  AppText(
+                    text: "Page Not Found!",
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.instance.white400,
+                    fontSize: AppSize.width(value: 20),
+                  ),
                 ],
               ),
             ),
@@ -37,12 +46,22 @@ class NotFoundScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: AppSize.width(value: 5),
           children: [
-            AppImage(path: "assets/images/not_found.webp", width: AppSize.size.width * 0.6),
+            AppImage(
+              path: "assets/images/not_found.webp",
+              width: AppSize.size.width * 0.6,
+            ),
 
             Gap(height: 5),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.1),
-              child: AppText(text: "We're sorry, the page you requested could not be found. Please go back to the homepage!", textAlign: TextAlign.center, height: 1.5),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSize.size.width * 0.1,
+              ),
+              child: AppText(
+                text:
+                    "We're sorry, the page you requested could not be found. Please go back to the homepage!",
+                textAlign: TextAlign.center,
+                height: 1.5,
+              ),
             ),
           ],
         ),

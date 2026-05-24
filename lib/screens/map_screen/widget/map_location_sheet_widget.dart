@@ -77,7 +77,9 @@ class MapLocationSheetWidget extends StatelessWidget {
             title: "Confirm Location",
             trailing: Icons.arrow_forward,
             onTap: () {
-              AppRoutes.instance.pushNamed(AppRoutesKey.instance.appNavigationScreen);
+              AppRoutes.instance.pushNamed(
+                AppRoutesKey.instance.appNavigationScreen,
+              );
             },
           ),
 

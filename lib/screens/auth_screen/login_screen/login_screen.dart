@@ -21,8 +21,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  
-
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(loginProvider);
@@ -71,12 +69,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                             Gap(height: 35),
-            
-                            PhoneInputField(
-                            ),
-            
+
+                            PhoneInputField(),
+
                             Gap(height: 20),
-            
+
                             CustomTextSpan(
                               highlightColor: AppColors.instance.primary,
                               firstHighLightText: "Sign Up",
@@ -88,9 +85,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 );
                               },
                             ),
-            
+
                             Gap(height: 35),
-            
+
                             Row(
                               children: [
                                 Expanded(child: Divider()),
@@ -108,26 +105,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 const Expanded(child: Divider()),
                               ],
                             ),
-            
+
                             Gap(height: 35),
-            
+
                             Row(
                               children: [
                                 Expanded(
-                                    child: CustomSocialButton(
+                                  child: CustomSocialButton(
                                     label: "Google",
                                     icon: AppAssertsIconsPath
                                         .instance
                                         .logosGoogleIcon,
                                     color: Colors.red,
                                     onTap: () async {
-                                      final success = await ref.read(loginProvider.notifier).signInWithGoogle();
+                                      final success = await ref
+                                          .read(loginProvider.notifier)
+                                          .signInWithGoogle();
                                       if (success) {
-                                        AppRoutes.instance.pushNamed(AppRoutesKey.instance.appNavigationScreen);
+                                        AppRoutes.instance.pushNamed(
+                                          AppRoutesKey
+                                              .instance
+                                              .appNavigationScreen,
+                                        );
                                       } else {
                                         if (!context.mounted) return;
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text("Google Sign-In failed")),
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              "Google Sign-In failed",
+                                            ),
+                                          ),
                                         );
                                       }
                                     },
@@ -148,13 +157,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ],
                         ),
-            
+
                         CustomTextSpan(
                           secondHighLightText: "Privacy Policy",
                           firstOnTap: () {},
                           secondOnTap: () {},
                         ),
-            
+
                         Gap(height: 20),
                       ],
                     ),

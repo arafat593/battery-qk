@@ -37,10 +37,7 @@ class AccountSettingSwitchTile extends StatelessWidget {
             color: iconBackgroundColor ?? Colors.grey[100],
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(
-            icon,
-            color: iconColor ?? Colors.grey[700],
-          ),
+          child: Icon(icon, color: iconColor ?? Colors.grey[700]),
         ),
         const SizedBox(width: 15),
 
@@ -48,11 +45,7 @@ class AccountSettingSwitchTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(
-                text: title,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
+              AppText(text: title, fontWeight: FontWeight.w700, fontSize: 16),
               AppText(
                 text: subtitle,
                 color: AppColors.instance.deepHintText,
@@ -66,8 +59,7 @@ class AccountSettingSwitchTile extends StatelessWidget {
           value: value,
           onChanged: onChanged,
           activeColor: activeColor ?? Colors.white,
-          activeTrackColor:
-          activeTrackColor ?? AppColors.instance.success,
+          activeTrackColor: activeTrackColor ?? AppColors.instance.success,
         ),
       ],
     );

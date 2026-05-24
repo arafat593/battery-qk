@@ -26,9 +26,14 @@ class BusinessReviewArgs {
   int get hashCode => id.hashCode ^ name.hashCode;
 }
 
-final businessProfileReviewProvider = StateNotifierProvider.autoDispose.family<BusinessProfileReviewNotifier, BusinessProfileReviewState, BusinessReviewArgs>((ref, args) {
-  return BusinessProfileReviewNotifier(args.id, args.name);
-});
+final businessProfileReviewProvider = StateNotifierProvider.autoDispose
+    .family<
+      BusinessProfileReviewNotifier,
+      BusinessProfileReviewState,
+      BusinessReviewArgs
+    >((ref, args) {
+      return BusinessProfileReviewNotifier(args.id, args.name);
+    });
 
 class BusinessProfileReviewState {
   final bool isLoading;
@@ -36,7 +41,7 @@ class BusinessProfileReviewState {
   final String reviewText;
   final List<XFile> images;
   final bool isAnonymous;
-  
+
   BusinessProfileReviewState({
     this.isLoading = false,
     this.rating = 0.0,
@@ -62,13 +67,15 @@ class BusinessProfileReviewState {
   }
 }
 
-class BusinessProfileReviewNotifier extends StateNotifier<BusinessProfileReviewState> {
+class BusinessProfileReviewNotifier
+    extends StateNotifier<BusinessProfileReviewState> {
   final int businessId;
   final String businessName;
   final PublicRepository _publicRepository = PublicRepository.instance;
   final TextEditingController reviewController = TextEditingController();
 
-  BusinessProfileReviewNotifier(this.businessId, this.businessName) : super(BusinessProfileReviewState()) {
+  BusinessProfileReviewNotifier(this.businessId, this.businessName)
+    : super(BusinessProfileReviewState()) {
     reviewController.addListener(() {
       state = state.copyWith(reviewText: reviewController.text);
     });
@@ -118,7 +125,10 @@ class BusinessProfileReviewNotifier extends StateNotifier<BusinessProfileReviewS
       if (!state.isAnonymous) {
         try {
           var localData = await StorageServices.instance.getLogDedData();
-          fullName = localData["name"] ?? "${localData["first_name"] ?? ""} ${localData["last_name"] ?? ""}".trim();
+          fullName =
+              localData["name"] ??
+              "${localData["first_name"] ?? ""} ${localData["last_name"] ?? ""}"
+                  .trim();
           if (fullName.isEmpty) {
             fullName = "User";
           }
@@ -137,7 +147,7 @@ class BusinessProfileReviewNotifier extends StateNotifier<BusinessProfileReviewS
       );
 
       state = state.copyWith(isLoading: false);
-      
+
       if (response != null) {
         AppSnackBar.instance.success("Review submitted successfully.");
         AppRoutes.instance.pushReplacementNamed(

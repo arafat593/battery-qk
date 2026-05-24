@@ -43,7 +43,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) return;
       }
-      
+
       if (permission == LocationPermission.deniedForever) return;
 
       Position position = await Geolocator.getCurrentPosition(
@@ -92,15 +92,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   IconData _getCategoryIcon(String categoryName) {
     categoryName = categoryName.toLowerCase();
-    if (categoryName.contains("food") || categoryName.contains("cater")) return Icons.restaurant;
-    if (categoryName.contains("repair") || categoryName.contains("home")) return Icons.home_repair_service;
-    if (categoryName.contains("tech") || categoryName.contains("laptop")) return Icons.laptop_mac;
+    if (categoryName.contains("food") || categoryName.contains("cater"))
+      return Icons.restaurant;
+    if (categoryName.contains("repair") || categoryName.contains("home"))
+      return Icons.home_repair_service;
+    if (categoryName.contains("tech") || categoryName.contains("laptop"))
+      return Icons.laptop_mac;
     if (categoryName.contains("event")) return Icons.event;
-    if (categoryName.contains("beauty") || categoryName.contains("fashion")) return Icons.content_cut;
+    if (categoryName.contains("beauty") || categoryName.contains("fashion"))
+      return Icons.content_cut;
     if (categoryName.contains("plumb")) return Icons.plumbing;
     if (categoryName.contains("electric")) return Icons.electric_bolt;
     if (categoryName.contains("clean")) return Icons.cleaning_services;
-    if (categoryName.contains("logistic") || categoryName.contains("transport")) return Icons.local_shipping;
+    if (categoryName.contains("logistic") || categoryName.contains("transport"))
+      return Icons.local_shipping;
     return Icons.category;
   }
 
@@ -108,18 +113,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeProvider);
     final settingsState = ref.watch(accountSettingsProvider);
-    final String locationText = _currentLocationText ?? (settingsState.location.isNotEmpty ? settingsState.location : "Lagos, Nigeria");
+    final String locationText =
+        _currentLocationText ??
+        (settingsState.location.isNotEmpty
+            ? settingsState.location
+            : "Lagos, Nigeria");
     var categories = homeState.categories;
     if (!_showAllCategories) {
       categories = categories.take(8).toList();
     }
 
     final allBusinesses = List<dynamic>.from(homeState.businesses);
-    allBusinesses.sort((a, b) => ((b['average_rating'] ?? 0) as num).compareTo((a['average_rating'] ?? 0) as num));
+    allBusinesses.sort(
+      (a, b) => ((b['average_rating'] ?? 0) as num).compareTo(
+        (a['average_rating'] ?? 0) as num,
+      ),
+    );
 
     final List<dynamic> filteredBusinesses = allBusinesses;
 
-    final professionals = filteredBusinesses.where((b) => (b['average_rating'] ?? 0) >= 4.5).toList();
+    final professionals = filteredBusinesses
+        .where((b) => (b['average_rating'] ?? 0) >= 4.5)
+        .toList();
     final recentServices = filteredBusinesses.take(8).toList();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -129,9 +144,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onLocationTap: null,
       ),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(homeProvider.notifier).fetchHomeData(search: _searchQuery),
+        onRefresh: () =>
+            ref.read(homeProvider.notifier).fetchHomeData(search: _searchQuery),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.02), 
+          padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.02),
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -148,7 +164,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       });
                       _debounce?.cancel();
                       _debounce = Timer(const Duration(milliseconds: 500), () {
-                        ref.read(homeProvider.notifier).fetchHomeData(search: value);
+                        ref
+                            .read(homeProvider.notifier)
+                            .fetchHomeData(search: value);
                       });
                     },
                     suffixIcon: _searchQuery.isNotEmpty
@@ -167,19 +185,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               if (_searchQuery.isNotEmpty) ...[
                 SliverToBoxAdapter(
-                  child: HomeSectionHeader(title: "Search Results for '$_searchQuery'"),
+                  child: HomeSectionHeader(
+                    title: "Search Results for '$_searchQuery'",
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: AppSize.height(value: 20),
                     ),
-                    child: homeState.isLoading 
-                      ? const Center(child: CircularProgressIndicator())
-                      : filteredBusinesses.isEmpty
-                        ? const Center(child: Text("No services found matching search"))
+                    child: homeState.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : filteredBusinesses.isEmpty
+                        ? const Center(
+                            child: Text("No services found matching search"),
+                          )
                         : Column(
-                            children: List.generate(filteredBusinesses.length, (index) {
+                            children: List.generate(filteredBusinesses.length, (
+                              index,
+                            ) {
                               var service = filteredBusinesses[index];
                               return Padding(
                                 padding: EdgeInsets.symmetric(
@@ -190,14 +214,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   onTap: () async {
                                     await AppRoutes.instance.pushNamed(
                                       AppRoutesKey.instance.businessProfile,
-                                      pathParameters: {"id": service['id'].toString()},
+                                      pathParameters: {
+                                        "id": service['id'].toString(),
+                                      },
                                     );
-                                    ref.read(homeProvider.notifier).fetchHomeData();
+                                    ref
+                                        .read(homeProvider.notifier)
+                                        .fetchHomeData();
                                   },
                                   name: service['business_name'] ?? "Unknown",
-                                  rating: (service['average_rating'] ?? 0.0).toDouble(),
+                                  rating: (service['average_rating'] ?? 0.0)
+                                      .toDouble(),
                                   reviews: service['reviews_count'] ?? 0,
-                                  imageUrl: service['logo_url'] ?? 'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                                  imageUrl:
+                                      service['logo_url'] ??
+                                      'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
                                 ),
                               );
                             }),
@@ -222,30 +253,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: categories.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 1,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 1,
+                          ),
                       itemBuilder: (context, index) {
                         final item = categories[index];
                         String label = "";
                         IconData icon = Icons.category;
-                        
+
                         if (item is Map && item.containsKey('label')) {
-                           label = item['label'];
-                           icon = item['icon'];
+                          label = item['label'];
+                          icon = item['icon'];
                         } else if (item is Map && item.containsKey('name')) {
-                           label = item['name'].toString().split(" ").first; // Keep it short for grid
-                           icon = item['icon'] ?? _getCategoryIcon(item['name']);
+                          label = item['name']
+                              .toString()
+                              .split(" ")
+                              .first; // Keep it short for grid
+                          icon = item['icon'] ?? _getCategoryIcon(item['name']);
                         }
-          
+
                         return GestureDetector(
                           onTap: () {
                             if (item is Map && item['id'] != null) {
-                              ref.read(selectedCategoryIdProvider.notifier).state = item['id'];
-                              ref.read(navigationIndexProvider.notifier).state = 1;
+                              ref
+                                      .read(selectedCategoryIdProvider.notifier)
+                                      .state =
+                                  item['id'];
+                              ref.read(navigationIndexProvider.notifier).state =
+                                  1;
                             }
                           },
                           child: CategoryCard(
@@ -257,7 +296,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                 ],
-        
+
                 SliverToBoxAdapter(
                   child: HomeSectionHeader(title: "Verified Professionals"),
                 ),
@@ -268,10 +307,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: EdgeInsets.symmetric(
                         vertical: AppSize.height(value: 20),
                       ),
-                      child: homeState.isLoading 
-                        ? const Center(child: CircularProgressIndicator())
-                        : professionals.isEmpty 
-                          ? Center(child: AppText(text: "No professionals found", fontWeight: FontWeight.w700, fontSize: 12,))
+                      child: homeState.isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : professionals.isEmpty
+                          ? Center(
+                              child: AppText(
+                                text: "No professionals found",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            )
                           : ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: professionals.length,
@@ -281,14 +326,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   onTap: () async {
                                     await AppRoutes.instance.pushNamed(
                                       AppRoutesKey.instance.businessProfile,
-                                      pathParameters: {"id": pro['id'].toString()},
+                                      pathParameters: {
+                                        "id": pro['id'].toString(),
+                                      },
                                     );
-                                    ref.read(homeProvider.notifier).fetchHomeData();
+                                    ref
+                                        .read(homeProvider.notifier)
+                                        .fetchHomeData();
                                   },
                                   name: pro['business_name'] ?? "Unknown",
-                                  rating: (pro['average_rating'] ?? 0.0).toDouble(),
+                                  rating: (pro['average_rating'] ?? 0.0)
+                                      .toDouble(),
                                   reviews: pro['reviews_count'] ?? 0,
-                                  imageUrl: pro['logo_url'] ?? 'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                                  imageUrl:
+                                      pro['logo_url'] ??
+                                      'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
                                   width: AppSize.size.width * 0.7,
                                 );
                               },
@@ -304,12 +356,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: EdgeInsets.symmetric(
                       vertical: AppSize.height(value: 20),
                     ),
-                    child: homeState.isLoading 
-                      ? const Center(child: CircularProgressIndicator())
-                      : recentServices.isEmpty
+                    child: homeState.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : recentServices.isEmpty
                         ? const Center(child: Text("No services found"))
                         : Column(
-                            children: List.generate(recentServices.length, (index) {
+                            children: List.generate(recentServices.length, (
+                              index,
+                            ) {
                               var service = recentServices[index];
                               return Padding(
                                 padding: EdgeInsets.symmetric(
@@ -320,15 +374,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   onTap: () async {
                                     await AppRoutes.instance.pushNamed(
                                       AppRoutesKey.instance.businessProfile,
-                                      pathParameters: {"id": service['id'].toString()},
+                                      pathParameters: {
+                                        "id": service['id'].toString(),
+                                      },
                                     );
-                                    ref.read(homeProvider.notifier).fetchHomeData();
+                                    ref
+                                        .read(homeProvider.notifier)
+                                        .fetchHomeData();
                                   },
                                   child: HomeServiceListTile(
-                                    title: service['business_name'] ?? "Unknown",
-                                    location: service['location']?['name'] ?? "Unknown",
+                                    title:
+                                        service['business_name'] ?? "Unknown",
+                                    location:
+                                        service['location']?['name'] ??
+                                        "Unknown",
                                     distance: "",
-                                    rating: (service['average_rating'] ?? 0.0).toDouble(),
+                                    rating: (service['average_rating'] ?? 0.0)
+                                        .toDouble(),
                                     imageUrl: service['logo_url'],
                                   ),
                                 ),

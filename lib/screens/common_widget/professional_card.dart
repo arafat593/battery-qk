@@ -34,8 +34,8 @@ class ProfessionalCard extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: AppSize.size.width * 0.01,
-            vertical: AppSize.size.height * 0.01
+          horizontal: AppSize.size.width * 0.01,
+          vertical: AppSize.size.height * 0.01,
         ),
         child: Container(
           width: width ?? double.infinity,
@@ -67,11 +67,7 @@ class ProfessionalCard extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: VerifiedBadge(),
-                  ),
+                  Positioned(top: 8, left: 8, child: VerifiedBadge()),
                 ],
               ),
               Padding(
@@ -79,18 +75,22 @@ class ProfessionalCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppText(text: name, fontSize: 18, fontWeight: FontWeight.w600),
+                    AppText(
+                      text: name,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                     Row(
                       children: [
                         const Icon(Icons.star, color: Colors.red, size: 16),
-                        AppText(text:
-                          " $rating ",
+                        AppText(
+                          text: " $rating ",
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
-                        Gap(width: 4,),
-                        AppText(text:
-                          "($reviews reviews)",
+                        Gap(width: 4),
+                        AppText(
+                          text: "($reviews reviews)",
                           fontSize: 14,
                           color: AppColors.instance.hintText,
                         ),
@@ -105,9 +105,12 @@ class ProfessionalCard extends StatelessWidget {
                     ),
                     Gap(height: 8),
                     AppButton(
-                      backgroundColor: AppColors.instance.buttonColor.withAlpha(15),
+                      backgroundColor: AppColors.instance.buttonColor.withAlpha(
+                        15,
+                      ),
                       borderColor: AppColors.instance.buttonColor,
-                      leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
+                      leadingIconImage:
+                          AppAssertsIconsPath.instance.messageIcon,
                       iconColor: AppColors.instance.buttonColor,
                       title: "Direct Message",
                       titleColor: AppColors.instance.buttonColor,
@@ -122,5 +125,3 @@ class ProfessionalCard extends StatelessWidget {
     );
   }
 }
-
-

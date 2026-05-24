@@ -6,7 +6,8 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
 final fAQScreenProvider = StateNotifierProvider((ref) => _FAQScreenProvider());
 
-class _FAQScreenProvider extends StateNotifier<AsyncValue<List<FAQScreenDataModel>>> {
+class _FAQScreenProvider
+    extends StateNotifier<AsyncValue<List<FAQScreenDataModel>>> {
   final BaseRepository _repo = BaseRepository.instance;
   _FAQScreenProvider() : super(AsyncLoading()) {
     initialDataLoad();
@@ -17,7 +18,9 @@ class _FAQScreenProvider extends StateNotifier<AsyncValue<List<FAQScreenDataMode
       var data = state.value;
       if (data == null) return;
       var oldData = [...data];
-      var newData = [...data].map((e) => e.copyWith(isSelected: false)).toList();
+      var newData = [
+        ...data,
+      ].map((e) => e.copyWith(isSelected: false)).toList();
       var item = oldData[index];
       newData[index] = item.copyWith(isSelected: !item.isSelected);
       state = AsyncData(newData);

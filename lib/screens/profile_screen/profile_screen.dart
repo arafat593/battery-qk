@@ -33,7 +33,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final settingsState = ref.watch(accountSettingsProvider);
     final savedState = ref.watch(savedBusinessProvider);
-    String fullName = "${settingsState.firstName} ${settingsState.lastName}".trim();
+    String fullName = "${settingsState.firstName} ${settingsState.lastName}"
+        .trim();
     if (fullName.isEmpty) fullName = "User";
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA), // Light background
@@ -59,171 +60,180 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
-          children: [
-            const Gap(height: 20),
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(colors: [Colors.green, Colors.teal]),
-                ),
-                child: AppImageCircular(
-                  borderRadius: 100,
-                  height: 100,
-                  width: 100,
-                  url: settingsState.photo.isNotEmpty 
-                      ? settingsState.photo 
-                      : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+            children: [
+              const Gap(height: 20),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [Colors.green, Colors.teal],
+                    ),
+                  ),
+                  child: AppImageCircular(
+                    borderRadius: 100,
+                    height: 100,
+                    width: 100,
+                    url: settingsState.photo.isNotEmpty
+                        ? settingsState.photo
+                        : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+                  ),
                 ),
               ),
-            ),
-            const Gap(height: 15),
-            AppText(
-              text: fullName,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.location_on_outlined,
-                  size: 14,
-                  color: Colors.grey,
-                ),
-                AppText(
-                  text: settingsState.location.isNotEmpty ? " ${settingsState.location}" : " Location not set",
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-            const Gap(height: 25),
-
-            // --- Stats Cards ---
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
+              const Gap(height: 15),
+              AppText(
+                text: fullName,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildStatCard(
-                    savedState.isLoading 
-                      ? "--" 
-                      : savedState.savedItems.length.toString().padLeft(2, '0'), 
-                    "SAVED"
+                  const Icon(
+                    Icons.location_on_outlined,
+                    size: 14,
+                    color: Colors.grey,
                   ),
-                  const Gap(width: 15),
-                  _buildStatCard("12", "REVIEWS"),
+                  AppText(
+                    text: settingsState.location.isNotEmpty
+                        ? " ${settingsState.location}"
+                        : " Location not set",
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
                 ],
               ),
-            ),
-            const Gap(height: 25),
+              const Gap(height: 25),
 
-            // --- Menu Items ---
-            MenuSection(
-              items: [
-                MenuItemTile(
-                  icon: Icons.bookmark_outline,
-                  title: "Saved Businesses",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.savedBusinessesScreen,
-                    );
-                  },
+              // --- Stats Cards ---
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    _buildStatCard(
+                      savedState.isLoading
+                          ? "--"
+                          : savedState.savedItems.length.toString().padLeft(
+                              2,
+                              '0',
+                            ),
+                      "SAVED",
+                    ),
+                    const Gap(width: 15),
+                    _buildStatCard("12", "REVIEWS"),
+                  ],
                 ),
-                MenuItemTile(
-                  icon: Icons.chat_bubble_outline,
-                  title: "My Reviews",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.myReviewsScreen,
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            const Gap(height: 20),
-
-            MenuSection(
-              items: [
-                MenuItemTile(
-                  icon: Icons.info_outline,
-                  title: "About Us",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.aboutUsScreen,
-                    );
-                  },
-                ),
-                MenuItemTile(
-                  icon: Icons.verified_user_outlined,
-                  title: "Privacy Policy",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.privacyPolicyScreen,
-                    );
-                  },
-                ),
-                MenuItemTile(
-                  icon: Icons.description_outlined,
-                  title: "Terms of Service",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.termsAndConditionsScreen,
-                    );
-                  },
-                ),
-                MenuItemTile(
-                  icon: Icons.settings_outlined,
-                  title: "Settings",
-                  onTap: () {
-                    AppRoutes.instance.pushNamed(
-                      AppRoutesKey.instance.accountSettingsScreen,
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            const Gap(height: 30),
-            // --- Logout Button ---
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: AppButton(
-                title: "Logout",
-                backgroundColor: AppColors.instance.transparent,
-                leading: Icons.logout,
-                titleColor: AppColors.instance.black500,
-                iconColor: AppColors.instance.black500,
-                borderColor: AppColors.instance.black500,
-                onTap: () async {
-                  final success = await ref.read(loginProvider.notifier).logOut();
-                  if (success) {
-                    AppRoutes.instance.goNamed(
-                      AppRoutesKey.instance.loginScreen,
-                    );
-                  } else {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Logout failed")),
-                    );
-                  }
-                },
               ),
-            ),
-            const Gap(height: 20),
-            AppText(
-              text: "GIDIRA V2.4.1 • CURATOR EDITION",
-              fontSize: 10,
-              color: Colors.grey,
-            ),
-            const Gap(height: 30),
-          ],
+              const Gap(height: 25),
+
+              // --- Menu Items ---
+              MenuSection(
+                items: [
+                  MenuItemTile(
+                    icon: Icons.bookmark_outline,
+                    title: "Saved Businesses",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.savedBusinessesScreen,
+                      );
+                    },
+                  ),
+                  MenuItemTile(
+                    icon: Icons.chat_bubble_outline,
+                    title: "My Reviews",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.myReviewsScreen,
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              const Gap(height: 20),
+
+              MenuSection(
+                items: [
+                  MenuItemTile(
+                    icon: Icons.info_outline,
+                    title: "About Us",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.aboutUsScreen,
+                      );
+                    },
+                  ),
+                  MenuItemTile(
+                    icon: Icons.verified_user_outlined,
+                    title: "Privacy Policy",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.privacyPolicyScreen,
+                      );
+                    },
+                  ),
+                  MenuItemTile(
+                    icon: Icons.description_outlined,
+                    title: "Terms of Service",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.termsAndConditionsScreen,
+                      );
+                    },
+                  ),
+                  MenuItemTile(
+                    icon: Icons.settings_outlined,
+                    title: "Settings",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.accountSettingsScreen,
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              const Gap(height: 30),
+              // --- Logout Button ---
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: AppButton(
+                  title: "Logout",
+                  backgroundColor: AppColors.instance.transparent,
+                  leading: Icons.logout,
+                  titleColor: AppColors.instance.black500,
+                  iconColor: AppColors.instance.black500,
+                  borderColor: AppColors.instance.black500,
+                  onTap: () async {
+                    final success = await ref
+                        .read(loginProvider.notifier)
+                        .logOut();
+                    if (success) {
+                      AppRoutes.instance.goNamed(
+                        AppRoutesKey.instance.loginScreen,
+                      );
+                    } else {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Logout failed")),
+                      );
+                    }
+                  },
+                ),
+              ),
+              const Gap(height: 20),
+              AppText(
+                text: "GIDIRA V2.4.1 • CURATOR EDITION",
+                fontSize: 10,
+                color: Colors.grey,
+              ),
+              const Gap(height: 30),
+            ],
+          ),
         ),
       ),
-     ),
     );
   }
 

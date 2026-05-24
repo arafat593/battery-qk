@@ -18,7 +18,11 @@ class BusinessProfilePhotosScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppText(text: "Photos", fontSize: 24, fontWeight: FontWeight.w900),
+              AppText(
+                text: "Photos",
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+              ),
               Gap(height: 30),
               imageUrls.isEmpty
                   ? const Center(

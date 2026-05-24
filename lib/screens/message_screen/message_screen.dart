@@ -38,7 +38,8 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     if (selectedFilter == 1) {
       // Unread
       filteredConversations = state.conversations.where((conv) {
-        final int unreadCount = int.tryParse(conv['unread_count']?.toString() ?? '0') ?? 0;
+        final int unreadCount =
+            int.tryParse(conv['unread_count']?.toString() ?? '0') ?? 0;
         return unreadCount > 0;
       }).toList();
     } else if (selectedFilter == 2) {
@@ -47,9 +48,12 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
         final List<dynamic>? participants = conv['participants'];
         if (participants != null && state.currentUserUuid != null) {
           for (var p in participants) {
-            if (p is Map && p['user'] != null && p['user']['uuid'] != state.currentUserUuid) {
+            if (p is Map &&
+                p['user'] != null &&
+                p['user']['uuid'] != state.currentUserUuid) {
               final user = p['user'];
-              return user['is_verified'] == true || user['shows_verified_badge'] == true;
+              return user['is_verified'] == true ||
+                  user['shows_verified_badge'] == true;
             }
           }
         }
@@ -59,13 +63,11 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: "Messages",
-        showBackButton: false,
-      ),
+      appBar: CustomAppBar(title: "Messages", showBackButton: false),
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () => ref.read(messageProvider.notifier).fetchConversations(),
+          onRefresh: () =>
+              ref.read(messageProvider.notifier).fetchConversations(),
           child: Column(
             children: [
               // Search Input Row
@@ -82,15 +84,18 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                   decoration: InputDecoration(
                     hintText: "Search conversations...",
                     prefixIcon: const Icon(Icons.search),
-                    hintStyle: const TextStyle(color: Colors.black), 
-                    labelStyle: const TextStyle(color: Colors.black), 
+                    hintStyle: const TextStyle(color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
                     prefixIconColor: Colors.black,
                     hoverColor: Colors.black,
                     focusColor: Colors.black,
                     suffixIconColor: Colors.black,
-                    fillColor: const Color(0xFFEFEFEF), 
+                    fillColor: const Color(0xFFEFEFEF),
                     filled: true,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 16,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide.none,
@@ -140,105 +145,145 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                 child: state.isLoading && state.conversations.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : filteredConversations.isEmpty
-                        ? Center(
-                            child: ListView(
-                              shrinkWrap: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              children: const [
-                                Center(
-                                  child: AppText(
-                                    text: "No conversations found.",
-                                    fontSize: 15,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
+                    ? Center(
+                        child: ListView(
+                          shrinkWrap: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: const [
+                            Center(
+                              child: AppText(
+                                text: "No conversations found.",
+                                fontSize: 15,
+                                color: Colors.grey,
+                              ),
                             ),
-                          )
-                        : ListView.separated(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSize.size.width * 0.04,
-                            ),
-                            itemCount: filteredConversations.length,
-                            separatorBuilder: (context, index) => const Divider(
-                              height: 20,
-                              thickness: 0.5,
-                              color: Color(0xFFE5E5E5),
-                            ),
-                            itemBuilder: (context, index) {
-                              final conv = filteredConversations[index];
-                              return MessageHeadingTitle(
-                                conversation: conv,
-                                currentUserUuid: state.currentUserUuid,
-                                currentUserId: state.currentUserId,
-                                 onTap: () {
-                                  final peer = conv['peer'];
-                                  String chatTitle = conv['display_name'] ?? conv['conversation_name'] ?? conv['name'] ?? "";
-                                  String? avatarUrl = conv['conversation_image_url'];
-                                  String otherUserUuid = "";
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSize.size.width * 0.04,
+                        ),
+                        itemCount: filteredConversations.length,
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 20,
+                          thickness: 0.5,
+                          color: Color(0xFFE5E5E5),
+                        ),
+                        itemBuilder: (context, index) {
+                          final conv = filteredConversations[index];
+                          return MessageHeadingTitle(
+                            conversation: conv,
+                            currentUserUuid: state.currentUserUuid,
+                            currentUserId: state.currentUserId,
+                            onTap: () {
+                              final peer = conv['peer'];
+                              String chatTitle =
+                                  conv['display_name'] ??
+                                  conv['conversation_name'] ??
+                                  conv['name'] ??
+                                  "";
+                              String? avatarUrl =
+                                  conv['conversation_image_url'];
+                              String otherUserUuid = "";
 
-                                  if (peer != null && peer is Map) {
-                                    if (chatTitle.isEmpty) {
-                                      chatTitle = peer['display_name'] ?? peer['name'] ?? "";
-                                    }
-                                    if (avatarUrl == null || avatarUrl.isEmpty) {
-                                      avatarUrl = peer['avatar_url'];
-                                    }
-                                    otherUserUuid = peer['uuid']?.toString() ?? "";
-                                  }
+                              if (peer != null && peer is Map) {
+                                if (chatTitle.isEmpty) {
+                                  chatTitle =
+                                      peer['display_name'] ??
+                                      peer['name'] ??
+                                      "";
+                                }
+                                if (avatarUrl == null || avatarUrl.isEmpty) {
+                                  avatarUrl = peer['avatar_url'];
+                                }
+                                otherUserUuid = peer['uuid']?.toString() ?? "";
+                              }
 
-                                  // Find other participant name and photo to show in chat details (fallback)
-                                  if (chatTitle.isEmpty || chatTitle == "Chat" || otherUserUuid.isEmpty) {
-                                    final List<dynamic>? participants = conv['participants'];
-                                    if (participants != null) {
-                                      for (var p in participants) {
-                                        Map<String, dynamic>? u;
-                                        if (p is Map) {
-                                          if (p['user'] != null && p['user'] is Map) {
-                                            u = Map<String, dynamic>.from(p['user']);
-                                          } else if (p['messageable'] != null && p['messageable'] is Map) {
-                                            u = Map<String, dynamic>.from(p['messageable']);
-                                          } else if (p.containsKey('id') || p.containsKey('uuid') || p.containsKey('email') || p.containsKey('name')) {
-                                            u = Map<String, dynamic>.from(p);
-                                          }
+                              // Find other participant name and photo to show in chat details (fallback)
+                              if (chatTitle.isEmpty ||
+                                  chatTitle == "Chat" ||
+                                  otherUserUuid.isEmpty) {
+                                final List<dynamic>? participants =
+                                    conv['participants'];
+                                if (participants != null) {
+                                  for (var p in participants) {
+                                    Map<String, dynamic>? u;
+                                    if (p is Map) {
+                                      if (p['user'] != null &&
+                                          p['user'] is Map) {
+                                        u = Map<String, dynamic>.from(
+                                          p['user'],
+                                        );
+                                      } else if (p['messageable'] != null &&
+                                          p['messageable'] is Map) {
+                                        u = Map<String, dynamic>.from(
+                                          p['messageable'],
+                                        );
+                                      } else if (p.containsKey('id') ||
+                                          p.containsKey('uuid') ||
+                                          p.containsKey('email') ||
+                                          p.containsKey('name')) {
+                                        u = Map<String, dynamic>.from(p);
+                                      }
+                                    }
+                                    if (u != null) {
+                                      final bool isMe =
+                                          (state.currentUserUuid != null &&
+                                              u['uuid'] ==
+                                                  state.currentUserUuid) ||
+                                          (state.currentUserId != null &&
+                                              u['id']?.toString() ==
+                                                  state.currentUserId
+                                                      .toString());
+                                      if (!isMe) {
+                                        final name =
+                                            u['display_name'] ??
+                                            u['name'] ??
+                                            u['full_name'];
+                                        if (name != null &&
+                                            name.toString().isNotEmpty) {
+                                          chatTitle = name.toString();
+                                        } else {
+                                          final firstName =
+                                              u['first_name'] ?? "";
+                                          final lastName = u['last_name'] ?? "";
+                                          chatTitle = "$firstName $lastName"
+                                              .trim();
                                         }
-                                        if (u != null) {
-                                          final bool isMe = (state.currentUserUuid != null && u['uuid'] == state.currentUserUuid) ||
-                                                            (state.currentUserId != null && u['id']?.toString() == state.currentUserId.toString());
-                                          if (!isMe) {
-                                            final name = u['display_name'] ?? u['name'] ?? u['full_name'];
-                                            if (name != null && name.toString().isNotEmpty) {
-                                              chatTitle = name.toString();
-                                            } else {
-                                              final firstName = u['first_name'] ?? "";
-                                              final lastName = u['last_name'] ?? "";
-                                              chatTitle = "$firstName $lastName".trim();
-                                            }
-                                            otherUserUuid = u['uuid']?.toString() ?? "";
-                                            avatarUrl = u['avatar_url'] ?? u['photo'] ?? u['image_url'] ?? u['avatar'] ?? u['logo_url'] ?? u['logo'] ?? "";
-                                            break;
-                                          }
-                                        }
+                                        otherUserUuid =
+                                            u['uuid']?.toString() ?? "";
+                                        avatarUrl =
+                                            u['avatar_url'] ??
+                                            u['photo'] ??
+                                            u['image_url'] ??
+                                            u['avatar'] ??
+                                            u['logo_url'] ??
+                                            u['logo'] ??
+                                            "";
+                                        break;
                                       }
                                     }
                                   }
-                                  if (chatTitle.isEmpty) {
-                                    chatTitle = "Chat";
-                                  }
+                                }
+                              }
+                              if (chatTitle.isEmpty) {
+                                chatTitle = "Chat";
+                              }
 
-                                  AppRoutes.instance.pushNamed(
-                                    AppRoutesKey.instance.messagesDetailsScreen,
-                                    extra: {
-                                      "conversation_uuid": conv['uuid'],
-                                      "chat_title": chatTitle,
-                                      "other_user_uuid": otherUserUuid,
-                                      "avatar_url": avatarUrl,
-                                    },
-                                  );
+                              AppRoutes.instance.pushNamed(
+                                AppRoutesKey.instance.messagesDetailsScreen,
+                                extra: {
+                                  "conversation_uuid": conv['uuid'],
+                                  "chat_title": chatTitle,
+                                  "other_user_uuid": otherUserUuid,
+                                  "avatar_url": avatarUrl,
                                 },
                               );
                             },
-                          ),
+                          );
+                        },
+                      ),
               ),
             ],
           ),

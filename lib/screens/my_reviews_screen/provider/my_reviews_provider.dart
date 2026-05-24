@@ -3,23 +3,18 @@ import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'dart:developer';
 
-final myReviewsProvider = StateNotifierProvider<MyReviewsNotifier, MyReviewsState>((ref) {
-  return MyReviewsNotifier();
-});
+final myReviewsProvider =
+    StateNotifierProvider<MyReviewsNotifier, MyReviewsState>((ref) {
+      return MyReviewsNotifier();
+    });
 
 class MyReviewsState {
   final bool isLoading;
   final List<dynamic> reviews;
-  
-  MyReviewsState({
-    this.isLoading = false,
-    this.reviews = const [],
-  });
 
-  MyReviewsState copyWith({
-    bool? isLoading,
-    List<dynamic>? reviews,
-  }) {
+  MyReviewsState({this.isLoading = false, this.reviews = const []});
+
+  MyReviewsState copyWith({bool? isLoading, List<dynamic>? reviews}) {
     return MyReviewsState(
       isLoading: isLoading ?? this.isLoading,
       reviews: reviews ?? this.reviews,

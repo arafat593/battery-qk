@@ -30,14 +30,22 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(businessProfileReviewProvider(BusinessReviewArgs(id: businessId, name: businessName)));
-    final notifier = ref.read(businessProfileReviewProvider(BusinessReviewArgs(id: businessId, name: businessName)).notifier);
+    final state = ref.watch(
+      businessProfileReviewProvider(
+        BusinessReviewArgs(id: businessId, name: businessName),
+      ),
+    );
+    final notifier = ref.read(
+      businessProfileReviewProvider(
+        BusinessReviewArgs(id: businessId, name: businessName),
+      ).notifier,
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "Write a Review"),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0), 
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -46,7 +54,7 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20), 
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.grey.shade100),
                 boxShadow: [
                   BoxShadow(
@@ -65,7 +73,9 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
                     ),
                     child: AppImageCircular(
                       borderRadius: 16,
-                      url: businessLogo ?? "https://picsum.photos/200/200?random=6",
+                      url:
+                          businessLogo ??
+                          "https://picsum.photos/200/200?random=6",
                       width: 70,
                       height: 70,
                     ),
@@ -76,7 +86,10 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.instance.error.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
@@ -97,7 +110,11 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
                         const Gap(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.location_on, size: 12, color: AppColors.instance.hintText),
+                            Icon(
+                              Icons.location_on,
+                              size: 12,
+                              color: AppColors.instance.hintText,
+                            ),
                             const Gap(width: 4),
                             Expanded(
                               child: AppText(
@@ -184,10 +201,7 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(
-                      Icons.person_outline,
-                      color: Colors.grey[700],
-                    ),
+                    child: Icon(Icons.person_outline, color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 15),
                   Expanded(
@@ -266,7 +280,7 @@ class BusinessProfileReviewScreen extends ConsumerWidget {
 
                 // Image List
                 Expanded(
-                  child: SizedBox( 
+                  child: SizedBox(
                     height: 100,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,

@@ -2,7 +2,8 @@ import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
 class OtpRelatedFunction {
   OtpRelatedFunction._privateConstructor();
-  static final OtpRelatedFunction _instant = OtpRelatedFunction._privateConstructor();
+  static final OtpRelatedFunction _instant =
+      OtpRelatedFunction._privateConstructor();
   static OtpRelatedFunction get instant => _instant;
   ///////////////////////  timer function start
   String formatSecondFunction(int seconds) {

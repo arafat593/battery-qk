@@ -36,7 +36,9 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(businessProfileProvider(widget.businessId).notifier).fetchBusinessData();
+      ref
+          .read(businessProfileProvider(widget.businessId).notifier)
+          .fetchBusinessData();
     });
   }
 
@@ -44,7 +46,9 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
   Widget build(BuildContext context) {
     final state = ref.watch(businessProfileProvider(widget.businessId));
     final details = state.businessDetails;
-    final List<String> photos = (details?['cover_photo_urls'] is List && (details?['cover_photo_urls'] as List).isNotEmpty)
+    final List<String> photos =
+        (details?['cover_photo_urls'] is List &&
+            (details?['cover_photo_urls'] as List).isNotEmpty)
         ? List<String>.from(details!['cover_photo_urls'])
         : <String>[];
 
@@ -62,7 +66,10 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
           IconButton(
             onPressed: () => BusinessProfileShareSheet.show(
               context: context,
-              businessName: details?['business_name'] ?? details?['name'] ?? 'Business Profile',
+              businessName:
+                  details?['business_name'] ??
+                  details?['name'] ??
+                  'Business Profile',
               logoUrl: details?['logo_url'],
               businessId: widget.businessId,
               categoryName: details?['category']?['name'],
@@ -72,7 +79,9 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(businessProfileProvider(widget.businessId).notifier).fetchBusinessData(),
+        onRefresh: () => ref
+            .read(businessProfileProvider(widget.businessId).notifier)
+            .fetchBusinessData(),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(16.0),
@@ -82,7 +91,9 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
               // 1. Header Image Section
               BusinessProfileHeaderImage(
                 coverImage: photos.isNotEmpty ? photos[0] : null,
-                logoImage: (details?['logo_url'] != null && details!['logo_url'].toString().isNotEmpty)
+                logoImage:
+                    (details?['logo_url'] != null &&
+                        details!['logo_url'].toString().isNotEmpty)
                     ? details['logo_url']
                     : null,
                 showSeeAll: true,
@@ -94,7 +105,7 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                 },
               ),
               Gap(height: 16),
-      
+
               // 2. Title & Rating Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,7 +119,11 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                   ),
                   IconButton(
                     onPressed: () {
-                      ref.read(businessProfileProvider(widget.businessId).notifier).toggleFavorite();
+                      ref
+                          .read(
+                            businessProfileProvider(widget.businessId).notifier,
+                          )
+                          .toggleFavorite();
                     },
                     icon: Icon(
                       state.isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -117,8 +132,8 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                   ),
                 ],
               ),
-      
-              if (details?['verification_status'] == 'approved') ...[  
+
+              if (details?['verification_status'] == 'approved') ...[
                 VerifiedBadge(
                   backgroundColor: AppColors.instance.redOrange,
                   textColor: AppColors.instance.black500,
@@ -126,18 +141,24 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                 ),
                 Gap(height: 8),
               ],
-      
+
               RatingWidget(
                 rating: (details?['average_rating'] ?? 0.0).toDouble(),
                 totalReviews: details?['reviews_count'] ?? 0,
               ),
               Gap(height: 8),
-      
+
               BusinessProfileInfoRow(
                 icon: Icons.shield_outlined,
-                text: details?['verification_status'] == 'approved' ? "Identity Verified" : "Pending Verification",
-                iconColor: details?['verification_status'] == 'approved' ? AppColors.instance.success : AppColors.instance.hintText,
-                textColor: details?['verification_status'] == 'approved' ? AppColors.instance.success : AppColors.instance.hintText,
+                text: details?['verification_status'] == 'approved'
+                    ? "Identity Verified"
+                    : "Pending Verification",
+                iconColor: details?['verification_status'] == 'approved'
+                    ? AppColors.instance.success
+                    : AppColors.instance.hintText,
+                textColor: details?['verification_status'] == 'approved'
+                    ? AppColors.instance.success
+                    : AppColors.instance.hintText,
                 iconSize: 14,
                 fontSize: 14,
               ),
@@ -147,25 +168,33 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
               ),
               BusinessProfileInfoRow(
                 icon: Icons.check_circle_outline_outlined,
-                text: details?['business_status'] == 'active' ? "Business is Active" : "Business Inactive",
+                text: details?['business_status'] == 'active'
+                    ? "Business is Active"
+                    : "Business Inactive",
               ),
               Gap(height: 20),
-      
+
               BusinessProfileActionSection(
                 phone: details?['phone'],
                 whatsapp: details?['whatsapp'],
                 website: details?['website'],
                 isFavorite: state.isFavorite,
                 vendorUuid: details?['vendor']?['uuid']?.toString(),
-                businessName: details?['business_name'] ?? details?['name'] ?? "Chat",
+                businessName:
+                    details?['business_name'] ?? details?['name'] ?? "Chat",
                 logoUrl: details?['logo_url'],
                 onFavoriteTap: () {
-                  ref.read(businessProfileProvider(widget.businessId).notifier).toggleFavorite();
+                  ref
+                      .read(businessProfileProvider(widget.businessId).notifier)
+                      .toggleFavorite();
                 },
                 onShareTap: () {
                   BusinessProfileShareSheet.show(
                     context: context,
-                    businessName: details?['business_name'] ?? details?['name'] ?? 'Business Profile',
+                    businessName:
+                        details?['business_name'] ??
+                        details?['name'] ??
+                        'Business Profile',
                     logoUrl: details?['logo_url'],
                     businessId: widget.businessId,
                     categoryName: details?['category']?['name'],
@@ -173,18 +202,20 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                 },
               ),
               Gap(height: 20),
-      
+
               // 4. Business Hours Section
               BusinessProfileSecheduleScetion(
-                businessHours: details?['business_hours_display'] ?? details?['business_hours'],
+                businessHours:
+                    details?['business_hours_display'] ??
+                    details?['business_hours'],
               ),
               Gap(height: 20),
-      
+
               BusinessProfileAboutSection(
                 description: details?['business_description'],
               ),
               Gap(height: 20),
-      
+
               BusinessProfileServiceSection(
                 services: details?['services_offered'] is List
                     ? List<String>.from(details!['services_offered'])
@@ -194,21 +225,27 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
               Gap(height: 20),
 
               if (photos.isNotEmpty) ...[
-                BusinessProfilePhotoGrid(
-                  imageUrls: photos, 
-                ),
+                BusinessProfilePhotoGrid(imageUrls: photos),
                 const Gap(height: 20),
               ],
-       
 
-      
               BusinessProfileLocationMap(
-                latitude: details?['location']?['latitude'] != null ? double.tryParse(details!['location']['latitude'].toString()) : null,
-                longitude: details?['location']?['longitude'] != null ? double.tryParse(details!['location']['longitude'].toString()) : null,
-                locationName: details?['location']?['full_name'] ?? details?['location']?['name'],
+                latitude: details?['location']?['latitude'] != null
+                    ? double.tryParse(
+                        details!['location']['latitude'].toString(),
+                      )
+                    : null,
+                longitude: details?['location']?['longitude'] != null
+                    ? double.tryParse(
+                        details!['location']['longitude'].toString(),
+                      )
+                    : null,
+                locationName:
+                    details?['location']?['full_name'] ??
+                    details?['location']?['name'],
               ),
               Gap(height: 30),
-      
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -228,7 +265,11 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                           "location": details?['location']?['full_name'],
                         },
                       );
-                      ref.read(businessProfileProvider(widget.businessId).notifier).fetchBusinessData();
+                      ref
+                          .read(
+                            businessProfileProvider(widget.businessId).notifier,
+                          )
+                          .fetchBusinessData();
                     },
                     child: AppText(
                       text: "Write a review",
@@ -245,20 +286,33 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                 itemCount: state.reviews.length,
                 itemBuilder: (context, index) {
                   var review = state.reviews[index];
-                  
+
                   // Parse details based on backend /reviews response
-                  final name = review['reviewer_name'] ?? review['full_name'] ?? "Anonymous";
-                  final date = review['created_at_human'] ?? review['created_at'] ?? "";
-                   
-                  final isAnonymous = review['is_anonymous'] == true || name == "Anonymous";
-                  
-                   String avatarUrl = "";
+                  final name =
+                      review['reviewer_name'] ??
+                      review['full_name'] ??
+                      "Anonymous";
+                  final date =
+                      review['created_at_human'] ?? review['created_at'] ?? "";
+
+                  final isAnonymous =
+                      review['is_anonymous'] == true || name == "Anonymous";
+
+                  String avatarUrl = "";
                   if (!isAnonymous) {
-                    final rawPhoto = review['reviewer_photo'] ?? review['reviewer_image'] ?? review['avatar'] ?? review['user']?['photo'] ?? review['user']?['image_url'] ?? "";
+                    final rawPhoto =
+                        review['reviewer_photo'] ??
+                        review['reviewer_image'] ??
+                        review['avatar'] ??
+                        review['user']?['photo'] ??
+                        review['user']?['image_url'] ??
+                        "";
                     if (rawPhoto.toString().isNotEmpty) {
                       avatarUrl = rawPhoto.toString();
                       if (avatarUrl.contains('/storage/')) {
-                        final storagePath = avatarUrl.substring(avatarUrl.indexOf('/storage/'));
+                        final storagePath = avatarUrl.substring(
+                          avatarUrl.indexOf('/storage/'),
+                        );
                         avatarUrl = "${AppApiUrl.domain}$storagePath";
                       } else if (!avatarUrl.startsWith('http')) {
                         avatarUrl = "${AppApiUrl.domain}/storage/$avatarUrl";
@@ -267,14 +321,17 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                   }
 
                   if (avatarUrl.isEmpty) {
-                    avatarUrl = isAnonymous 
-                        ? "https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                    avatarUrl = isAnonymous
+                        ? "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                         : "https://i.pravatar.cc/150?img=${review['id'] ?? index}";
                   }
 
-                  String reviewText = review['review_text'] ?? review['review'] ?? "";
+                  String reviewText =
+                      review['review_text'] ?? review['review'] ?? "";
                   // Strip leading and trailing escaped quotes if they exist
-                  if (reviewText.startsWith('"') && reviewText.endsWith('"') && reviewText.length > 1) {
+                  if (reviewText.startsWith('"') &&
+                      reviewText.endsWith('"') &&
+                      reviewText.length > 1) {
                     reviewText = reviewText.substring(1, reviewText.length - 1);
                   }
 
@@ -285,13 +342,20 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                       if (img != null) {
                         String imgUrl = "";
                         if (img is Map) {
-                          imgUrl = img['url'] ?? img['image_url'] ?? img['path'] ?? img['image_path'] ?? "";
+                          imgUrl =
+                              img['url'] ??
+                              img['image_url'] ??
+                              img['path'] ??
+                              img['image_path'] ??
+                              "";
                         } else {
                           imgUrl = img.toString();
                         }
                         if (imgUrl.isNotEmpty) {
                           if (imgUrl.contains('/storage/')) {
-                            final storagePath = imgUrl.substring(imgUrl.indexOf('/storage/'));
+                            final storagePath = imgUrl.substring(
+                              imgUrl.indexOf('/storage/'),
+                            );
                             imgUrl = "${AppApiUrl.domain}$storagePath";
                           } else if (!imgUrl.startsWith('http')) {
                             imgUrl = "${AppApiUrl.domain}/storage/$imgUrl";
@@ -307,7 +371,7 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                     date: date,
                     imageUrl: avatarUrl,
                     rating: (review['rating'] ?? 5).round(),
-                    review: reviewText, 
+                    review: reviewText,
                     reviewImages: reviewImages,
                   );
                 },
@@ -321,17 +385,11 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
   }
 }
 
-
-
 class SocialIcon extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const SocialIcon({
-    super.key,
-    required this.icon,
-    required this.label,
-  });
+  const SocialIcon({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

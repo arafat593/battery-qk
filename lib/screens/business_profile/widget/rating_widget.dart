@@ -42,8 +42,8 @@ class RatingWidget extends StatelessWidget {
         ),
         if (showText) ...[
           const Gap(width: 8),
-          AppText(text:
-            "$rating ($totalReviews Reviews)",
+          AppText(
+            text: "$rating ($totalReviews Reviews)",
             fontSize: 14,
             fontWeight: FontWeight.w700,
           ),

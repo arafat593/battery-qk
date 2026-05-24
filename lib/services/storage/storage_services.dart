@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageServices {
   StorageServices._privateConstructor();
-  static final StorageServices _instance = StorageServices._privateConstructor();
+  static final StorageServices _instance =
+      StorageServices._privateConstructor();
   static StorageServices get instance => _instance;
 
   ////////////// storage initial
@@ -35,8 +36,6 @@ class StorageServices {
       return {};
     }
   }
-
-
 
   ////////////// token storage
   Future<void> setToken(String value) async {

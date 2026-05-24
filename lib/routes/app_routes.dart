@@ -15,7 +15,7 @@ import '../screens/auth_screen/forget_password/successful_screen/successfull_scr
 import '../screens/auth_screen/login_screen/login_screen.dart';
 import '../screens/auth_screen/otp_verification_screen/otp_verification_screen.dart';
 import '../screens/auth_screen/sign_up_screen/sign_up_screen.dart';
- import '../screens/base_screen/about_us_screen/about_us_screen.dart';
+import '../screens/base_screen/about_us_screen/about_us_screen.dart';
 import '../screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
 import '../screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
 import '../screens/business_profile/business_profile.dart';
@@ -68,7 +68,8 @@ class AppRoutes {
         path: "/${AppRoutesKey.instance.appNavigationScreen}",
         name: AppRoutesKey.instance.appNavigationScreen,
         builder: (context, state) {
-          final index = int.tryParse(state.uri.queryParameters['index'] ?? '') ?? 0;
+          final index =
+              int.tryParse(state.uri.queryParameters['index'] ?? '') ?? 0;
           return AppNavigationScreen(initialIndex: index);
         },
       ),
@@ -325,7 +326,12 @@ class AppRoutes {
     }
   }
 
-  void pushReplacement(String value, {Map<String, String> pathParameters = const {}, Map<String, dynamic> queryParameters = const {}, Object? extra}) {
+  void pushReplacement(
+    String value, {
+    Map<String, String> pathParameters = const {},
+    Map<String, dynamic> queryParameters = const {},
+    Object? extra,
+  }) {
     try {
       router.pushReplacementNamed(
         value,

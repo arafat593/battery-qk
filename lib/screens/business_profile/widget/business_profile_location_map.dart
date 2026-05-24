@@ -30,11 +30,17 @@ class BusinessProfileLocationMap extends StatelessWidget {
   void _openDetailedMap() async {
     Uri uri;
     if (latitude != null && longitude != null) {
-      uri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude");
+      uri = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+      );
     } else if (locationName != null && locationName!.isNotEmpty) {
-      uri = Uri.parse("https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(locationName!)}");
+      uri = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(locationName!)}",
+      );
     } else {
-      uri = Uri.parse("https://www.google.com/maps/search/?api=1&query=Lagos,Nigeria");
+      uri = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=Lagos,Nigeria",
+      );
     }
 
     if (await canLaunchUrl(uri)) {
@@ -45,7 +51,7 @@ class BusinessProfileLocationMap extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,7 +83,11 @@ class BusinessProfileLocationMap extends StatelessWidget {
                     height: 250,
                     width: double.infinity,
                     color: Colors.grey[200],
-                    child: const Icon(Icons.map_outlined, size: 50, color: Colors.grey),
+                    child: const Icon(
+                      Icons.map_outlined,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),
@@ -87,11 +97,15 @@ class BusinessProfileLocationMap extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: Colors.blue,
                     radius: 25,
-                    child: Icon(Icons.location_on, color: Colors.white, size: 30),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
-  
+
               // Bottom Button Overlay
               Positioned(
                 bottom: 16,

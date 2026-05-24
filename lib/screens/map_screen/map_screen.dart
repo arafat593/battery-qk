@@ -17,7 +17,10 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? _mapController;
-  LatLng _currentPosition = const LatLng(6.5244, 3.3792); // Default to Lagos, Nigeria
+  LatLng _currentPosition = const LatLng(
+    6.5244,
+    3.3792,
+  ); // Default to Lagos, Nigeria
   bool _isMapReady = false;
 
   @override
@@ -58,9 +61,7 @@ class _MapScreenState extends State<MapScreen> {
           if (!_isMapReady)
             Container(
               color: Colors.white,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
 
           // ===================== APP BAR =====================
@@ -125,17 +126,14 @@ class _MapScreenState extends State<MapScreen> {
       );
 
       debugPrint("Lat: ${position.latitude}, Lng: ${position.longitude}");
-      
+
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
       });
 
       _mapController?.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: _currentPosition,
-            zoom: 15.0,
-          ),
+          CameraPosition(target: _currentPosition, zoom: 15.0),
         ),
       );
     } catch (e) {

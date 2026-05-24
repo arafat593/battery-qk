@@ -17,14 +17,16 @@ import '../../utils/app_log.dart';
 final navigationIndexProvider = StateProvider<int>((ref) => 0);
 final selectedCategoryIdProvider = StateProvider<int?>((ref) => null);
 
-final GlobalKey<_AppNavigationScreenState> appNavigationKey = GlobalKey<_AppNavigationScreenState>();
+final GlobalKey<_AppNavigationScreenState> appNavigationKey =
+    GlobalKey<_AppNavigationScreenState>();
 
 class AppNavigationScreen extends ConsumerStatefulWidget {
   final int initialIndex;
   const AppNavigationScreen({super.key, this.initialIndex = 0});
 
   @override
-  ConsumerState<AppNavigationScreen> createState() => _AppNavigationScreenState();
+  ConsumerState<AppNavigationScreen> createState() =>
+      _AppNavigationScreenState();
 }
 
 class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
@@ -71,7 +73,9 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
           "CATEGORIES",
         ),
         _buildNavItem(
-            AppAssertsIconsPath.instance.bottomBarMessagesIcon, "MESSAGES"),
+          AppAssertsIconsPath.instance.bottomBarMessagesIcon,
+          "MESSAGES",
+        ),
         _buildNavItem(AppAssertsIconsPath.instance.profileIcon, "PROFILE"),
       ];
       isLoading = false;
@@ -124,7 +128,8 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
               index: (selectedIndex >= 0 && selectedIndex < bodyWidget.length)
                   ? selectedIndex
                   : 0,
-              children: bodyWidget),
+              children: bodyWidget,
+            ),
       bottomNavigationBar: isLoading || bottomNavigation.length < 2
           ? const Gap()
           : Container(

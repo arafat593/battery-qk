@@ -7,9 +7,13 @@ import 'package:olabisiolai_flutter_app/services/repository/chat_repository.dart
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
-final chatDetailsProvider = StateNotifierProvider.autoDispose.family<ChatDetailsNotifier, ChatDetailsState, String?>((ref, conversationUuid) {
-  return ChatDetailsNotifier(conversationUuid, ref);
-});
+final chatDetailsProvider = StateNotifierProvider.autoDispose
+    .family<ChatDetailsNotifier, ChatDetailsState, String?>((
+      ref,
+      conversationUuid,
+    ) {
+      return ChatDetailsNotifier(conversationUuid, ref);
+    });
 
 class ChatDetailsState {
   final bool isLoading;
@@ -74,7 +78,8 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
   Timer? _pollingTimer;
   Timer? _typingTimer;
 
-  ChatDetailsNotifier(String? conversationUuid, this.ref) : super(ChatDetailsState(conversationUuid: conversationUuid)) {
+  ChatDetailsNotifier(String? conversationUuid, this.ref)
+    : super(ChatDetailsState(conversationUuid: conversationUuid)) {
     init();
   }
 
@@ -94,7 +99,8 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
         timer.cancel();
         return;
       }
-      if (state.conversationUuid != null && state.conversationUuid!.isNotEmpty) {
+      if (state.conversationUuid != null &&
+          state.conversationUuid!.isNotEmpty) {
         fetchMessages(background: true);
       }
     });
@@ -137,16 +143,18 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
           if (response['data']['messages'] is List) {
             items = response['data']['messages'];
           }
-          convName = response['data']['display_name']?.toString() ?? response['data']['conversation_name']?.toString();
+          convName =
+              response['data']['display_name']?.toString() ??
+              response['data']['conversation_name']?.toString();
           convImageUrl = response['data']['conversation_image_url']?.toString();
           if (response['data']['peer'] is Map) {
             peerData = Map<String, dynamic>.from(response['data']['peer']);
           }
         }
       }
-      
+
       state = state.copyWith(
-        isLoading: false, 
+        isLoading: false,
         messages: items,
         conversationName: convName,
         conversationImageUrl: convImageUrl,
@@ -157,10 +165,13 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       for (var msg in items) {
         final List<dynamic>? readBy = msg['read_by'];
         final sender = msg['sender'];
-        final bool isMe = sender != null && 
-            (sender['id'] == state.currentUserId || sender['uuid'] == state.currentUserUuid);
-            
-        if (!isMe && (readBy == null || !readBy.contains(state.currentUserId))) {
+        final bool isMe =
+            sender != null &&
+            (sender['id'] == state.currentUserId ||
+                sender['uuid'] == state.currentUserUuid);
+
+        if (!isMe &&
+            (readBy == null || !readBy.contains(state.currentUserId))) {
           final String? msgUuid = msg['uuid'];
           if (msgUuid != null) {
             _chatRepository.readMessage(msgUuid);
@@ -176,18 +187,24 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
   }
 
   /// Create a conversation dynamically (if starting chat from business profile page)
-  Future<String?> createConversation(String otherUserUuid, {String? name}) async {
+  Future<String?> createConversation(
+    String otherUserUuid, {
+    String? name,
+  }) async {
     try {
-      var response = await _chatRepository.createConversation(otherUserUuid, name: name);
+      var response = await _chatRepository.createConversation(
+        otherUserUuid,
+        name: name,
+      );
       if (!mounted) return null;
       if (response != null && response['data'] != null) {
         final convData = response['data'];
         final String newUuid = convData['uuid'];
         state = state.copyWith(conversationUuid: newUuid);
-        
+
         // Refresh conversations list
         ref.read(messageProvider.notifier).fetchConversations();
-        
+
         _startPolling();
         return newUuid;
       }
@@ -198,13 +215,18 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
   }
 
   /// Send message
-  Future<bool> sendMessage(String text, {List<File>? files, String? otherUserUuid, String? conversationName}) async {
+  Future<bool> sendMessage(
+    String text, {
+    List<File>? files,
+    String? otherUserUuid,
+    String? conversationName,
+  }) async {
     if (text.trim().isEmpty && (files == null || files.isEmpty)) return false;
 
     state = state.copyWith(isSending: true);
     try {
       String? uuid = state.conversationUuid;
-      
+
       // 1. If conversation doesn't exist, create it first
       if ((uuid == null || uuid.isEmpty) && otherUserUuid != null) {
         uuid = await createConversation(otherUserUuid, name: conversationName);
@@ -219,13 +241,15 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       }
 
       // 2. Upload attachments if any
-      List<String> attachmentIds = [];
+      List<dynamic> attachmentIds = [];
       if (files != null && files.isNotEmpty) {
         for (var file in files) {
           final response = await _chatRepository.uploadAttachment(file);
           if (!mounted) return false;
           if (response != null && response['data'] != null) {
-            final String? attId = response['data']['id']?.toString() ?? response['data']['uuid']?.toString();
+            final dynamic attId =
+                response['data']['id'] ??
+                response['data']['uuid'];
             if (attId != null) {
               attachmentIds.add(attId);
             }
@@ -234,15 +258,22 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       }
 
       // 3. Send message
-      final response = await _chatRepository.sendMessage(uuid, text, attachmentIds: attachmentIds);
+      final response = await _chatRepository.sendMessage(
+        uuid,
+        text,
+        attachmentIds: attachmentIds,
+      );
       if (!mounted) return false;
       if (response != null && response['data'] != null) {
         // Append new message locally for instant update
         final currentMessages = List.from(state.messages);
-        currentMessages.insert(0, response['data']); // insert at the top (latest message)
+        currentMessages.insert(
+          0,
+          response['data'],
+        ); // insert at the top (latest message)
         state = state.copyWith(messages: currentMessages);
         state = state.copyWith(isSending: false);
-        
+
         // Stop typing indicator on send
         setTyping(false);
         return true;
@@ -284,7 +315,9 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       var response = await _chatRepository.deleteMessage(messageUuid);
       if (!mounted) return false;
       if (response != null) {
-        final updatedList = state.messages.where((msg) => msg['uuid'] != messageUuid).toList();
+        final updatedList = state.messages
+            .where((msg) => msg['uuid'] != messageUuid)
+            .toList();
         state = state.copyWith(messages: updatedList);
         return true;
       }
@@ -296,8 +329,9 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
 
   /// Send typing status to backend
   void setTyping(bool isTyping) {
-    if (state.conversationUuid == null || state.conversationUuid!.isEmpty) return;
-    
+    if (state.conversationUuid == null || state.conversationUuid!.isEmpty)
+      return;
+
     if (state.isTyping == isTyping) return;
     state = state.copyWith(isTyping: isTyping);
 

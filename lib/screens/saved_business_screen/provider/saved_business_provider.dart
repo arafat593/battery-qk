@@ -3,23 +3,18 @@ import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'dart:developer';
 
-final savedBusinessProvider = StateNotifierProvider<SavedBusinessNotifier, SavedBusinessState>((ref) {
-  return SavedBusinessNotifier();
-});
+final savedBusinessProvider =
+    StateNotifierProvider<SavedBusinessNotifier, SavedBusinessState>((ref) {
+      return SavedBusinessNotifier();
+    });
 
 class SavedBusinessState {
   final bool isLoading;
   final List<dynamic> savedItems;
-  
-  SavedBusinessState({
-    this.isLoading = false,
-    this.savedItems = const [],
-  });
 
-  SavedBusinessState copyWith({
-    bool? isLoading,
-    List<dynamic>? savedItems,
-  }) {
+  SavedBusinessState({this.isLoading = false, this.savedItems = const []});
+
+  SavedBusinessState copyWith({bool? isLoading, List<dynamic>? savedItems}) {
     return SavedBusinessState(
       isLoading: isLoading ?? this.isLoading,
       savedItems: savedItems ?? this.savedItems,
@@ -59,7 +54,7 @@ class SavedBusinessNotifier extends StateNotifier<SavedBusinessState> {
   void refresh() {
     fetchSavedBusinesses();
   }
-  
+
   Future<void> removeFavorite(int favoriteId) async {
     // Optimistic UI update could be added here
     try {

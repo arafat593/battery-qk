@@ -22,12 +22,14 @@ class AboutUsScreen extends ConsumerWidget {
           }
           return BaseDataWidget(data: data);
         },
-        error: (error, stackTrace) => const Center(
-          child: AppText(text: "Something went wrong!"),
-        ),
+        error: (error, stackTrace) =>
+            const Center(child: AppText(text: "Something went wrong!")),
         loading: () => Skeletonizer(
           child: BaseDataWidget(
-            data: List.generate(20, (index) => "<p>Loading about us details from server...</p>").join(""),
+            data: List.generate(
+              20,
+              (index) => "<p>Loading about us details from server...</p>",
+            ).join(""),
           ),
         ),
       ),

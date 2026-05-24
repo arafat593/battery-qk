@@ -1,12 +1,10 @@
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
-
 class AppDateTimeFormate {
   AppDateTimeFormate._privateConstructor();
-  static final AppDateTimeFormate _instance = AppDateTimeFormate._privateConstructor();
+  static final AppDateTimeFormate _instance =
+      AppDateTimeFormate._privateConstructor();
   static AppDateTimeFormate get instance => _instance;
-
-
 
   String timeFormateTextMonthYear(String? inputDateTime) {
     try {
@@ -15,8 +13,21 @@ class AppDateTimeFormate {
       if (dateTime == null) return "";
 
       DateTime utcTime = dateTime.toLocal();
-    
-      const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      const List<String> monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
 
       String month = monthNames[utcTime.month - 1];
       int year = utcTime.year;
@@ -33,8 +44,21 @@ class AppDateTimeFormate {
       DateTime? dateTime = DateTime.tryParse(inputDateTime);
       if (dateTime == null) return "";
       DateTime localTime = dateTime.toLocal();
- 
-      const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      const List<String> monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
 
       String month = monthNames[localTime.month - 1];
       int year = localTime.year;
@@ -54,7 +78,20 @@ class AppDateTimeFormate {
 
       DateTime localTime = dateTime.toLocal();
 
-      const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const List<String> monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
 
       String month = monthNames[localTime.month - 1];
       int year = localTime.year;
@@ -75,7 +112,20 @@ class AppDateTimeFormate {
 
       if (localTime == null) return "";
 
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
       // Extract month, day, year, hour, and minute
       String month = months[localTime.month - 1];
 
@@ -107,7 +157,6 @@ class AppDateTimeFormate {
       DateTime? localTime = DateTime.tryParse(inputDateTime)?.toLocal();
 
       if (localTime == null) return "";
-    
 
       final DateTime now = DateTime.now().toLocal();
       final Duration difference = now.difference(localTime);

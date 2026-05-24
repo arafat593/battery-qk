@@ -16,7 +16,10 @@ class FaqCard extends StatelessWidget {
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
       child: Container(
         margin: EdgeInsets.only(bottom: AppSize.size.width * 0.02),
-        padding: EdgeInsets.symmetric(horizontal: AppSize.size.width * 0.05, vertical: AppSize.size.width * 0.015),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSize.size.width * 0.05,
+          vertical: AppSize.size.width * 0.015,
+        ),
         decoration: BoxDecoration(
           color: AppColors.instance.white400,
           border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
@@ -41,7 +44,11 @@ class FaqCard extends StatelessWidget {
                 AnimatedRotation(
                   duration: Durations.medium4,
                   turns: item.isSelected ? 0.75 : 0.25,
-                  child: Icon(Icons.arrow_forward_ios, color: AppColors.instance.dark400, weight: 500),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: AppColors.instance.dark400,
+                    weight: 500,
+                  ),
                 ),
               ],
             ),
@@ -50,12 +57,21 @@ class FaqCard extends StatelessWidget {
               duration: Durations.medium4,
               curve: Curves.easeInOut,
               child: ConstrainedBox(
-                constraints: item.isSelected ? const BoxConstraints() : const BoxConstraints(maxHeight: 0),
+                constraints: item.isSelected
+                    ? const BoxConstraints()
+                    : const BoxConstraints(maxHeight: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Gap(height: 20),
-                    AppText(text: item.body, height: 1.5, fontSize: AppSize.size.width * 0.05, color: AppColors.instance.dark400, maxLines: 50000, textAlign: TextAlign.start),
+                    AppText(
+                      text: item.body,
+                      height: 1.5,
+                      fontSize: AppSize.size.width * 0.05,
+                      color: AppColors.instance.dark400,
+                      maxLines: 50000,
+                      textAlign: TextAlign.start,
+                    ),
                     Gap(height: 20),
                   ],
                 ),

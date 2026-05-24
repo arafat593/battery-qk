@@ -38,7 +38,11 @@ Type: ${context.provider.runtimeType}
   }
 
   @override
-  void didUpdateProvider(ProviderObserverContext context, Object? previousValue, Object? newValue) {
+  void didUpdateProvider(
+    ProviderObserverContext context,
+    Object? previousValue,
+    Object? newValue,
+  ) {
     _log('''
 🌀 Provider Updated
 ---------------------------------------
@@ -52,7 +56,12 @@ New: $newValue
   }
 
   @override
-  void mutationError(ProviderObserverContext context, Mutation<Object?> mutation, Object error, StackTrace stackTrace) {
+  void mutationError(
+    ProviderObserverContext context,
+    Mutation<Object?> mutation,
+    Object error,
+    StackTrace stackTrace,
+  ) {
     _log('''
 ❌ Mutation Error
 ---------------------------------------
@@ -66,7 +75,10 @@ Stack Trace: $stackTrace
   }
 
   @override
-  void mutationReset(ProviderObserverContext context, Mutation<Object?> mutation) {
+  void mutationReset(
+    ProviderObserverContext context,
+    Mutation<Object?> mutation,
+  ) {
     _log('''
 🔄 Mutation Reset
 ---------------------------------------
@@ -78,7 +90,10 @@ Mutation: ${mutation.runtimeType}
   }
 
   @override
-  void mutationStart(ProviderObserverContext context, Mutation<Object?> mutation) {
+  void mutationStart(
+    ProviderObserverContext context,
+    Mutation<Object?> mutation,
+  ) {
     _log('''
 🚀 Mutation Started
 ---------------------------------------
@@ -91,7 +106,11 @@ State Before: $mutation
   }
 
   @override
-  void mutationSuccess(ProviderObserverContext context, Mutation<Object?> mutation, Object? result) {
+  void mutationSuccess(
+    ProviderObserverContext context,
+    Mutation<Object?> mutation,
+    Object? result,
+  ) {
     _log('''
 ✅ Mutation Success
 ---------------------------------------
@@ -117,7 +136,11 @@ Arguments: ${invocation.positionalArguments}
   }
 
   @override
-  void providerDidFail(ProviderObserverContext context, Object error, StackTrace stackTrace) {
+  void providerDidFail(
+    ProviderObserverContext context,
+    Object error,
+    StackTrace stackTrace,
+  ) {
     _log('''
 ⚠️ Provider Error
 ---------------------------------------

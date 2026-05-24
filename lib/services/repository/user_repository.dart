@@ -18,9 +18,7 @@ class UserRepository {
     try {
       var response = await _apiServices.postServices(
         url: _api.userFavoritesToggle,
-        body: {
-          "business_info_id": businessInfoId
-        }
+        body: {"business_info_id": businessInfoId},
       );
       return response;
     } catch (e) {
@@ -32,7 +30,7 @@ class UserRepository {
   Future<dynamic> deleteFavorite(int id) async {
     try {
       var response = await _apiServices.deleteServices(
-        url: "${_api.userFavorites}/$id"
+        url: "${_api.userFavorites}/$id",
       );
       return response;
     } catch (e) {
@@ -44,7 +42,7 @@ class UserRepository {
   Future<dynamic> checkFavoriteExists(int id) async {
     try {
       var response = await _apiServices.getServices(
-        "${_api.userFavorites}/$id/exists"
+        "${_api.userFavorites}/$id/exists",
       );
       return response;
     } catch (e) {
@@ -127,7 +125,7 @@ class UserRepository {
         // Regular JSON PATCH for text-only updates
         response = await _apiServices.patchServices(
           url: _api.userSettings,
-          body: body
+          body: body,
         );
       }
       return response;
@@ -144,7 +142,7 @@ class UserRepository {
 
       String fileName = file.path.split('/').last;
       var mimeType = lookupMimeType(file.path);
-      
+
       FormData formData = FormData.fromMap({
         "image": await MultipartFile.fromFile(
           file.path,
@@ -157,7 +155,7 @@ class UserRepository {
         url: _api.userSettings,
         body: formData,
       );
-      
+
       return response;
     } catch (e) {
       errorLog("updateProfilePhoto repo", e);

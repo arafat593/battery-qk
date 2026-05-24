@@ -54,8 +54,7 @@ class CustomFloatingSearchWidget extends StatelessWidget {
           hintText: hintText ?? "Search...",
 
           /// Prefix Icon
-          prefixIcon: prefixIcon ??
-              const Icon(Icons.search, size: 20),
+          prefixIcon: prefixIcon ?? const Icon(Icons.search, size: 20),
 
           /// Suffix Icon
           suffixIcon: suffixIcon,
@@ -63,8 +62,8 @@ class CustomFloatingSearchWidget extends StatelessWidget {
           filled: true,
           fillColor: fillColor ?? Colors.grey.shade100,
 
-          contentPadding: contentPadding ??
-              const EdgeInsets.symmetric(vertical: 12),
+          contentPadding:
+              contentPadding ?? const EdgeInsets.symmetric(vertical: 12),
 
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 12),

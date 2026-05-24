@@ -34,11 +34,7 @@ class BusinessProfileInfoRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: iconSize,
-            color: iconColor,
-          ),
+          Icon(icon, size: iconSize, color: iconColor),
           Gap(width: spacing),
           Expanded(
             child: AppText(

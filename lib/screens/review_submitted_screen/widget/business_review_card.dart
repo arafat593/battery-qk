@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
-import '../../../constant/app_colors.dart';
-import '../../../widgets/texts/app_text.dart';
-import '../../business_profile/widget/rating_widget.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/screens/business_profile/widget/rating_widget.dart'; 
 
 class BusinessReviewCard extends StatelessWidget {
   final String businessName;

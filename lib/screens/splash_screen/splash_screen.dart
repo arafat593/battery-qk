@@ -7,12 +7,11 @@ import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-
-import '../../routes/app_routes.dart';
-import '../../routes/app_routes_key.dart';
-import '../../services/storage/storage_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../utils/app_log.dart';
+import 'package:olabisiolai_flutter_app/utils/app_log.dart'; 
+import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
+import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});

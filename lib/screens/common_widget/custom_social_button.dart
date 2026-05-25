@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../widgets/app_image/app_image.dart';
-import '../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class CustomSocialButton extends StatelessWidget {
   final String label;

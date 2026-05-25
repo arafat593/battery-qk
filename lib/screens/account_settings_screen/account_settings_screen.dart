@@ -8,7 +8,6 @@ import 'package:olabisiolai_flutter_app/screens/account_settings_screen/widget/a
 import 'package:olabisiolai_flutter_app/screens/auth_screen/login_screen/provider/login_provider.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
-import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
 import '../../../../widgets/texts/app_text.dart';
 import '../../../utils/gap.dart';
 

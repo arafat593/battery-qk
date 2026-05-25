@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../constant/app_asserts_icons_path.dart';
-import '../../../constant/app_colors.dart';
-import '../../../utils/gap.dart';
-import '../../../widgets/buttons/app_button.dart';
 import 'business_profile_info_row.dart';
 
 class BusinessProfileActionSection extends StatelessWidget {

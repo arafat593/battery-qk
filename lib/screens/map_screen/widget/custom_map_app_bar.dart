@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import '../../../widgets/app_image/app_image.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
 
 class CustomMapAppBar extends StatelessWidget {
   const CustomMapAppBar({

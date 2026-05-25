@@ -5,9 +5,9 @@ import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/widget/message_heading_title.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/provider/message_provider.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
-import '../../../utils/app_size.dart';
-import '../../../widgets/texts/app_text.dart';
-import '../../utils/gap.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   const MessageScreen({super.key});

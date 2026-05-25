@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
-
-import '../../../constant/app_colors.dart';
-import '../../../widgets/app_image/app_image.dart';
-import '../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 //// ---------------- SERVICE TILE ----------------
 class HomeServiceListTile extends StatelessWidget {

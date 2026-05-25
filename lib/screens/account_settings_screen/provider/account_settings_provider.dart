@@ -211,7 +211,7 @@ class AccountSettingsNotifier extends StateNotifier<AccountSettingsState> {
         phone: phoneController.text,
         location: locationController.text,
         wantsMarketingEmails: state.wantsMarketingEmails,
-        imagePath: state.pickedImagePath, // Pass the image path here
+        imagePath: state.pickedImagePath,
         settings: {
           "notifications": {
             "email": state.emailNotifications,

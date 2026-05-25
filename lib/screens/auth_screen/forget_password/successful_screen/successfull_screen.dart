@@ -50,7 +50,7 @@ class SuccessFullScreen extends StatelessWidget {
                       Gap(height: 12),
                       AppText(
                         text:
-                            'Your new password created successfully. Please login by new password. ',
+                            'Your new password created successfully.Please login by new password. ',
                         textAlign: TextAlign.center,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,

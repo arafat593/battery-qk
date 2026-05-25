@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../constant/app_asserts_icons_path.dart';
-import '../../../constant/app_colors.dart';
-import '../../../utils/app_size.dart';
-import '../../../utils/gap.dart';
-import '../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'business_profile_service_item.dart';
 
 class BusinessProfileServiceSection extends StatelessWidget {

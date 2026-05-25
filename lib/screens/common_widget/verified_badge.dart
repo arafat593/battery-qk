@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../constant/app_colors.dart';
-import '../../utils/gap.dart';
-import '../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class VerifiedBadge extends StatelessWidget {
   final String text;

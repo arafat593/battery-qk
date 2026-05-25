@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class CustomSectionTitle extends StatelessWidget {
   final String title;

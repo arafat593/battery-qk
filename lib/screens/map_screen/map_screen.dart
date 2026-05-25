@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:olabisiolai_flutter_app/screens/map_screen/widget/custom_map_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
 import 'package:olabisiolai_flutter_app/screens/map_screen/widget/map_location_sheet_widget.dart';
-
-import '../../constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});

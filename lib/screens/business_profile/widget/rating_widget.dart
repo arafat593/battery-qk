@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-import '../../../utils/gap.dart';
 
 class RatingWidget extends StatelessWidget {
   final double rating; // e.g. 4.0, 3.5

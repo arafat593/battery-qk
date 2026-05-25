@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
+import 'package:olabisiolai_flutter_app/screens/common_widget/professional_card.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
-import '../../../widgets/texts/app_text.dart';
-import '../../common_widget/professional_card.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class CategoryContent extends StatelessWidget {
   final String? title;

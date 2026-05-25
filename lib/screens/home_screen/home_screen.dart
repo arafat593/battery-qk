@@ -6,18 +6,17 @@ import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_app_bar.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_category_grid.dart';
 import 'package:olabisiolai_flutter_app/screens/common_widget/professional_card.dart';
-import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_section_header.dart';
-import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_service_tile.dart';
-import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
-
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/provider/home_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/account_settings_screen/provider/account_settings_provider.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-import '../account_settings_screen/provider/account_settings_provider.dart';
-import '../app_navigation_screen/app_navigation_screen.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:olabisiolai_flutter_app/screens/app_navigation_screen/app_navigation_screen.dart';
+import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_section_header.dart';
+import 'package:olabisiolai_flutter_app/screens/home_screen/widget/home_service_tile.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

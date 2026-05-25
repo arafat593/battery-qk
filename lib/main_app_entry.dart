@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/error_handling_screen/error_screen.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import 'package:olabisiolai_flutter_app/utils/app_theme.dart';
 import 'package:olabisiolai_flutter_app/utils/app_theme_configuration.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/utils/observer/logger_ob_server.dart';

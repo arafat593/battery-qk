@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
-
-import '../../../widgets/app_image/app_image_circular.dart';
-import '../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class BusinessProfileServiceItem extends StatelessWidget {
   final String name;

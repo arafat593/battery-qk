@@ -10,7 +10,6 @@ import 'package:olabisiolai_flutter_app/screens/account_settings_screen/provider
 import 'package:olabisiolai_flutter_app/screens/message_screen/provider/message_provider.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import '../../constant/app_asserts_icons_path.dart';
-import '../../error_handling_screen/error_screen.dart';
 import '../../services/storage/storage_services.dart';
 import '../../utils/app_log.dart';
 

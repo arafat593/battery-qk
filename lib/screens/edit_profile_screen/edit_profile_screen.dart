@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/screens/account_settings_screen/provider/account_settings_provider.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
+import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/inputs/app_input_widget_tow.dart';
-import '../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/gap.dart';
-import '../../widgets/custom_app_bar/custom_app_bar.dart';
-import '../account_settings_screen/provider/account_settings_provider.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});

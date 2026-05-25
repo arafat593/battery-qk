@@ -150,6 +150,7 @@ class BusinessProfileReviewNotifier
 
       if (response != null) {
         AppSnackBar.instance.success("Review submitted successfully.");
+        AppRoutes.instance.pop(); 
         AppRoutes.instance.pushReplacementNamed(
           AppRoutesKey.instance.reviewSubmittedScreen,
           extra: {

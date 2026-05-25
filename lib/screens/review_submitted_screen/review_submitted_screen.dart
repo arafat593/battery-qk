@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
-import 'package:olabisiolai_flutter_app/screens/business_profile/widget/rating_widget.dart';
 import 'package:olabisiolai_flutter_app/screens/review_submitted_screen/widget/business_review_card.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-
-import '../../widgets/custom_app_bar/custom_app_bar.dart';
-import '../app_navigation_screen/app_navigation_screen.dart';
+import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 
 class ReviewSubmittedScreen extends StatelessWidget {
   final Map<String, dynamic>? data;

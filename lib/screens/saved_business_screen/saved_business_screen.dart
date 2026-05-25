@@ -8,7 +8,7 @@ import 'package:olabisiolai_flutter_app/screens/saved_business_screen/provider/s
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
-import '../../utils/gap.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
 
 class SavedBusinessesScreen extends ConsumerStatefulWidget {
   const SavedBusinessesScreen({super.key});

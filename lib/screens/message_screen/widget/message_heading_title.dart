@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/constant/app_api_url.dart';
-import '../../../utils/app_size.dart';
-import '../../../utils/gap.dart';
-import '../../../widgets/app_image/app_image_circular.dart';
-import '../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/utils/app_size.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart'; 
 
 class MessageHeadingTitle extends StatelessWidget {
   final Function()? onTap;

@@ -5,12 +5,12 @@ import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
-import '../../../widgets/texts/app_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../auth_screen/login_screen/provider/login_provider.dart';
-import '../account_settings_screen/provider/account_settings_provider.dart';
-import '../saved_business_screen/provider/saved_business_provider.dart';
-import '../../utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/screens/account_settings_screen/provider/account_settings_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/saved_business_screen/provider/saved_business_provider.dart';
+import 'package:olabisiolai_flutter_app/screens/auth_screen/login_screen/provider/login_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});

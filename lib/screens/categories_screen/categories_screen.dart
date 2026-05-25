@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/screens/app_navigation_screen/app_navigation_screen.dart';
 import 'package:olabisiolai_flutter_app/screens/categories_screen/widget/categories_content.dart';
 import 'package:olabisiolai_flutter_app/screens/categories_screen/widget/category_side_bar.dart';
 import 'package:olabisiolai_flutter_app/screens/map_screen/widget/custom_map_app_bar.dart';
-
 import 'package:olabisiolai_flutter_app/widgets/inputs/custom_floationg_search_widget.dart';
-import '../../constant/app_asserts_icons_path.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:olabisiolai_flutter_app/screens/home_screen/provider/home_provider.dart';
-import '../app_navigation_screen/app_navigation_screen.dart';
+
 
 class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});

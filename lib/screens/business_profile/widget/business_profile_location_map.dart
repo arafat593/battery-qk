@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../constant/app_colors.dart';
-import '../../../utils/gap.dart';
-import '../../../widgets/texts/app_text.dart';
 
 class BusinessProfileLocationMap extends StatelessWidget {
   final double? latitude;

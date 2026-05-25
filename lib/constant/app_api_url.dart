@@ -50,7 +50,6 @@ class AppApiUrl {
 
 String _getDomain() {
   const String liveServer = "https://olabisiolai.maktechlaravel.cloud";
-  const String localServer = "http://10.10.7.8:6008";
 
   try {
     if (kDebugMode) {

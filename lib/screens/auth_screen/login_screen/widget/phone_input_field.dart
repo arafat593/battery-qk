@@ -5,7 +5,6 @@ import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
 import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/screens/auth_screen/login_screen/provider/login_provider.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
-import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import '../../../../utils/gap.dart';

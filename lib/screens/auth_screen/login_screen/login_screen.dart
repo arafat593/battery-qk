@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes.dart';
+import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
+import 'package:olabisiolai_flutter_app/screens/auth_screen/login_screen/provider/login_provider.dart';
 import 'package:olabisiolai_flutter_app/screens/auth_screen/login_screen/widget/phone_input_field.dart';
+import 'package:olabisiolai_flutter_app/screens/common_widget/custom_social_button.dart';
+import 'package:olabisiolai_flutter_app/screens/common_widget/custom_text_span.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
-import '../../../constant/app_asserts_icons_path.dart';
-import '../../../constant/app_colors.dart';
-import '../../../routes/app_routes.dart';
-import '../../../routes/app_routes_key.dart';
-import '../../../utils/gap.dart';
-import '../../../widgets/app_image/app_image.dart';
-import '../../../widgets/texts/app_text.dart';
-import '../../common_widget/custom_social_button.dart';
-import '../../common_widget/custom_text_span.dart';
-import 'provider/login_provider.dart';
+import 'package:olabisiolai_flutter_app/utils/gap.dart';
+import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
+
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -23,7 +24,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(loginProvider);
+    ref.watch(loginProvider);
 
     return Scaffold(
       body: Stack(

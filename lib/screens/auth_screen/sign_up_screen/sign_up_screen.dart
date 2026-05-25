@@ -90,7 +90,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                 Consumer(
                   builder: (context, ref, child) {
-                    var provider = ref.watch(signUpProvider);
+                    ref.watch(signUpProvider);
                     return AppButton(
                       title: state.isLoading ? "Loading..." : "Continue",
                       onTap: state.isLoading

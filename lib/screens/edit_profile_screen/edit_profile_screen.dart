@@ -17,7 +17,6 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
-  bool _obscureCurrent = true;
 
   @override
   Widget build(BuildContext context) {

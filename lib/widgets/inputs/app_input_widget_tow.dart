@@ -23,7 +23,7 @@ class AppInputWidgetTwo extends StatefulWidget {
     this.keyboardType,
     this.fillColor,
     this.elevation = 0.0,
-    this.elevationColor,
+    this.elevationColor, 
     this.minLines = 1,
     this.maxLines = 1,
     this.readOnly = false,

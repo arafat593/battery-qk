@@ -38,8 +38,10 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     if (selectedFilter == 1) {
       // Unread
       filteredConversations = state.conversations.where((conv) {
-        final int unreadCount =
-            int.tryParse(conv['unread_count']?.toString() ?? '0') ?? 0;
+        final dynamic rawUnread = conv['unread_count'];
+        final int unreadCount = rawUnread is int
+            ? rawUnread
+            : (int.tryParse(rawUnread?.toString() ?? '0') ?? 0);
         return unreadCount > 0;
       }).toList();
     } else if (selectedFilter == 2) {

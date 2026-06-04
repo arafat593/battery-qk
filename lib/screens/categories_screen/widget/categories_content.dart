@@ -91,6 +91,10 @@ class CategoryContent extends StatelessWidget {
                   imageUrl:
                       pro['logo_url'] ??
                       'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                  phone: pro['phone'] ?? pro['mobile'],
+                  vendorUuid: pro['vendor']?['uuid']?.toString() ?? pro['vendor_uuid']?.toString(),
+                  businessName: pro['business_name'] ?? pro['name'],
+                  logoUrl: pro['logo_url'],
                 );
               },
             ),

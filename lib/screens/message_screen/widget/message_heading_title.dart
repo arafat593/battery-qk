@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olabisiolai_flutter_app/constant/app_api_url.dart';
+import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image_circular.dart';
@@ -85,9 +86,7 @@ class MessageHeadingTitle extends StatelessWidget {
           }
         }
       }
-      if (otherParticipant == null) {
-        otherParticipant = resolveUser(participants.first);
-      }
+      otherParticipant ??= resolveUser(participants.first);
     }
 
     String displayName =
@@ -171,9 +170,11 @@ class MessageHeadingTitle extends StatelessWidget {
       }
     }
 
-    final int unreadCount =
-        int.tryParse(conversation['unread_count']?.toString() ?? '0') ?? 0;
-    final bool hasUnread = unreadCount > 0;
+    final dynamic rawUnread = conversation['unread_count'];
+    final int unreadCount = rawUnread is int
+        ? rawUnread
+        : (int.tryParse(rawUnread?.toString() ?? '0') ?? 0);
+    final bool hasUnread = unreadCount > 0; 
 
     return GestureDetector(
       onTap: onTap,
@@ -261,10 +262,12 @@ class MessageHeadingTitle extends StatelessWidget {
                 const Gap(height: 10),
                 if (hasUnread)
                   Container(
-                    width: 8,
+                    width: 8, 
                     height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.redAccent,
+                    decoration: BoxDecoration(
+                      color: hasUnread
+                          ? AppColors.instance.error
+                          : Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                   ),

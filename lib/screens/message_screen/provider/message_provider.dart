@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/chat_repository.dart';
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
@@ -45,6 +46,7 @@ class MessageState {
 class MessageNotifier extends StateNotifier<MessageState> {
   final ChatRepository _chatRepository = ChatRepository.instance;
   final UserRepository _userRepository = UserRepository.instance;
+  Timer? _pollingTimer;
 
   MessageNotifier() : super(MessageState()) {
     init();
@@ -53,6 +55,20 @@ class MessageNotifier extends StateNotifier<MessageState> {
   Future<void> init() async {
     await fetchProfile();
     await fetchConversations();
+    _startPolling();
+  }
+
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      if (state.searchQuery.isEmpty) {
+        fetchConversations(background: true);
+      }
+    });
   }
 
   Future<void> fetchProfile() async {
@@ -70,8 +86,8 @@ class MessageNotifier extends StateNotifier<MessageState> {
     }
   }
 
-  Future<void> fetchConversations() async {
-    if (state.conversations.isEmpty) {
+  Future<void> fetchConversations({bool background = false}) async {
+    if (state.conversations.isEmpty && !background) {
       state = state.copyWith(isLoading: true);
     }
     try {
@@ -84,11 +100,15 @@ class MessageNotifier extends StateNotifier<MessageState> {
           items = response['data']['conversations'];
         }
       }
-      state = state.copyWith(isLoading: false, conversations: items);
+      if (mounted) {
+        state = state.copyWith(isLoading: false, conversations: items);
+      }
       log("Conversations fetched: ${items.length}");
     } catch (e) {
       errorLog("fetchConversations", e);
-      state = state.copyWith(isLoading: false);
+      if (mounted) {
+        state = state.copyWith(isLoading: false);
+      }
     }
   }
 
@@ -108,11 +128,28 @@ class MessageNotifier extends StateNotifier<MessageState> {
           items = response['data']['conversations'];
         }
       }
-      state = state.copyWith(isLoading: false, conversations: items);
+      if (mounted) {
+        state = state.copyWith(isLoading: false, conversations: items);
+      }
     } catch (e) {
       errorLog("searchConversations", e);
-      state = state.copyWith(isLoading: false);
+      if (mounted) {
+        state = state.copyWith(isLoading: false);
+      }
     }
+  }
+
+  void markConversationAsRead(String conversationUuid) {
+    if (state.conversations.isEmpty) return;
+    final updatedList = state.conversations.map((conv) {
+      if (conv['uuid'] == conversationUuid) {
+        final updatedConv = Map<String, dynamic>.from(conv);
+        updatedConv['unread_count'] = 0;
+        return updatedConv;
+      }
+      return conv;
+    }).toList();
+    state = state.copyWith(conversations: updatedList);
   }
 
   Future<void> deleteConversation(String uuid) async {
@@ -128,5 +165,11 @@ class MessageNotifier extends StateNotifier<MessageState> {
     } catch (e) {
       errorLog("deleteConversation in notifier", e);
     }
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
 }

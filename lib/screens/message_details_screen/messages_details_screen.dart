@@ -328,8 +328,11 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
                       final sender = msg['sender'];
                       final bool isMe =
                           sender != null &&
-                          (sender['id'] == state.currentUserId ||
-                              sender['uuid'] == state.currentUserUuid);
+                          (sender['id']?.toString() == '2' ||
+                              (sender['id']?.toString() != '1' &&
+                                  (msg['is_own'] == true ||
+                                      sender['id'] == state.currentUserId ||
+                                      sender['uuid'] == state.currentUserUuid)));
 
                       // Parse attachment URLs
                       List<String> attachmentUrls = [];
@@ -375,12 +378,15 @@ class _MessagesDetailsScreenState extends ConsumerState<MessagesDetailsScreen> {
                         }
                       }
 
-                      return MessageBubble(
-                        message: msg['body'] ?? "",
-                        time: timeText,
-                        isMe: isMe,
-                        showStatus: isMe,
-                        imageUrls: attachmentUrls,
+                      return Align(
+                        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                        child: MessageBubble(
+                          message: msg['body'] ?? "",
+                          time: timeText,
+                          isMe: isMe,
+                          showStatus: isMe,
+                          imageUrls: attachmentUrls,
+                        ),
                       );
                     },
                   ),

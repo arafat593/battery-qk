@@ -228,6 +228,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   imageUrl:
                                       service['logo_url'] ??
                                       'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
+                                  phone: service['phone'] ?? service['mobile'],
+                                  vendorUuid: service['vendor']?['uuid']?.toString() ?? service['vendor_uuid']?.toString(),
+                                  businessName: service['business_name'] ?? service['name'],
+                                  logoUrl: service['logo_url'],
                                 ),
                               );
                             }),
@@ -341,6 +345,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       pro['logo_url'] ??
                                       'https://static.photo-ac.com/static/assets/image/logo/photo_open_graph.jpeg',
                                   width: AppSize.size.width * 0.7,
+                                  phone: pro['phone'] ?? pro['mobile'],
+                                  vendorUuid: pro['vendor']?['uuid']?.toString() ?? pro['vendor_uuid']?.toString(),
+                                  businessName: pro['business_name'] ?? pro['name'],
+                                  logoUrl: pro['logo_url'],
                                 );
                               },
                             ),

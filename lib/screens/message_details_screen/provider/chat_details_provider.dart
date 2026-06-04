@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show Ref;
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/provider/message_provider.dart';
@@ -87,6 +88,7 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
     await fetchProfile();
     if (!mounted) return;
     if (state.conversationUuid != null && state.conversationUuid!.isNotEmpty) {
+      ref.read(messageProvider.notifier).markConversationAsRead(state.conversationUuid!);
       await fetchMessages();
       _startPolling();
     }
@@ -153,6 +155,60 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
         }
       }
 
+      // Auto mark unread messages as read and update locally
+      final String? myUuid = state.currentUserUuid;
+      final int? myId = state.currentUserId;
+
+      for (var msg in items) {
+        if (msg is! Map) continue;
+        final dynamic rawReadBy = msg['read_by'];
+        final List<dynamic>? readBy = rawReadBy is List ? rawReadBy : null;
+        final sender = msg['sender'];
+        
+        final bool isMe = msg['is_own'] == true ||
+            (sender is Map &&
+                (sender['id']?.toString() == myId?.toString() ||
+                    sender['uuid'] == myUuid));
+
+        final bool isAlreadyRead = msg['is_read'] == true ||
+            msg['read_at'] != null ||
+            (readBy != null &&
+                readBy.any((element) {
+                  if (element == null) return false;
+                  if (element is Map) {
+                    final dynamic uid = element['uuid'] ?? element['id'] ?? element['user_id'];
+                    return uid?.toString() == myUuid ||
+                        uid?.toString() == myId?.toString();
+                  }
+                  final String elementStr = element.toString();
+                  return elementStr == myUuid || elementStr == myId?.toString();
+                }));
+
+        final String? msgUuid = msg['uuid']?.toString() ?? msg['id']?.toString();
+
+        debugPrint("DEBUG Message read check -> UUID: $msgUuid, isMe: $isMe, isAlreadyRead: $isAlreadyRead, sender: $sender");
+
+        if (!isMe && !isAlreadyRead) {
+          if (msgUuid != null) {
+            debugPrint("DEBUG Calling readMessage API for UUID: $msgUuid");
+            _chatRepository.readMessage(msgUuid).then((response) {
+              debugPrint("DEBUG readMessage API Response for $msgUuid: $response");
+            }).catchError((err) {
+              debugPrint("DEBUG readMessage API Error for $msgUuid: $err");
+            });
+            
+            // Update local list to prevent subsequent duplicate API calls
+            if (msg['read_by'] == null) {
+              msg['read_by'] = [myUuid ?? myId];
+            } else if (msg['read_by'] is List) {
+              final List<dynamic> updatedReadBy = List.from(msg['read_by']);
+              updatedReadBy.add(myUuid ?? myId);
+              msg['read_by'] = updatedReadBy;
+            }
+          }
+        }
+      }
+
       state = state.copyWith(
         isLoading: false,
         messages: items,
@@ -161,23 +217,8 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
         peer: peerData,
       );
 
-      // Auto mark unread messages as read
-      for (var msg in items) {
-        final List<dynamic>? readBy = msg['read_by'];
-        final sender = msg['sender'];
-        final bool isMe =
-            sender != null &&
-            (sender['id'] == state.currentUserId ||
-                sender['uuid'] == state.currentUserUuid);
-
-        if (!isMe &&
-            (readBy == null || !readBy.contains(state.currentUserId))) {
-          final String? msgUuid = msg['uuid'];
-          if (msgUuid != null) {
-            _chatRepository.readMessage(msgUuid);
-          }
-        }
-      }
+      // Locally mark this conversation as read in messageProvider
+      ref.read(messageProvider.notifier).markConversationAsRead(uuid);
     } catch (e) {
       errorLog("fetchMessages", e);
       if (mounted) {

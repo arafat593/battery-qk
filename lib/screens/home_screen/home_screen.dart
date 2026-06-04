@@ -356,7 +356,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: HomeSectionHeader(title: "Recent Popular Services"),
+                  child: HomeSectionHeader(title: "Recent Popular Services "),
                 ),
                 SliverToBoxAdapter(
                   child: Padding(

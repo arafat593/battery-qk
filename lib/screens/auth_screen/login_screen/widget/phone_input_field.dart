@@ -108,7 +108,7 @@ class _PhoneInputFieldState extends ConsumerState<PhoneInputField> {
                 );
               },
               child: AppText(
-                text: "FORGET PASSWORD",
+                text: "Forgot password",
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: AppColors.instance.primary,

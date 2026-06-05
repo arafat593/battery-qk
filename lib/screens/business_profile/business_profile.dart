@@ -154,10 +154,10 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                       ? "Identity Verified"
                       : "Pending Verification",
                   iconColor: details?['verification_status'] == 'approved'
-                      ? AppColors.instance.success
+                      ? AppColors.instance.blue
                       : AppColors.instance.hintText,
                   textColor: details?['verification_status'] == 'approved'
-                      ? AppColors.instance.success
+                      ? AppColors.instance.blue 
                       : AppColors.instance.hintText,
                   iconSize: 14,
                   fontSize: 14,

@@ -18,40 +18,42 @@ class FaqScreen extends StatelessWidget {
         centerTitle: true,
         title: AppText(text: "FAQ", fontWeight: FontWeight.w500),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(AppSize.size.width * 0.05),
-        child: Consumer(
-          builder: (context, ref, child) {
-            var provider = ref.watch(fAQScreenProvider);
-            return provider.when(
-              data: (data) {
-                if (data.isEmpty) return Gap();
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    var item = data[index];
-                    return FaqCard(
-                      item: item,
-                      onTap: () {
-                        ref.read(fAQScreenProvider.notifier).changeItem(index);
-                      },
-                    );
-                  },
-                );
-              },
-              error: (error, stackTrace) {
-                return Center(child: AppText(text: "Something Was Wrong"));
-              },
-              loading: () => Skeletonizer(
-                child: ListView.builder(
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return FaqCardLoader();
-                  },
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(AppSize.size.width * 0.05),
+          child: Consumer(
+            builder: (context, ref, child) {
+              var provider = ref.watch(fAQScreenProvider);
+              return provider.when(
+                data: (data) {
+                  if (data.isEmpty) return Gap();
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      var item = data[index];
+                      return FaqCard(
+                        item: item,
+                        onTap: () {
+                          ref.read(fAQScreenProvider.notifier).changeItem(index);
+                        },
+                      );
+                    },
+                  );
+                },
+                error: (error, stackTrace) {
+                  return Center(child: AppText(text: "Something Was Wrong"));
+                },
+                loading: () => Skeletonizer(
+                  child: ListView.builder(
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return FaqCardLoader();
+                    },
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

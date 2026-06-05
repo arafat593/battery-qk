@@ -154,7 +154,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: CustomFloatingSearchWidget(
-                    hintText: "Find verified services...",
+                    hintText: "What are you looking for today?",
                     controller: _searchController,
                     prefixIcon: const Icon(Icons.search),
                     onChanged: (value) {
@@ -241,8 +241,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ] else ...[
                 if (categories.isNotEmpty) ...[
                   SliverToBoxAdapter(
-                    child: HomeSectionHeader(
-                      title: "Curated Categories",
+                    child: HomeSectionHeader( 
+                      title: "Explore Categories", 
                       actionText: _showAllCategories ? "Show Less" : "View All",
                       onActionTap: () {
                         setState(() {
@@ -301,7 +301,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
 
                 SliverToBoxAdapter(
-                  child: HomeSectionHeader(title: "Verified Professionals"),
+                  child: HomeSectionHeader(title: "Verified Businesses"), 
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(

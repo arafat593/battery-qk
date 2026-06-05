@@ -25,6 +25,7 @@ class AppApiUrl {
   String authOtpVerify = "/auth/otp/verify";
   String userResendOtp = "/auth/resend-otp";
   String googleLogin = "/auth/google/login";
+  String appleLogin = "/auth/apple/login";
 
   String authForgotPassword = "/auth/forgot-password";
   String authForgotResendOtp = "/auth/forgot-password/resend-otp";

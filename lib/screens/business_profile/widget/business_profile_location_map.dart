@@ -4,7 +4,7 @@ import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BusinessProfileLocationMap extends StatelessWidget {
+class BusinessProfileLocationMap extends StatefulWidget {
   final double? latitude;
   final double? longitude;
   final String? locationName;
@@ -16,25 +16,38 @@ class BusinessProfileLocationMap extends StatelessWidget {
     this.locationName,
   });
 
+  @override
+  State<BusinessProfileLocationMap> createState() => _BusinessProfileLocationMapState();
+}
+
+class _BusinessProfileLocationMapState extends State<BusinessProfileLocationMap> {
+  bool _useFallback = false;
+
   String _getStaticMapUrl() {
     final String apiKey = "AIzaSyDkW397ZVPp9dxR5hIUp-u5dvEhefNn52k";
-    if (latitude != null && longitude != null) {
-      return "https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=14&size=600x300&key=$apiKey";
-    } else if (locationName != null && locationName!.isNotEmpty) {
-      return "https://maps.googleapis.com/maps/api/staticmap?center=${Uri.encodeComponent(locationName!)}&zoom=14&size=600x300&key=$apiKey";
+    if (widget.latitude != null && widget.longitude != null) {
+      return "https://maps.googleapis.com/maps/api/staticmap?center=${widget.latitude},${widget.longitude}&zoom=14&size=600x300&key=$apiKey";
+    } else if (widget.locationName != null && widget.locationName!.isNotEmpty) {
+      return "https://maps.googleapis.com/maps/api/staticmap?center=${Uri.encodeComponent(widget.locationName!)}&zoom=14&size=600x300&key=$apiKey";
     }
     return "https://maps.googleapis.com/maps/api/staticmap?center=Lagos,Nigeria&zoom=14&size=600x300&key=$apiKey";
   }
 
+  String _getFallbackMapUrl() {
+    final double lat = widget.latitude ?? 6.5244;
+    final double lng = widget.longitude ?? 3.3792;
+    return "https://static-maps.yandex.ru/1.x/?ll=$lng,$lat&z=14&size=600,300&l=map&pt=$lng,$lat,pm2rdm";
+  }
+
   void _openDetailedMap() async {
     Uri uri;
-    if (latitude != null && longitude != null) {
+    if (widget.latitude != null && widget.longitude != null) {
       uri = Uri.parse(
-        "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+        "https://www.google.com/maps/search/?api=1&query=${widget.latitude},${widget.longitude}",
       );
-    } else if (locationName != null && locationName!.isNotEmpty) {
+    } else if (widget.locationName != null && widget.locationName!.isNotEmpty) {
       uri = Uri.parse(
-        "https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(locationName!)}",
+        "https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(widget.locationName!)}",
       );
     } else {
       uri = Uri.parse(
@@ -60,12 +73,12 @@ class BusinessProfileLocationMap extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         AppText(
-          text: locationName ?? "Location not specified",
+          text: widget.locationName ?? "Location not specified",
           fontSize: 14,
           fontWeight: FontWeight.w600,
           color: AppColors.instance.buttonColor,
         ),
-        Gap(height: 16),
+        const Gap(height: 16),
         GestureDetector(
           onTap: _openDetailedMap,
           child: Stack(
@@ -74,20 +87,39 @@ class BusinessProfileLocationMap extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  _getStaticMapUrl(),
+                  _useFallback ? _getFallbackMapUrl() : _getStaticMapUrl(),
                   height: 250,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 250,
-                    width: double.infinity,
-                    color: Colors.grey[200],
-                    child: const Icon(
-                      Icons.map_outlined,
-                      size: 50,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  errorBuilder: (context, error, stackTrace) {
+                    if (!_useFallback) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          setState(() {
+                            _useFallback = true;
+                          });
+                        }
+                      });
+                      return Container(
+                        height: 250,
+                        width: double.infinity,
+                        color: Colors.grey[200],
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return Container(
+                      height: 250,
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.map_outlined,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
                 ),
               ),
               // Center Marker (perfect center alignment)

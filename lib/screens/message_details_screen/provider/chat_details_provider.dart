@@ -134,16 +134,17 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
 
       var response = await _chatRepository.getMessages(uuid);
       if (!mounted) return;
-      List<dynamic> items = [];
+      List<Map<String, dynamic>> items = [];
       String? convName;
       String? convImageUrl;
       Map<String, dynamic>? peerData;
-      if (response != null && response['data'] != null) {
+      if (response != null && response['data'] != null) { 
+        List<dynamic> rawItems = [];
         if (response['data'] is List) {
-          items = response['data'];
+          rawItems = response['data'];
         } else if (response['data'] is Map) {
           if (response['data']['messages'] is List) {
-            items = response['data']['messages'];
+            rawItems = response['data']['messages'];
           }
           convName =
               response['data']['display_name']?.toString() ??
@@ -153,6 +154,11 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
             peerData = Map<String, dynamic>.from(response['data']['peer']);
           }
         }
+        for (var element in rawItems) {
+          if (element is Map) {
+            items.add(Map<String, dynamic>.from(element));
+          }
+        }
       }
 
       // Auto mark unread messages as read and update locally
@@ -160,7 +166,6 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       final int? myId = state.currentUserId;
 
       for (var msg in items) {
-        if (msg is! Map) continue;
         final dynamic rawReadBy = msg['read_by'];
         final List<dynamic>? readBy = rawReadBy is List ? rawReadBy : null;
         final sender = msg['sender'];
@@ -381,12 +386,12 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
     // If typing is true, set a timer to automatically set it to false after 3 seconds of inactivity
     if (isTyping) {
       _typingTimer?.cancel();
-      _typingTimer = Timer(const Duration(seconds: 3), () {
+      _typingTimer = Timer(const Duration(seconds: 5), () {
         setTyping(false);
       });
     }
   }
-
+ 
   @override
   void dispose() {
     _pollingTimer?.cancel();

@@ -25,46 +25,40 @@ class SuccessFullScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo
-                  Column(
-                    children: [
-                      Gap(height: 200),
-                      AppImage(
-                        path: AppAssertsIconsPath.instance.gidiraNameLogo,
-                        width: 116,
-                      ),
-                      Gap(height: 40),
-                      // Welcome Text
-                      AppText(
-                        text: 'Successful',
-                        fontSize: 36,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      Gap(height: 12),
-                      AppText(
-                        text:
-                            'Your new password created successfully.Please login by new password. ',
-                        textAlign: TextAlign.center,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      Gap(height: 30),
-                      AppButton(
-                        title: "Go To Login",
-                        onTap: () {
-                          AppRoutes.instance.pushNamed(
-                            AppRoutesKey.instance.loginScreen,
-                          );
-                        },
-                      ),
-                    ],
+                  AppImage(
+                    path: AppAssertsIconsPath.instance.gidiraNameLogo,
+                    width: 116,
+                  ),
+                  Gap(height: 40),
+                  // Welcome Text
+                  AppText(
+                    text: 'Successful',
+                    fontSize: 36,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  Gap(height: 12),
+                  AppText(
+                    text:
+                        'Your new password created successfully. Please login by new password.',
+                    textAlign: TextAlign.center,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  Gap(height: 30),
+                  AppButton(
+                    title: "Go To Login",
+                    onTap: () {
+                      AppRoutes.instance.pushNamed(
+                        AppRoutesKey.instance.loginScreen,
+                      );
+                    },
                   ),
                 ],
               ),

@@ -10,7 +10,7 @@ import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'business_profile_info_row.dart';
 
-class BusinessProfileActionSection extends StatelessWidget {
+class BusinessProfileActionSection extends StatefulWidget {
   final String? phone;
   final String? whatsapp;
   final String? website;
@@ -20,7 +20,7 @@ class BusinessProfileActionSection extends StatelessWidget {
   final String? vendorUuid;
   final String businessName;
   final String? logoUrl;
-
+ 
   const BusinessProfileActionSection({
     super.key,
     this.phone,
@@ -35,7 +35,16 @@ class BusinessProfileActionSection extends StatelessWidget {
   });
 
   @override
+  State<BusinessProfileActionSection> createState() => _BusinessProfileActionSectionState();
+}
+
+class _BusinessProfileActionSectionState extends State<BusinessProfileActionSection> {
+  bool _isPhoneVisible = false;
+
+  @override
   Widget build(BuildContext context) {
+    final hasPhone = widget.phone != null && widget.phone!.trim().isNotEmpty;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -50,34 +59,40 @@ class BusinessProfileActionSection extends StatelessWidget {
           children: [
             // 3. Action Buttons Section
             AppButton(
-              backgroundColor: (phone != null && phone!.trim().isNotEmpty)
+              backgroundColor: hasPhone
                   ? AppColors.instance.error
                   : AppColors.instance.hintText.withAlpha(50),
-              borderColor: (phone != null && phone!.trim().isNotEmpty)
+              borderColor: hasPhone
                   ? AppColors.instance.error
                   : AppColors.instance.hintText.withAlpha(50),
-              title: (phone != null && phone!.trim().isNotEmpty)
-                  ? phone!
+              title: hasPhone
+                  ? (_isPhoneVisible ? widget.phone! : "Show phone number")
                   : "Phone Not Available",
-              titleColor: (phone != null && phone!.trim().isNotEmpty)
+              titleColor: hasPhone
                   ? Colors.white
                   : AppColors.instance.hintText,
-              iconColor: (phone != null && phone!.trim().isNotEmpty)
+              iconColor: hasPhone
                   ? Colors.white
                   : AppColors.instance.hintText,
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
-              onTap: (phone != null && phone!.trim().isNotEmpty)
+              onTap: hasPhone
                   ? () async {
-                      final Uri launchUri = Uri(
-                        scheme: 'tel',
-                        path: phone!.trim(),
-                      );
-                      if (await canLaunchUrl(launchUri)) {
-                        await launchUrl(launchUri);
+                      if (!_isPhoneVisible) {
+                        setState(() {
+                          _isPhoneVisible = true;
+                        });
                       } else {
-                        AppSnackBar.instance.error(
-                          "Could not launch phone dialer",
+                        final Uri launchUri = Uri(
+                          scheme: 'tel',
+                          path: widget.phone!.trim(),
                         );
+                        if (await canLaunchUrl(launchUri)) {
+                          await launchUrl(launchUri);
+                        } else {
+                          AppSnackBar.instance.error(
+                            "Could not launch phone dialer",
+                          );
+                        }
                       }
                     }
                   : () {
@@ -92,44 +107,44 @@ class BusinessProfileActionSection extends StatelessWidget {
               leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
               iconColor: AppColors.instance.buttonColor,
               onTap: () {
-                if (vendorUuid != null && vendorUuid!.isNotEmpty) {
+                if (widget.vendorUuid != null && widget.vendorUuid!.isNotEmpty) {
                   AppRoutes.instance.pushNamed(
                     AppRoutesKey.instance.messagesDetailsScreen,
                     extra: {
                       "conversation_uuid": null,
-                      "chat_title": businessName,
-                      "other_user_uuid": vendorUuid,
-                      "avatar_url": logoUrl,
+                      "chat_title": widget.businessName,
+                      "other_user_uuid": widget.vendorUuid,
+                      "avatar_url": widget.logoUrl, 
                     },
                   );
                 } else {
                   AppSnackBar.instance.error(
                     "Direct messaging is not available for this vendor (Missing UUID)",
                   );
-                }
+                } 
               },
             ),
             Gap(height: 20),
             AppButton(
-              backgroundColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              backgroundColor: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor.withAlpha(15)
                   : AppColors.instance.hintText.withAlpha(20),
-              borderColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              borderColor: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor
                   : AppColors.instance.hintText,
-              title: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              title: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty)
                   ? "Chat Via WhatsApp"
                   : "WhatsApp Not Available",
               leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
-              titleColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              titleColor: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty) 
                   ? AppColors.instance.buttonColor
                   : AppColors.instance.hintText,
-              iconColor: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              iconColor: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty)
                   ? AppColors.instance.buttonColor
                   : AppColors.instance.hintText,
-              onTap: (whatsapp != null && whatsapp!.trim().isNotEmpty)
+              onTap: (widget.whatsapp != null && widget.whatsapp!.trim().isNotEmpty)
                   ? () async {
-                      final cleanNumber = whatsapp!.replaceAll(
+                      final cleanNumber = widget.whatsapp!.replaceAll(
                         RegExp(r'[^0-9]'),
                         '',
                       );
@@ -151,7 +166,7 @@ class BusinessProfileActionSection extends StatelessWidget {
                       );
                     },
             ),
-
+ 
             Gap(height: 30),
             BusinessProfileInfoRow(
               icon: Icons.av_timer_outlined,
@@ -169,14 +184,14 @@ class BusinessProfileActionSection extends StatelessWidget {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: onFavoriteTap,
+                    onTap: widget.onFavoriteTap,
                     child: BusinessProfileInfoRow(
-                      icon: isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                      text: isFavorite ? "SAVED" : "SAVE",
-                      iconColor: isFavorite
+                      icon: widget.isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                      text: widget.isFavorite ? "SAVED" : "SAVE",
+                      iconColor: widget.isFavorite
                           ? AppColors.instance.buttonColor
                           : AppColors.instance.hintText,
-                      textColor: isFavorite
+                      textColor: widget.isFavorite
                           ? AppColors.instance.buttonColor
                           : AppColors.instance.hintText,
                     ),
@@ -184,9 +199,9 @@ class BusinessProfileActionSection extends StatelessWidget {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (website != null && website!.trim().isNotEmpty)
+                    onTap: (widget.website != null && widget.website!.trim().isNotEmpty)
                         ? () async {
-                            var urlString = website!.trim();
+                            var urlString = widget.website!.trim();
                             if (!urlString.startsWith('http://') &&
                                 !urlString.startsWith('https://')) {
                               urlString = 'https://$urlString';
@@ -209,10 +224,10 @@ class BusinessProfileActionSection extends StatelessWidget {
                     child: BusinessProfileInfoRow(
                       icon: Icons.language,
                       text: "WEBSITE",
-                      iconColor: (website != null && website!.trim().isNotEmpty)
+                      iconColor: (widget.website != null && widget.website!.trim().isNotEmpty)
                           ? AppColors.instance.buttonColor
                           : AppColors.instance.hintText,
-                      textColor: (website != null && website!.trim().isNotEmpty)
+                      textColor: (widget.website != null && widget.website!.trim().isNotEmpty)
                           ? AppColors.instance.buttonColor
                           : AppColors.instance.hintText,
                     ),
@@ -220,7 +235,7 @@ class BusinessProfileActionSection extends StatelessWidget {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: onShareTap,
+                    onTap: widget.onShareTap,
                     child: BusinessProfileInfoRow(
                       icon: Icons.share,
                       text: "SHARE LISTING",

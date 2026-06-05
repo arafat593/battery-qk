@@ -46,155 +46,157 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // --- Profile Picture Update ---
-            GestureDetector(
-              onTap: state.isSaving
-                  ? null
-                  : () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => SafeArea(
-                          child: Wrap(
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.camera_alt),
-                                title: const Text('Camera'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  notifier.pickImage(ImageSource.camera);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.photo_library),
-                                title: const Text('Gallery'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  notifier.pickImage(ImageSource.gallery);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-              child: Center(
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        AppImageCircular(
-                          borderRadius: 100,
-                          height: 120,
-                          width: 120,
-                          filePath: state.pickedImagePath.isNotEmpty
-                              ? state.pickedImagePath
-                              : null,
-                          url:
-                              state.pickedImagePath.isEmpty &&
-                                  state.photo.isNotEmpty
-                              ? state.photo
-                              : (state.pickedImagePath.isEmpty
-                                    ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                                    : null),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(color: Colors.black12, blurRadius: 4),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              // --- Profile Picture Update ---
+              GestureDetector(
+                onTap: state.isSaving
+                    ? null
+                    : () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => SafeArea(
+                            child: Wrap(
+                              children: [
+                                ListTile(
+                                  leading: const Icon(Icons.camera_alt),
+                                  title: const Text('Camera'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    notifier.pickImage(ImageSource.camera);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.photo_library),
+                                  title: const Text('Gallery'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    notifier.pickImage(ImageSource.gallery);
+                                  },
+                                ),
                               ],
                             ),
-                            child: const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 20,
-                              color: Colors.black,
+                          ),
+                        );
+                      },
+                child: Center(
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          AppImageCircular(
+                            borderRadius: 100,
+                            height: 120,
+                            width: 120,
+                            filePath: state.pickedImagePath.isNotEmpty
+                                ? state.pickedImagePath
+                                : null,
+                            url:
+                                state.pickedImagePath.isEmpty &&
+                                    state.photo.isNotEmpty
+                                ? state.photo
+                                : (state.pickedImagePath.isEmpty
+                                      ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                                      : null),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black12, blurRadius: 4),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt_outlined,
+                                size: 20,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        if (state.isSaving)
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black26,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
+                          if (state.isSaving)
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black26,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                    const Gap(height: 10),
-                    AppText(
-                      text: state.isSaving ? "SAVING..." : "UPDATE LOGO",
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ],
+                        ],
+                      ),
+                      const Gap(height: 10),
+                      AppText(
+                        text: state.isSaving ? "SAVING..." : "UPDATE LOGO",
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const Gap(height: 30),
-
-            // --- Personal Information Section ---
-            SectionCard(
-              icon: Icons.person_outline,
-              title: "Personal Information",
-              children: [
-                AppInputWidgetTwo(
-                  title: "FULL NAME",
-                  controller: notifier.fullNameController,
-                ),
-                AppInputWidgetTwo(
-                  title: "EMAIL ADDRESS",
-                  controller: notifier.emailController,
-                ),
-                AppInputWidgetTwo(
-                  title: "PHONE NUMBER",
-                  controller: notifier.phoneController,
-                ),
-                AppInputWidgetTwo(
-                  title: "LOCATION / ADDRESS",
-                  prefix: Icon(Icons.location_on_outlined),
-                  controller: notifier.locationController,
-                ),
-              ],
-            ),
-
-            const Gap(height: 20),
-
-            SectionCard(
-              icon: Icons.lock_outline,
-              title: "Security",
-              children: [
-                AppInputWidgetTwo(
-                  title: "CURRENT PASSWORD",
-                  hintText: "Enter your current password",
-                ),
-                AppInputWidgetTwo(
-                  title: "NEW PASSWORD",
-                  hintText: "Enter your new password",
-                ),
-                AppInputWidgetTwo(
-                  title: "CONFIRM NEW PASSWORD",
-                  hintText: "Enter your confirm new password",
-                ),
-              ],
-            ),
-            const Gap(height: 40),
-          ],
+              const Gap(height: 30),
+  
+              // --- Personal Information Section ---
+              SectionCard(
+                icon: Icons.person_outline,
+                title: "Personal Information",
+                children: [
+                  AppInputWidgetTwo(
+                    title: "FULL NAME",
+                    controller: notifier.fullNameController,
+                  ),
+                  AppInputWidgetTwo(
+                    title: "EMAIL ADDRESS",
+                    controller: notifier.emailController,
+                  ),
+                  AppInputWidgetTwo(
+                    title: "PHONE NUMBER",
+                    controller: notifier.phoneController,
+                  ),
+                  AppInputWidgetTwo(
+                    title: "LOCATION / ADDRESS",
+                    prefix: Icon(Icons.location_on_outlined),
+                    controller: notifier.locationController,
+                  ),
+                ],
+              ),
+  
+              const Gap(height: 20),
+  
+              SectionCard(
+                icon: Icons.lock_outline,
+                title: "Security",
+                children: [
+                  AppInputWidgetTwo(
+                    title: "CURRENT PASSWORD",
+                    hintText: "Enter your current password",
+                  ),
+                  AppInputWidgetTwo(
+                    title: "NEW PASSWORD",
+                    hintText: "Enter your new password",
+                  ),
+                  AppInputWidgetTwo(
+                    title: "CONFIRM NEW PASSWORD",
+                    hintText: "Enter your confirm new password",
+                  ),
+                ],
+              ),
+              const Gap(height: 40),
+            ],
+          ),
         ),
       ),
     );

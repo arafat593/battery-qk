@@ -11,6 +11,7 @@ import '../../../../widgets/app_image/app_image.dart';
 import '../../../../widgets/buttons/app_button.dart';
 import '../../../../widgets/inputs/app_input_widget_tow.dart';
 import '../../../../widgets/texts/app_text.dart';
+import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import '../provider/recover_password_provider.dart';
 
 class RecoverPassword extends ConsumerStatefulWidget {
@@ -80,6 +81,11 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
     final isLoading = ref.watch(recoverPasswordProvider);
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const CustomAppBar(
+        title: "",
+        backgroundColor: Colors.transparent,
+      ),
       body: Form(
         key: formKey,
         child: Container(
@@ -91,16 +97,17 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
             ),
           ),
           child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Gap(height: 100),
-
-                  AppImage(
-                    path: AppAssertsIconsPath.instance.gidiraNameLogo,
-                    width: 116,
-                  ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AppImage(
+                      path: AppAssertsIconsPath.instance.gidiraNameLogo,
+                      width: 116,
+                    ),
 
                   Gap(height: 40),
 
@@ -147,11 +154,12 @@ class _RecoverPasswordState extends ConsumerState<RecoverPassword> {
                     isLoading: isLoading,
                   ),
                 ],
-              ),
+              ), 
             ),
           ),
         ),
       ),
+      ), 
     );
   }
 }

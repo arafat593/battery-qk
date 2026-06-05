@@ -15,21 +15,23 @@ class PrivacyPolicyScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: CustomAppBar(title: "Privacy Policy"),
-      body: state.when(
-        data: (data) {
-          if (data.isEmpty) {
-            return const Center(child: AppText(text: "No Content Available"));
-          }
-          return BaseDataWidget(data: data);
-        },
-        error: (error, stackTrace) =>
-            const Center(child: AppText(text: "Something went wrong!")),
-        loading: () => Skeletonizer(
-          child: BaseDataWidget(
-            data: List.generate(
-              20,
-              (index) => "<p>Loading privacy policy details from server...</p>",
-            ).join(""),
+      body: SafeArea(
+        child: state.when(
+          data: (data) {
+            if (data.isEmpty) {
+              return const Center(child: AppText(text: "No Content Available"));
+            }
+            return BaseDataWidget(data: data);
+          },
+          error: (error, stackTrace) =>
+              const Center(child: AppText(text: "Something went wrong!")),
+          loading: () => Skeletonizer(
+            child: BaseDataWidget(
+              data: List.generate(
+                20,
+                (index) => "<p>Loading privacy policy details from server...</p>",
+              ).join(""),
+            ),
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
@@ -196,31 +197,31 @@ class BusinessProfileShareSheet extends StatelessWidget {
                   ),
                 ),
                 const Gap(height: 15),
-                Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ShareSocialIcon(
-                      icon: Icons.chat,
+                      icon: const FaIcon(FontAwesomeIcons.whatsapp, color: Colors.black54, size: 24),
                       label: "WHATSAPP",
                       onTap: () => _shareToSocial("WHATSAPP", shareUrl),
                     ),
-                    ShareSocialIcon(
-                      icon: Icons.public,
+                    ShareSocialIcon( 
+                      icon: const FaIcon(FontAwesomeIcons.facebook, color: Colors.black54, size: 24),
                       label: "FACEBOOK",
                       onTap: () => _shareToSocial("FACEBOOK", shareUrl),
                     ),
                     ShareSocialIcon(
-                      icon: Icons.close,
+                      icon: const FaIcon(FontAwesomeIcons.xTwitter, color: Colors.black54, size: 20),
                       label: "TWITTER/X",
                       onTap: () => _shareToSocial("TWITTER/X", shareUrl),
                     ),
                     ShareSocialIcon(
-                      icon: Icons.camera_alt,
+                      icon: const FaIcon(FontAwesomeIcons.instagram, color: Colors.black54, size: 24),
                       label: "INSTAGRAM",
                       onTap: () => _shareToSocial("INSTAGRAM", shareUrl),
                     ),
                     ShareSocialIcon(
-                      icon: Icons.work,
+                      icon: const FaIcon(FontAwesomeIcons.linkedin, color: Colors.black54, size: 24),
                       label: "LINKEDIN",
                       onTap: () => _shareToSocial("LINKEDIN", shareUrl),
                     ),
@@ -321,7 +322,7 @@ class BusinessProfileShareSheet extends StatelessWidget {
 }
 
 class ShareSocialIcon extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final VoidCallback onTap;
 
@@ -345,7 +346,7 @@ class ShareSocialIcon extends StatelessWidget {
               color: Colors.grey[200],
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Colors.black54, size: 24),
+            child: Center(child: icon),
           ),
           const Gap(height: 8),
           AppText(

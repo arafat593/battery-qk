@@ -8,6 +8,7 @@ import 'package:olabisiolai_flutter_app/screens/auth_screen/sign_up_screen/widge
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
+import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -55,78 +56,87 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final state = ref.watch(signUpProvider);
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const CustomAppBar(
+        title: "",
+        backgroundColor: Colors.transparent,
+      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                AppImage(
-                  path: AppAssertsIconsPath.instance.gidiraNameLogo,
-                  width: 116,
-                ),
-
-                Gap(height: 40),
-
-                AppText(
-                  text: 'Welcome to Gidira',
-                  fontSize: 36,
-                  fontWeight: FontWeight.w800,
-                ),
-
-                Gap(height: 40),
-
-                SignUpInputField(
-                  formKey: _formKey,
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  passwordController: passwordController,
-                  confirmPasswordController: confirmPasswordController,
-                ),
-
-                Gap(height: 24),
-
-                Consumer(
-                  builder: (context, ref, child) {
-                    ref.watch(signUpProvider);
-                    return AppButton(
-                      title: state.isLoading ? "Loading..." : "Continue",
-                      onTap: state.isLoading
-                          ? null
-                          : () async {
-                              final notifier = ref.read(
-                                signUpProvider.notifier,
-                              );
-
-                              FocusScope.of(context).unfocus();
-
-                              notifier.update(
-                                firstName: firstNameController.text.trim(),
-                                lastName: lastNameController.text.trim(),
-                                email: emailController.text.trim(),
-                                phone: phoneController.text.trim(),
-                                password: passwordController.text.trim(),
-                                confirmPassword: confirmPasswordController.text
-                                    .trim(),
-                              );
-
-                              final success = await notifier.signUp(_formKey);
-
-                              if (!mounted) return;
-
-                              if (success) {
-                                AppRoutes.instance.pushNamed(
-                                  AppRoutesKey.instance.otpVerificationScreen,
-                                  extra: emailController.text.trim(),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AppImage(
+                    path: AppAssertsIconsPath.instance.gidiraNameLogo,
+                    width: 116,
+                  ),
+  
+                  Gap(height: 40),
+  
+                  AppText(
+                    text: 'Welcome to Gidira',
+                    fontSize: 36,
+                    fontWeight: FontWeight.w800,
+                  ),
+  
+                  Gap(height: 40),
+  
+                  SignUpInputField(
+                    formKey: _formKey,
+                    firstNameController: firstNameController,
+                    lastNameController: lastNameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    passwordController: passwordController,
+                    confirmPasswordController: confirmPasswordController,
+                  ),
+  
+                  Gap(height: 24),
+  
+                  Consumer(
+                    builder: (context, ref, child) {
+                      ref.watch(signUpProvider);
+                      return AppButton(
+                        title: state.isLoading ? "Loading..." : "Continue",
+                        onTap: state.isLoading
+                            ? null
+                            : () async {
+                                final notifier = ref.read(
+                                  signUpProvider.notifier,
                                 );
-                              }
-                            },
-                    );
-                  },
-                ),
-              ],
+  
+                                FocusScope.of(context).unfocus();
+  
+                                notifier.update(
+                                  firstName: firstNameController.text.trim(),
+                                  lastName: lastNameController.text.trim(),
+                                  email: emailController.text.trim(),
+                                  phone: phoneController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                  confirmPassword: confirmPasswordController.text
+                                      .trim(),
+                                );
+  
+                                final success = await notifier.signUp(_formKey);
+  
+                                if (!mounted) return;
+  
+                                if (success) {
+                                  AppRoutes.instance.pushNamed(
+                                    AppRoutesKey.instance.otpVerificationScreen,
+                                    extra: emailController.text.trim(),
+                                  );
+                                }
+                              },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

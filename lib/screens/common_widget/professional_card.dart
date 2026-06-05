@@ -13,18 +13,18 @@ import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'verified_badge.dart';
 
 //// ---------------- PROFESSIONAL CARD ----------------
-class ProfessionalCard extends StatelessWidget {
+class ProfessionalCard extends StatefulWidget {
   final String name;
   final double rating;
-  final int reviews;
+  final int reviews; 
   final String imageUrl;
   final Function()? onTap;
-  final double? width;
+  final double? width; 
   final String? phone;
   final String? vendorUuid;
   final String? businessName;
   final String? logoUrl;
-
+ 
   const ProfessionalCard({
     super.key,
     required this.name,
@@ -40,14 +40,23 @@ class ProfessionalCard extends StatelessWidget {
   });
 
   @override
+  State<ProfessionalCard> createState() => _ProfessionalCardState();
+}
+
+class _ProfessionalCardState extends State<ProfessionalCard> {
+  bool _isPhoneVisible = false;
+
+  @override
   Widget build(BuildContext context) {
+    final hasPhone = widget.phone != null && widget.phone!.trim().isNotEmpty;
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: AppSize.size.width * 0.01,
         vertical: AppSize.size.height * 0.01,
       ),
       child: Container(
-        width: width ?? double.infinity,
+        width: widget.width ?? double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -64,7 +73,7 @@ class ProfessionalCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: onTap,
+              onTap: widget.onTap,
               child: Column( 
                 children: [
                   Stack(
@@ -74,9 +83,9 @@ class ProfessionalCard extends StatelessWidget {
                           top: Radius.circular(16),
                         ),
                         child: AppImage(
-                          url: imageUrl,
+                          url: widget.imageUrl,
                           height: 140,
-                          width: width ?? double.infinity,
+                          width: widget.width ?? double.infinity,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -92,7 +101,7 @@ class ProfessionalCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText(
-                    text: name,
+                    text: widget.name,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -100,13 +109,13 @@ class ProfessionalCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, color: Colors.red, size: 16),
                       AppText(
-                        text: " $rating ",
+                        text: " ${widget.rating} ",
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                       Gap(width: 4),
                       AppText(
-                        text: "($reviews reviews)",
+                        text: "(${widget.reviews} reviews)",
                         fontSize: 14,
                         color: AppColors.instance.hintText,
                       ),
@@ -114,68 +123,74 @@ class ProfessionalCard extends StatelessWidget {
                   ),
                   Gap(height: 12),
                   AppButton(
-              backgroundColor: (phone != null && phone!.trim().isNotEmpty)
-                  ? AppColors.instance.error
-                  : AppColors.instance.hintText.withAlpha(50),
-              borderColor: (phone != null && phone!.trim().isNotEmpty)
-                  ? AppColors.instance.error
-                  : AppColors.instance.hintText.withAlpha(50),
-              title: (phone != null && phone!.trim().isNotEmpty)
-                  ? phone!
-                  : "Phone Not Available",
-              titleColor: (phone != null && phone!.trim().isNotEmpty)
-                  ? Colors.white
-                  : AppColors.instance.hintText,
-              iconColor: (phone != null && phone!.trim().isNotEmpty)
-                  ? Colors.white
-                  : AppColors.instance.hintText,
-              leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
-              onTap: (phone != null && phone!.trim().isNotEmpty)
-                  ? () async {
-                      final Uri launchUri = Uri(
-                        scheme: 'tel',
-                        path: phone!.trim(),
-                      );
-                      if (await canLaunchUrl(launchUri)) {
-                        await launchUrl(launchUri);
-                      } else {
-                        AppSnackBar.instance.error(
-                          "Could not launch phone dialer",
-                        );
-                      }
-                    }
-                  : () {
-                      AppSnackBar.instance.error("Phone number not available");
-                    },
-            ),
+                    backgroundColor: hasPhone
+                        ? AppColors.instance.error
+                        : AppColors.instance.hintText.withAlpha(50),
+                    borderColor: hasPhone
+                        ? AppColors.instance.error
+                        : AppColors.instance.hintText.withAlpha(50),
+                    title: hasPhone
+                        ? (_isPhoneVisible ? widget.phone! : "Show phone number")
+                        : "Phone Not Available",
+                    titleColor: hasPhone
+                        ? Colors.white
+                        : AppColors.instance.hintText,
+                    iconColor: hasPhone
+                        ? Colors.white
+                        : AppColors.instance.hintText,
+                    leadingIconImage: AppAssertsIconsPath.instance.phoneIcon,
+                    onTap: hasPhone
+                        ? () async {
+                            if (!_isPhoneVisible) {
+                              setState(() {
+                                _isPhoneVisible = true;
+                              });
+                            } else {
+                              final Uri launchUri = Uri(
+                                scheme: 'tel',
+                                path: widget.phone!.trim(),
+                              );
+                              if (await canLaunchUrl(launchUri)) {
+                                await launchUrl(launchUri);
+                              } else {
+                                AppSnackBar.instance.error(
+                                  "Could not launch phone dialer",
+                                );
+                              }
+                            }
+                          }
+                        : () {
+                            AppSnackBar.instance.error("Phone number not available");
+                          },
+                  ),
                   Gap(height: 8),
                   AppButton(
-              backgroundColor: AppColors.instance.buttonColor.withAlpha(
+                    backgroundColor: AppColors.instance.buttonColor.withAlpha(
                       15,
                     ),
-              borderColor: AppColors.instance.buttonColor,
-              title: "Direct massage",
-              leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
-              iconColor: AppColors.instance.buttonColor,
-              titleColor: AppColors.instance.buttonColor,
-              onTap: () {
-                if (vendorUuid != null && vendorUuid!.isNotEmpty) {
-                  AppRoutes.instance.pushNamed(
-                    AppRoutesKey.instance.messagesDetailsScreen,
-                    extra: {
-                      "conversation_uuid": null,
-                      "chat_title": businessName ?? name,
-                      "other_user_uuid": vendorUuid,
-                      "avatar_url": logoUrl ?? imageUrl,
+                    borderColor: AppColors.instance.buttonColor,
+                    title: "Direct massage",
+                    leadingIconImage: AppAssertsIconsPath.instance.messageIcon,
+                    iconColor: AppColors.instance.buttonColor,
+                    titleColor: AppColors.instance.buttonColor,
+                    onTap: () {
+                      if (widget.vendorUuid != null && widget.vendorUuid!.isNotEmpty) {
+                        AppRoutes.instance.pushNamed(
+                          AppRoutesKey.instance.messagesDetailsScreen,
+                          extra: {
+                            "conversation_uuid": null,
+                            "chat_title": widget.businessName ?? widget.name,
+                            "other_user_uuid": widget.vendorUuid,
+                            "avatar_url": widget.logoUrl ?? widget.imageUrl,
+                          },
+                        );
+                      } else {
+                        AppSnackBar.instance.error(
+                          "Direct messaging is not available for this vendor (Missing UUID)",
+                        );
+                      }
                     },
-                  );
-                } else {
-                  AppSnackBar.instance.error(
-                    "Direct messaging is not available for this vendor (Missing UUID)",
-                  );
-                }
-              },
-            ),
+                  ),
                 ],
               ),
             ),

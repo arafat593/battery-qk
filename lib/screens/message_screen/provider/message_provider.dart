@@ -61,25 +61,28 @@ class MessageNotifier extends StateNotifier<MessageState> {
     }
     await fetchProfile();
     await fetchConversations();
-    _startPolling();
   }
 
-  void _startPolling() {
+  void startPolling() {
     _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
-      final token = await StorageServices.instance.getToken();
-      if (token.isEmpty) {
-        timer.cancel();
-        return;
-      }
-      if (state.searchQuery.isEmpty) {
-        fetchConversations(background: true);
-      }
+      fetchConversations(background: true);
     });
+  }
+
+  void stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> fetchProfile() async {
@@ -183,11 +186,5 @@ class MessageNotifier extends StateNotifier<MessageState> {
     } catch (e) {
       errorLog("deleteConversation in notifier", e);
     }
-  }
-
-  @override
-  void dispose() {
-    _pollingTimer?.cancel();
-    super.dispose();
   }
 }

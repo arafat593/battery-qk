@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -14,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({
     super.key,
-    required this.title,
+    required this.title, 
     this.showBackButton = true,
     this.onBackPressed,
     this.actions,
@@ -35,7 +36,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: showBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back, color: iconColor),
-              onPressed: onBackPressed ?? () => Navigator.pop(context),
+              onPressed: onBackPressed ?? () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                } else {
+                  context.pop();
+                }
+              },
             )
           : null,
       title: AppText(text: title, fontSize: 18, fontWeight: FontWeight.w600),

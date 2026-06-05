@@ -12,6 +12,7 @@ import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import '../../../../utils/app_snack_bar.dart';
 import '../../../../widgets/inputs/app_input_widget_tow.dart';
+import 'package:olabisiolai_flutter_app/widgets/custom_app_bar/custom_app_bar.dart';
 import '../provider/forget_password_gmail_provider.dart';
 
 class ForgetPasswordGmail extends ConsumerStatefulWidget {
@@ -162,6 +163,11 @@ class _ForgetPasswordGmailState extends ConsumerState<ForgetPasswordGmail> {
     final isLoading = ref.watch(forgetPasswordGmailProvider);
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const CustomAppBar(
+        title: "",
+        backgroundColor: Colors.transparent,
+      ),
       body: Form(
         key: formKey,
         child: Container(
@@ -173,94 +179,96 @@ class _ForgetPasswordGmailState extends ConsumerState<ForgetPasswordGmail> {
             ),
           ),
           child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Gap(height: 100),
-
-                  AppImage(
-                    path: AppAssertsIconsPath.instance.gidiraNameLogo,
-                    width: 116,
-                  ),
-
-                  Gap(height: 40),
-
-                  AppText(
-                    text: 'Forget Password',
-                    fontSize: 36,
-                    fontWeight: FontWeight.w800,
-                  ),
-
-                  Gap(height: 12),
-
-                  AppText(
-                    text:
-                        'Enter the email address or mobile phone number associated with your account.',
-                    textAlign: TextAlign.center,
-                    fontSize: 18,
-                  ),
-
-                  Gap(height: 30),
-
-                  /// EMAIL
-                  AppInputWidgetTwo(
-                    title: "phone number/email",
-                    controller: emailController,
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter email or phone";
-                      }
-                      return null;
-                    },
-                  ),
-
-                  /// SEND / RESEND
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: (!isLoading)
-                              ? () {
-                                  if (token.isEmpty) {
-                                    sendCode();
-                                  } else {
-                                    resendCode();
-                                  }
-                                }
-                              : null,
-                          child: AppText(
-                            text: secondsRemaining > 0
-                                ? "Resend in ${formatTime(secondsRemaining)}"
-                                : (token.isEmpty ? "SEND CODE" : "RESEND CODE"),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.instance.primary,
-                          ),
-                        ),
-                      ],
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AppImage(
+                      path: AppAssertsIconsPath.instance.gidiraNameLogo,
+                      width: 116,
                     ),
-                  ),
-
-                  /// OTP
-                  AppInputWidgetTwo(
-                    title: "Code",
-                    controller: otpController,
-                    keyboardType: TextInputType.number,
-                  ),
-
-                  Gap(height: 30),
-
-                  /// CONTINUE
-                  AppButton(
-                    title: "Continue",
-                    trailing: Icons.arrow_forward,
-                    onTap: isLoading ? null : verifyCode,
-                    isLoading: isLoading,
-                  ),
-                ],
+  
+                    Gap(height: 40),
+  
+                    AppText(
+                      text: 'Forgot password',
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                    ),
+  
+                    Gap(height: 12),
+  
+                    AppText(
+                      text:
+                          'Enter the email address or mobile phone number associated with your account.',
+                      textAlign: TextAlign.center,
+                      fontSize: 18,
+                    ),
+  
+                    Gap(height: 30),
+  
+                    /// EMAIL
+                    AppInputWidgetTwo(
+                      title: "phone number/email",
+                      controller: emailController,
+                      validator: (value) {
+                        if (value?.isEmpty ?? true) {
+                          return "Enter email or phone";
+                        }
+                        return null;
+                      },
+                    ),
+  
+                    /// SEND / RESEND
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: (!isLoading)
+                                ? () {
+                                    if (token.isEmpty) {
+                                      sendCode();
+                                    } else {
+                                      resendCode();
+                                    }
+                                  }
+                                : null,
+                            child: AppText(
+                              text: secondsRemaining > 0
+                                  ? "Resend in ${formatTime(secondsRemaining)}"
+                                  : (token.isEmpty ? "SEND CODE" : "RESEND CODE"),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.instance.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+  
+                    /// OTP
+                    AppInputWidgetTwo(
+                      title: "Code",
+                      controller: otpController,
+                      keyboardType: TextInputType.number,
+                    ),
+  
+                    Gap(height: 30),
+  
+                    /// CONTINUE
+                    AppButton(
+                      title: "Continue",
+                      trailing: Icons.arrow_forward,
+                      onTap: isLoading ? null : verifyCode,
+                      isLoading: isLoading,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

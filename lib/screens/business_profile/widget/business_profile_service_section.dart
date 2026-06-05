@@ -32,7 +32,7 @@ class BusinessProfileServiceSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppText(
-              text: category != null ? "$category Services" : "Our Services",
+              text: "Services/Products Offered.",
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.instance.success,

@@ -9,6 +9,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthRepository {
   ////////////// Contractures
@@ -182,6 +183,79 @@ class AuthRepository {
       return null;
     } catch (e) {
       errorLog("signInWithGoogle", e);
+      return null;
+    }
+  }
+
+  Future<User?> signInWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final OAuthCredential credential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final UserCredential userCredential = await auth.signInWithCredential(
+        credential
+      );
+
+      if (userCredential.user != null) {
+        String? idToken = await userCredential.user!.getIdToken();
+        if (idToken != null) {
+          print(idToken);
+          // Send token to backend /auth/apple/login
+          var response = await apiServices.postServices(
+            url: api.appleLogin,
+            body: {"id_token": idToken},
+          );
+
+          if (response != null &&
+              response["data"] != null &&
+              response["data"] is Map) {
+            var data = response["data"];
+            if (data["role"] != null && data["role"] is String) {
+              await storageServices.setAppRoll(data["role"].toString());
+            }
+            if (data["accessToken"] != null && data["accessToken"] is String) {
+              await storageServices.setToken(data["accessToken"].toString());
+            } else if (data["token"] != null && data["token"] is String) {
+              await storageServices.setToken(data["token"].toString());
+            }
+            if (data["refreshToken"] != null &&
+                data["refreshToken"] is String) {
+              await storageServices.setRefreshToken(
+                data["refreshToken"].toString(),
+              );
+            }
+            if (data["user"] != null && data["user"] is Map) {
+              Map<String, String> userData = (data["user"] as Map).map(
+                (key, value) => MapEntry(key.toString(), value.toString()),
+              );
+              await storageServices.setLogDedData(userData);
+              if (data["user"]["email"] != null) {
+                await storageServices.setEmail(
+                  data["user"]["email"].toString(),
+                );
+              }
+            }
+            return userCredential.user;
+          }
+        }
+
+        // If backend verification fails, sign out
+        await auth.signOut();
+        return null;
+      }
+
+      return null;
+    } catch (e) {
+      errorLog("signInWithApple", e);
       return null;
     }
   }

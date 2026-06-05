@@ -40,6 +40,19 @@ class LoginProvider extends StateNotifier<bool> {
     }
   }
 
+  Future<bool> signInWithApple() async {
+    try {
+      state = true;
+      final user = await AuthRepository.instance.signInWithApple();
+      state = false;
+      return user != null;
+    } catch (e) {
+      errorLog("Apple Sign In", e);
+      state = false;
+      return false;
+    }
+  }
+
   Future<bool> logOut() async {
     try {
       state = true;

@@ -13,7 +13,6 @@ import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/app_image/app_image.dart';
 import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 
-
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -111,17 +110,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                             Row(
                               children: [
+                                // Expanded(
+                                //   child: CustomSocialButton(
+                                //     label: "Google",
+                                //     icon: AppAssertsIconsPath
+                                //         .instance
+                                //         .logosGoogleIcon,
+                                //     color: Colors.red,
+                                //     onTap: () async {
+                                //       final success = await ref
+                                //           .read(loginProvider.notifier)
+                                //           .signInWithGoogle();
+                                //       if (success) {
+                                //         AppRoutes.instance.pushNamed(
+                                //           AppRoutesKey
+                                //               .instance
+                                //               .appNavigationScreen,
+                                //         );
+                                //       } else {
+                                //         if (!context.mounted) return;
+                                //         ScaffoldMessenger.of(
+                                //           context,
+                                //         ).showSnackBar(
+                                //           const SnackBar(
+                                //             content: Text(
+                                //               "Google Sign-In failed",
+                                //             ),
+                                //           ),
+                                //         );
+                                //       }
+                                //     },
+                                //   ),
+                                // ),
+                                // Gap(width: 8),
                                 Expanded(
                                   child: CustomSocialButton(
-                                    label: "Google",
-                                    icon: AppAssertsIconsPath
-                                        .instance
-                                        .logosGoogleIcon,
-                                    color: Colors.red,
+                                    label: "Apple",
+                                    icon:
+                                        AppAssertsIconsPath.instance.appleIcon,
+                                    color: Colors.black,
                                     onTap: () async {
                                       final success = await ref
                                           .read(loginProvider.notifier)
-                                          .signInWithGoogle();
+                                          .signInWithApple();
                                       if (success) {
                                         AppRoutes.instance.pushNamed(
                                           AppRoutesKey
@@ -135,7 +166,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         ).showSnackBar(
                                           const SnackBar(
                                             content: Text(
-                                              "Google Sign-In failed",
+                                              "Apple Sign-In failed",
                                             ),
                                           ),
                                         );
@@ -143,7 +174,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     },
                                   ),
                                 ),
-                                Gap(width: 16),
+                                Gap(width: 8),
                                 Expanded(
                                   child: CustomSocialButton(
                                     label: "Facebook",

@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/chat_repository.dart';
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
+import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'dart:developer';
 
-final messageProvider = StateNotifierProvider<MessageNotifier, MessageState>((
+final messageProvider = StateNotifierProvider.autoDispose<MessageNotifier, MessageState>((
   ref,
 ) {
   return MessageNotifier();
@@ -53,6 +54,11 @@ class MessageNotifier extends StateNotifier<MessageState> {
   }
 
   Future<void> init() async {
+    final token = await StorageServices.instance.getToken();
+    if (token.isEmpty) {
+      log("MessageNotifier init: No token, skipping initial fetch");
+      return;
+    }
     await fetchProfile();
     await fetchConversations();
     _startPolling();
@@ -60,8 +66,13 @@ class MessageNotifier extends StateNotifier<MessageState> {
 
   void _startPolling() {
     _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
       if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      final token = await StorageServices.instance.getToken();
+      if (token.isEmpty) {
         timer.cancel();
         return;
       }
@@ -72,6 +83,8 @@ class MessageNotifier extends StateNotifier<MessageState> {
   }
 
   Future<void> fetchProfile() async {
+    final token = await StorageServices.instance.getToken();
+    if (token.isEmpty) return;
     try {
       final profile = await _userRepository.getProfile();
       if (profile != null && profile['data'] != null) {
@@ -87,6 +100,11 @@ class MessageNotifier extends StateNotifier<MessageState> {
   }
 
   Future<void> fetchConversations({bool background = false}) async {
+    final token = await StorageServices.instance.getToken();
+    if (token.isEmpty) {
+      log("MessageNotifier fetchConversations: No token, aborting request");
+      return;
+    }
     if (state.conversations.isEmpty && !background) {
       state = state.copyWith(isLoading: true);
     }

@@ -156,6 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                               ],
                             ),
+                            Gap(height: 16)
                           ],
                         ),
 

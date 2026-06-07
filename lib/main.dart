@@ -9,7 +9,7 @@ import 'package:olabisiolai_flutter_app/main_app_entry.dart';
 Future<void> main() async {
   //////////////  flutter binding initialize
   WidgetsFlutterBinding.ensureInitialized();
-
+ 
   ///////////// firebase initialize
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 

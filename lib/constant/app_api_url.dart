@@ -9,7 +9,13 @@ class AppApiUrl {
   static final String domain = _getDomain();
   static final String socket = _getDomain();
 
-  final String baseUrl = "$domain/api/v1";
+  // Reverb WebSocket Configurations
+  static String reverbKey = const String.fromEnvironment('REVERB_APP_KEY', defaultValue: '487bdf0322617ae35986');
+  static String reverbHost = const String.fromEnvironment('REVERB_HOST', defaultValue: 'olabisiolai.maktechlaravel.cloud');
+  static int? reverbPort = int.tryParse(const String.fromEnvironment('REVERB_PORT', defaultValue: '443')) ?? 443;
+  static String reverbScheme = const String.fromEnvironment('REVERB_SCHEME', defaultValue: 'wss');
+
+  final String baseUrl = "$domain/api/v1"; 
 
   String refreshToken = "/refreshToken";
   String userProfile = "/user/profile";
@@ -47,10 +53,10 @@ class AppApiUrl {
   String categories = "/categories";
 
   String conversations = "/conversations";
-}
-
+} 
+  
 String _getDomain() {
-  const String liveServer = "https://olabisiolai.maktechlaravel.cloud";
+  const String liveServer = "https://api.gidira.tech";
 
   try {
     if (kDebugMode) {
@@ -62,3 +68,4 @@ String _getDomain() {
 
   return liveServer;
 }
+ 

@@ -113,7 +113,9 @@ class _SavedBusinessesScreenState extends ConsumerState<SavedBusinessesScreen> {
         business['logo_url'] ??
         'https://images.unsplash.com/photo-1584622650111-993a426fbf0a';
     final favoriteId = item['id'] ?? item['business_info_id'];
-    final String? vendorUuid = business['vendor_user_uuid'] ?? business['vendor_uuid'];
+    final String? vendorUuid = business['vendor']?['uuid']?.toString() ??
+        business['vendor_user_uuid']?.toString() ??
+        business['vendor_uuid']?.toString();
     final String? logoUrl = business['logo_url']; 
     return Container(
       decoration: BoxDecoration(

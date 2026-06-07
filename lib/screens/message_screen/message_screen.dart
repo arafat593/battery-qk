@@ -26,13 +26,11 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(messageProvider.notifier).fetchConversations();
-      ref.read(messageProvider.notifier).startPolling();
     });
   }
 
   @override
   void dispose() {
-    ref.read(messageProvider.notifier).stopPolling();
     super.dispose();
   }
 
@@ -280,7 +278,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                                 chatTitle = "Chat";
                               }
 
-                              ref.read(messageProvider.notifier).stopPolling();
                               AppRoutes.instance.pushNamed(
                                 AppRoutesKey.instance.messagesDetailsScreen,
                                 extra: {
@@ -290,7 +287,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                                   "avatar_url": avatarUrl,
                                 },
                               ).then((_) {
-                                ref.read(messageProvider.notifier).startPolling();
                                 ref.read(messageProvider.notifier).fetchConversations(background: true);
                               });
                             },

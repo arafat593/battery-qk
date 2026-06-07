@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 void main() async {
   var dio = Dio();
-  dio.options.baseUrl = "https://olabisiolai.maktechlaravel.cloud/api/v1";
+  dio.options.baseUrl = "https://api.gidira.tech/api/v1";
 
   try {
     var response = await dio.get("/businesses/4");

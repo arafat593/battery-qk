@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/services/repository/chat_repository.dart';
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
 import 'package:olabisiolai_flutter_app/services/storage/storage_services.dart';
+import 'package:olabisiolai_flutter_app/services/sockets/app_socket_all_operation.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 import 'dart:developer';
 
@@ -47,7 +48,6 @@ class MessageState {
 class MessageNotifier extends StateNotifier<MessageState> {
   final ChatRepository _chatRepository = ChatRepository.instance;
   final UserRepository _userRepository = UserRepository.instance;
-  Timer? _pollingTimer;
 
   MessageNotifier() : super(MessageState()) {
     init();
@@ -60,28 +60,66 @@ class MessageNotifier extends StateNotifier<MessageState> {
       return;
     }
     await fetchProfile();
+    _initSocket();
     await fetchConversations();
   }
 
-  void startPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-      fetchConversations(background: true);
-    });
-  }
+  void _initSocket() {
+    final uuid = state.currentUserUuid;
+    final id = state.currentUserId;
+    if (uuid == null) return;
 
-  void stopPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
+    final socket = AppSocketAllOperation.instance;
+    socket.initializeSocket();
+
+    final channels = [
+      'private-user.$uuid',
+      'user.$uuid',
+      'private-conversations.$uuid',
+      'conversations.$uuid',
+      if (id != null) 'private-App.Models.User.$id',
+      if (id != null) 'App.Models.User.$id',
+    ];
+
+    final events = [
+      'MessageSent',
+      'MessageCreated',
+      'ConversationUpdated',
+      'NewMessage',
+      'message.sent',
+      'message.created',
+      'conversation.updated',
+      'chat.updated',
+    ];
+
+    for (final channel in channels) {
+      for (final event in events) {
+        socket.subscribe(
+          channel: channel,
+          event: event,
+          handler: (data) {
+            log("Real-time trigger: refreshing conversations list");
+            fetchConversations(background: true);
+          },
+        );
+      }
+    }
   }
 
   @override
   void dispose() {
-    _pollingTimer?.cancel();
+    final uuid = state.currentUserUuid;
+    final id = state.currentUserId;
+    if (uuid != null) {
+      AppSocketAllOperation.instance.unsubscribe(channel: 'private-user.$uuid');
+      AppSocketAllOperation.instance.unsubscribe(channel: 'user.$uuid');
+      AppSocketAllOperation.instance.unsubscribe(channel: 'private-conversations.$uuid');
+      AppSocketAllOperation.instance.unsubscribe(channel: 'conversations.$uuid');
+    }
+    if (id != null) {
+      AppSocketAllOperation.instance.unsubscribe(channel: 'private-App.Models.User.$id');
+      AppSocketAllOperation.instance.unsubscribe(channel: 'App.Models.User.$id');
+    }
     super.dispose();
   }
 

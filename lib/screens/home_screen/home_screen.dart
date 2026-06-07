@@ -239,15 +239,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ] else ...[
-                if (categories.isNotEmpty) ...[
+                if (categories.isNotEmpty) ...[ 
                   SliverToBoxAdapter(
                     child: HomeSectionHeader( 
                       title: "Explore Categories", 
-                      actionText: _showAllCategories ? "Show Less" : "View All",
+                      actionText:"View All",
                       onActionTap: () {
-                        setState(() {
-                          _showAllCategories = !_showAllCategories;
-                        });
+                        ref.read(navigationIndexProvider.notifier).state = 1;
                       },
                     ),
                   ),
@@ -256,7 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: categories.length,
-                      gridDelegate:
+                      gridDelegate: 
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 4,
                             mainAxisSpacing: 16,

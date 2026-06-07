@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:olabisiolai_flutter_app/screens/message_screen/provider/message_provider.dart';
 import 'package:olabisiolai_flutter_app/services/repository/chat_repository.dart';
 import 'package:olabisiolai_flutter_app/services/repository/user_repository.dart';
+import 'package:olabisiolai_flutter_app/services/sockets/app_socket_all_operation.dart';
 import 'package:olabisiolai_flutter_app/utils/app_log.dart';
 
 final chatDetailsProvider = StateNotifierProvider.autoDispose
@@ -76,8 +77,6 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
   final ChatRepository _chatRepository = ChatRepository.instance;
   final UserRepository _userRepository = UserRepository.instance;
   final Ref ref;
-  Timer? _pollingTimer;
-  Timer? _typingTimer;
 
   ChatDetailsNotifier(String? conversationUuid, this.ref)
     : super(ChatDetailsState(conversationUuid: conversationUuid)) {
@@ -89,23 +88,108 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
     if (!mounted) return;
     if (state.conversationUuid != null && state.conversationUuid!.isNotEmpty) {
       ref.read(messageProvider.notifier).markConversationAsRead(state.conversationUuid!);
+      _initSocket();
       await fetchMessages();
-      _startPolling();
     }
   }
 
-  void _startPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
+  void _initSocket() {
+    final uuid = state.conversationUuid;
+    if (uuid == null || uuid.isEmpty) return;
+
+    final socket = AppSocketAllOperation.instance;
+    socket.initializeSocket();
+
+    final channels = [
+      'private-chat.$uuid',
+      'chat.$uuid',
+    ];
+
+    final messageEvents = [
+      'MessageSent',
+      'MessageCreated',
+      'message.sent',
+      'message.created',
+    ];
+
+    final typingEvents = [
+      'UserTyping',
+      'typing',
+      'typing.status',
+    ];
+
+    for (final channel in channels) {
+      for (final event in messageEvents) {
+        socket.subscribe(
+          channel: channel,
+          event: event,
+          handler: (data) {
+            _handleIncomingMessage(data);
+          },
+        );
       }
-      if (state.conversationUuid != null &&
-          state.conversationUuid!.isNotEmpty) {
-        fetchMessages(background: true);
+
+      for (final event in typingEvents) {
+        socket.subscribe(
+          channel: channel,
+          event: event,
+          handler: (data) {
+            _handleIncomingTyping(data);
+          },
+        );
       }
-    });
+    }
+  }
+
+  void _handleIncomingMessage(dynamic data) {
+    if (!mounted || data == null) return;
+    try {
+      final dynamic newMsg = data['message'] ?? data;
+      if (newMsg is Map) {
+        final currentMessages = List.from(state.messages);
+
+        final String? newMsgUuid = newMsg['uuid']?.toString() ?? newMsg['id']?.toString();
+        final bool alreadyExists = currentMessages.any((msg) {
+          final String? existingUuid = msg['uuid']?.toString() ?? msg['id']?.toString();
+          return existingUuid == newMsgUuid;
+        });
+
+        if (!alreadyExists) {
+          currentMessages.insert(0, newMsg);
+          state = state.copyWith(messages: currentMessages);
+
+          final sender = newMsg['sender'];
+          final bool isMe = newMsg['is_own'] == true ||
+              (sender is Map &&
+                  (sender['uuid'] == state.currentUserUuid ||
+                      sender['id']?.toString() == state.currentUserId?.toString()));
+
+          if (!isMe && newMsgUuid != null) {
+            _chatRepository.readMessage(newMsgUuid);
+          }
+        }
+      }
+    } catch (e) {
+      errorLog("Error handling incoming message", e);
+    }
+  }
+
+  void _handleIncomingTyping(dynamic data) {
+    if (!mounted || data == null) return;
+    try {
+      final dynamic isTyping = data['is_typing'] ?? data['typing'];
+      final dynamic senderUuid = data['user_uuid'] ?? data['uuid'];
+      final dynamic senderId = data['user_id'] ?? data['id'];
+
+      final bool isMe = senderUuid == state.currentUserUuid ||
+          (senderId != null && senderId.toString() == state.currentUserId?.toString());
+
+      if (isTyping != null && !isMe) {
+        state = state.copyWith(isOtherUserTyping: isTyping == true || isTyping == 1);
+      }
+    } catch (e) {
+      errorLog("Error handling incoming typing", e);
+    }
   }
 
   Future<void> fetchProfile() async {
@@ -251,7 +335,9 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
         // Refresh conversations list
         ref.read(messageProvider.notifier).fetchConversations();
 
-        _startPolling();
+        // Subscribe to socket channels
+        _initSocket();
+
         return newUuid;
       }
     } catch (e) {
@@ -312,7 +398,7 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
       if (!mounted) return false;
       if (response != null && response['data'] != null) {
         // Append new message locally for instant update
-        final currentMessages = List.from(state.messages);
+        final currentMessages = List.from(state.messages);  
         currentMessages.insert(
           0,
           response['data'],
@@ -382,20 +468,15 @@ class ChatDetailsNotifier extends StateNotifier<ChatDetailsState> {
     state = state.copyWith(isTyping: isTyping);
 
     _chatRepository.setTypingStatus(state.conversationUuid!, isTyping);
-
-    // If typing is true, set a timer to automatically set it to false after 3 seconds of inactivity
-    if (isTyping) {
-      _typingTimer?.cancel();
-      _typingTimer = Timer(const Duration(seconds: 5), () {
-        setTyping(false);
-      });
-    }
   }
  
   @override
   void dispose() {
-    _pollingTimer?.cancel();
-    _typingTimer?.cancel();
+    final uuid = state.conversationUuid;
+    if (uuid != null && uuid.isNotEmpty) {
+      AppSocketAllOperation.instance.unsubscribe(channel: 'private-chat.$uuid');
+      AppSocketAllOperation.instance.unsubscribe(channel: 'chat.$uuid');
+    }
     super.dispose();
   }
 }

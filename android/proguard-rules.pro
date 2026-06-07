@@ -48,3 +48,13 @@
 -dontusemixedcaseclassnames
 -dontpreverify
 -allowaccessmodification
+
+# connectivity_plus keep rules
+-keep class dev.fluttercommunity.plus.connectivity.** { *; }
+-dontwarn dev.fluttercommunity.plus.connectivity.**
+
+# Firebase & Pigeon keep rules
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class dev.flutter.pigeon.** { *; }
+-keepclassmembers class dev.flutter.pigeon.* { *; }

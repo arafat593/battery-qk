@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:olabisiolai_flutter_app/constant/app_asserts_icons_path.dart';
 import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
 import 'package:olabisiolai_flutter_app/utils/app_size.dart';
@@ -7,6 +8,7 @@ import 'package:olabisiolai_flutter_app/routes/app_routes_key.dart';
 import 'package:olabisiolai_flutter_app/utils/app_snack_bar.dart';
 import 'package:olabisiolai_flutter_app/utils/gap.dart';
 import 'package:olabisiolai_flutter_app/widgets/buttons/app_button.dart';
+import 'package:olabisiolai_flutter_app/widgets/texts/app_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'business_profile_info_row.dart';
 
@@ -14,6 +16,7 @@ class BusinessProfileActionSection extends StatefulWidget {
   final String? phone;
   final String? whatsapp;
   final String? website;
+  final String? instagramUrl;
   final bool isFavorite;
   final VoidCallback? onFavoriteTap;
   final VoidCallback? onShareTap;
@@ -26,6 +29,7 @@ class BusinessProfileActionSection extends StatefulWidget {
     this.phone,
     this.whatsapp,
     this.website,
+    this.instagramUrl,
     this.isFavorite = false,
     this.onFavoriteTap,
     this.onShareTap,
@@ -70,7 +74,7 @@ class _BusinessProfileActionSectionState extends State<BusinessProfileActionSect
                   : "Phone Not Available",
               titleColor: hasPhone
                   ? Colors.white
-                  : AppColors.instance.hintText,
+                  : AppColors.instance.hintText, 
               iconColor: hasPhone
                   ? Colors.white
                   : AppColors.instance.hintText,
@@ -183,70 +187,146 @@ class _BusinessProfileActionSectionState extends State<BusinessProfileActionSect
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    onTap: widget.onFavoriteTap,
-                    child: BusinessProfileInfoRow(
-                      icon: widget.isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                      text: widget.isFavorite ? "SAVED" : "SAVE",
-                      iconColor: widget.isFavorite
+                  child: _ActionVerticalButton(
+                    onTap: widget.onFavoriteTap ?? () {},
+                    icon: Icon(
+                      widget.isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                      color: widget.isFavorite
                           ? AppColors.instance.buttonColor
                           : AppColors.instance.hintText,
-                      textColor: widget.isFavorite
-                          ? AppColors.instance.buttonColor
-                          : AppColors.instance.hintText,
+                      size: 24,
                     ),
+                    label: widget.isFavorite ? "SAVED" : "SAVE",
+                    color: widget.isFavorite
+                        ? AppColors.instance.buttonColor
+                        : AppColors.instance.hintText,
                   ),
                 ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (widget.website != null && widget.website!.trim().isNotEmpty)
-                        ? () async {
-                            var urlString = widget.website!.trim();
-                            if (!urlString.startsWith('http://') &&
-                                !urlString.startsWith('https://')) {
-                              urlString = 'https://$urlString';
-                            }
-                            final Uri uri = Uri.parse(urlString);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(
-                                uri,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            } else {
-                              AppSnackBar.instance.error(
-                                "Could not open website",
-                              );
-                            }
-                          }
-                        : () {
-                            AppSnackBar.instance.error("Website not available");
-                          },
-                    child: BusinessProfileInfoRow(
-                      icon: Icons.language,
-                      text: "WEBSITE",
-                      iconColor: (widget.website != null && widget.website!.trim().isNotEmpty)
-                          ? AppColors.instance.buttonColor
-                          : AppColors.instance.hintText,
-                      textColor: (widget.website != null && widget.website!.trim().isNotEmpty)
-                          ? AppColors.instance.buttonColor
-                          : AppColors.instance.hintText,
+                if (widget.website != null && widget.website!.trim().isNotEmpty)
+                  Expanded(
+                    child: _ActionVerticalButton(
+                      onTap: () async {
+                        var urlString = widget.website!.trim();
+                        if (!urlString.startsWith('http://') &&
+                            !urlString.startsWith('https://')) {
+                          urlString = 'https://$urlString';
+                        }
+                        final Uri uri = Uri.parse(urlString);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          AppSnackBar.instance.error(
+                            "Could not open website",
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        Icons.language,
+                        color: AppColors.instance.buttonColor,
+                        size: 24,
+                      ),
+                      label: "WEBSITE",
+                      color: AppColors.instance.buttonColor,
                     ),
                   ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: widget.onShareTap,
-                    child: BusinessProfileInfoRow(
-                      icon: Icons.share,
-                      text: "SHARE LISTING",
-                      iconColor: AppColors.instance.hintText,
+                if (widget.instagramUrl != null && widget.instagramUrl!.trim().isNotEmpty)
+                  Expanded(
+                    child: _ActionVerticalButton(
+                      onTap: () async {
+                        var urlString = widget.instagramUrl!.trim();
+                        if (urlString.startsWith('@')) {
+                          urlString = 'https://instagram.com/${urlString.substring(1)}';
+                        } else if (!urlString.startsWith('http://') &&
+                            !urlString.startsWith('https://')) {
+                          urlString = 'https://instagram.com/$urlString';
+                        }
+                        final Uri uri = Uri.parse(urlString);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          AppSnackBar.instance.error(
+                            "Could not open Instagram",
+                          );
+                        }
+                      },
+                      icon: FaIcon(
+                        FontAwesomeIcons.instagram,
+                        color: AppColors.instance.buttonColor,
+                        size: 24,
+                      ),
+                      label: "INSTAGRAM",
+                      color: AppColors.instance.buttonColor,
                     ),
+                  ),
+                Expanded(
+                  child: _ActionVerticalButton(
+                    onTap: widget.onShareTap ?? () {},
+                    icon: Icon(
+                      Icons.share,
+                      color: AppColors.instance.hintText,
+                      size: 24,
+                    ),
+                    label: "SHARE",
+                    color: AppColors.instance.hintText,
                   ),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ActionVerticalButton extends StatelessWidget {
+  final Widget icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color color;
+
+  const _ActionVerticalButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: color.withAlpha(20),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: icon,
+            ),
+          ),
+          const Gap(height: 6),
+          AppText(
+            text: label,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: color,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

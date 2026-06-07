@@ -43,17 +43,13 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
       });
       // Auto load/fetch updated data when switching tabs!
       if (index == 0) {
-        ref.read(messageProvider.notifier).stopPolling();
         ref.read(homeProvider.notifier).fetchHomeData();
         ref.read(accountSettingsProvider.notifier).fetchSettings();
       } else if (index == 1) {
-        ref.read(messageProvider.notifier).stopPolling();
         ref.read(homeProvider.notifier).fetchHomeData();
       } else if (index == 2) {
         ref.read(messageProvider.notifier).fetchConversations();
-        ref.read(messageProvider.notifier).startPolling();
       } else if (index == 3) {
-        ref.read(messageProvider.notifier).stopPolling();
         ref.read(accountSettingsProvider.notifier).fetchSettings();
       }
     } catch (e) {

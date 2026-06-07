@@ -178,6 +178,17 @@ class _BusinessProfileState extends ConsumerState<BusinessProfile> {
                   phone: details?['phone'],
                   whatsapp: details?['whatsapp'],
                   website: details?['website'],
+                  instagramUrl: () {
+                    final accounts = details?['social_accounts'];
+                    if (accounts is List) {
+                      for (var acc in accounts) {
+                        if (acc is Map && acc['platform']?.toString().toLowerCase() == 'instagram') {
+                          return acc['url']?.toString();
+                        }
+                      }
+                    }
+                    return details?['instagram']?.toString() ?? details?['instagram_url']?.toString();
+                  }(),
                   isFavorite: state.isFavorite,
                   vendorUuid: details?['vendor']?['uuid']?.toString(),
                   businessName:

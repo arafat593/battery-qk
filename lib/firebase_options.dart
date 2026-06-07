@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,25 +46,30 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAp6VEjvqGNEvBBe_sm8rEYLEFoK38fOJk',
+    appId: '1:953237213749:web:13dddb9e154013edee577c',
+    messagingSenderId: '953237213749',
+    projectId: 'batteryqk-webapp',
+    authDomain: 'batteryqk-webapp.firebaseapp.com',
+    storageBucket: 'batteryqk-webapp.firebasestorage.app',
+    measurementId: 'G-CFC0HKJ1S1',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCW99Z6_oeNMnMF6x322sNMWrdJs9MaFT8',
-    appId: '1:233797822107:android:8c6ba77cc78275a9cd083e',
-    messagingSenderId: '233797822107',
-    projectId: 'olabisiolai-flutter-app',
-    databaseURL: 'https://olabisiolai-flutter-app-default-rtdb.firebaseio.com',
-    storageBucket: 'olabisiolai-flutter-app.firebasestorage.app',
+    apiKey: 'AIzaSyDMX-2-OV4pT6sCd6nqePO4d9rjb8yOtUI',
+    appId: '1:953237213749:android:8ed11de6f625abb3ee577c',
+    messagingSenderId: '953237213749',
+    projectId: 'batteryqk-webapp',
+    storageBucket: 'batteryqk-webapp.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDLJ8jELBtgdahpYfh_4I8dc2HV1n5e3SM',
-    appId: '1:233797822107:ios:8e99f68a6c20d713cd083e',
-    messagingSenderId: '233797822107',
-    projectId: 'olabisiolai-flutter-app',
-    databaseURL: 'https://olabisiolai-flutter-app-default-rtdb.firebaseio.com',
-    storageBucket: 'olabisiolai-flutter-app.firebasestorage.app',
-    androidClientId: '233797822107-mdvmmrg6hl45lgqhimr9or66n85vrbln.apps.googleusercontent.com',
-    iosClientId: '233797822107-v426oj9rnpfoj9jsiiqi39hlsv315jhr.apps.googleusercontent.com',
-    iosBundleId: 'com.olabisiolai.gidira',
+    apiKey: 'AIzaSyByoVPeA6KWO40EDRPpKmwf75bMObMJOJE',
+    appId: '1:953237213749:ios:33f822375d992e16ee577c',
+    messagingSenderId: '953237213749',
+    projectId: 'batteryqk-webapp',
+    storageBucket: 'batteryqk-webapp.firebasestorage.app',
+    iosBundleId: 'com.example.batteryqkWebApp',
   );
-
 }

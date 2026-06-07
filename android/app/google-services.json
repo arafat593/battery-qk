@@ -1,49 +1,144 @@
 {
   "project_info": {
-    "project_number": "233797822107",
-    "firebase_url": "https://olabisiolai-flutter-app-default-rtdb.firebaseio.com",
-    "project_id": "olabisiolai-flutter-app",
-    "storage_bucket": "olabisiolai-flutter-app.firebasestorage.app"
+    "project_number": "953237213749",
+    "project_id": "batteryqk-webapp",
+    "storage_bucket": "batteryqk-webapp.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:233797822107:android:8c6ba77cc78275a9cd083e",
+        "mobilesdk_app_id": "1:953237213749:android:958300584110787dee577c",
         "android_client_info": {
-          "package_name": "com.olabisiolai.gidira"
+          "package_name": "com.batteryqk.batteryqk_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "233797822107-mdvmmrg6hl45lgqhimr9or66n85vrbln.apps.googleusercontent.com",
+          "client_id": "953237213749-5cevhnr2rbddu08ppkd237ag93ot6tjj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.olabisiolai.gidira",
-            "certificate_hash": "39d4594fdeda2b672717e104e55fe207ab4e038a"
+            "package_name": "com.batteryqk.batteryqk_app",
+            "certificate_hash": "b89103fdaf4491e478f46f4281211e6910b25bc5"
           }
         },
         {
-          "client_id": "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
+          "client_id": "953237213749-oea7f4or066t8tdjkud92enml5cg5ur2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.batteryqk.batteryqk_app",
+            "certificate_hash": "9d9001465960af4751f21008940f7066f7f4e9e9"
+          }
+        },
+        {
+          "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCW99Z6_oeNMnMF6x322sNMWrdJs9MaFT8"
+          "current_key": "AIzaSyDMX-2-OV4pT6sCd6nqePO4d9rjb8yOtUI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "233797822107-kcufq98hr6lc5g4teuik1scv9vf1oh2o.apps.googleusercontent.com",
+              "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "233797822107-v426oj9rnpfoj9jsiiqi39hlsv315jhr.apps.googleusercontent.com",
+              "client_id": "953237213749-pktpe9rte9uvkf57potkipt9rl0dbipc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.olabisiolai.gidira"
+                "bundle_id": "com.example.batteryqkWebApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953237213749:android:d1df73a260450b8cee577c",
+        "android_client_info": {
+          "package_name": "com.example.batteryqk_web"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953237213749-t715naqflknsl1ekp8mb03mrfj37g9vb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.batteryqk_web",
+            "certificate_hash": "76fefedc42b8da47cfcdf26f7454eb9227f94843"
+          }
+        },
+        {
+          "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMX-2-OV4pT6sCd6nqePO4d9rjb8yOtUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "953237213749-pktpe9rte9uvkf57potkipt9rl0dbipc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.batteryqkWebApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953237213749:android:8ed11de6f625abb3ee577c",
+        "android_client_info": {
+          "package_name": "com.example.batteryqk_web_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953237213749-qkspaa5l0264a5l34j3d7f74o8ia156q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.batteryqk_web_app",
+            "certificate_hash": "b89103fdaf4491e478f46f4281211e6910b25bc5"
+          }
+        },
+        {
+          "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMX-2-OV4pT6sCd6nqePO4d9rjb8yOtUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953237213749-8nqu24ukp308fcr7jqa69sb01sesvc56.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "953237213749-pktpe9rte9uvkf57potkipt9rl0dbipc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.batteryqkWebApp"
               }
             }
           ]

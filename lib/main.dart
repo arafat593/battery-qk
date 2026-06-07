@@ -1,44 +1,35 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:batteryqk_web_app/app.dart';
+import 'package:batteryqk_web_app/features/authentication/controllers/language_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:olabisiolai_flutter_app/firebase_options.dart';
-import 'package:olabisiolai_flutter_app/constant/app_colors.dart';
-import 'package:olabisiolai_flutter_app/main_app_entry.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-Future<void> main() async {
-  //////////////  flutter binding initialize
+import 'features/authentication/controllers/build_listing_card_controller.dart';
+import 'features/authentication/controllers/notification_controller.dart';
+import 'features/authentication/controllers/user_controller.dart';
+import 'firebase_options.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
-  ///////////// firebase initialize
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  ///////////// devices orientation set
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.portraitUp,
-  ]);
-  //////////// app navigation style set
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      systemNavigationBarColor: AppColors.instance.transparent,
-      statusBarColor: AppColors.instance.transparent,
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarDividerColor: Colors.transparent,
-    ),
-  );
-  ////////////// network
-  HttpOverrides.global = MyHttpOverrides();
-
-  runApp(const MainAppEntry());
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (cert, host, port) => true;
+  if (!Get.isRegistered<LanguageController>()) {
+    Get.lazyPut<LanguageController>(() => LanguageController(), fenix: true);
   }
+  if (!Get.isRegistered<BuildListingCardController>()) {
+    Get.lazyPut<BuildListingCardController>(
+      () => BuildListingCardController(),//buildListingController
+      fenix: true,
+    );
+  }
+  if (!Get.isRegistered<NotificationController>()) {
+    Get.lazyPut<NotificationController>(
+      () => NotificationController(),
+      fenix: true,
+    );
+  }
+  if (!Get.isRegistered<UserController>()) {
+    Get.lazyPut<UserController>(() => UserController(), fenix: true);
+  }
+
+  runApp(const App());
 }
